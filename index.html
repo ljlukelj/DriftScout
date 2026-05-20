@@ -2940,6 +2940,11 @@ async function onStatePick() {
       .map(l => { const c = l.split('\t'); return { id: c[1], name: c[2], lat: c[4], lon: c[5] }; })
       .filter(s => s.id && s.name && s.id.length >= 8);
     status.textContent = allSites.length + ' active gauges — type to filter';
+    // Re-enable search input
+    input.disabled = false;
+    input.placeholder = 'Type river name to filter…';
+    // Render curated tabs for this state
+    renderStateTabs(state);
   } catch(e) {
     input.disabled = false;
     input.placeholder = 'Type river name to filter\u2026';
@@ -3442,6 +3447,306 @@ function calcWeight() {
     <div class="leader-result-row"><span class="lbl">Diameter</span><span class="val">${w.diameter}</span></div>
     <div class="leader-result-row"><span class="lbl">Best For</span><span class="val" style="font-size:0.65rem">${w.note}</span></div>
     <div class="leader-result-row"><span class="lbl">Depth Tip</span><span class="val" style="font-size:0.6rem;max-width:160px;text-align:right">${di[depth]}</span></div>`;
+}
+
+// ── STATE FLY FISHING RIVERS DATABASE ────────────────────────────────────────
+// Top fly fishing rivers by state with verified USGS gauge IDs
+// Format: { label, sub, usgs, lat, lon }
+const STATE_RIVERS = {
+  WA: [
+    { label:'Upper Yakima',    sub:'Easton → Thorpe',        usgs:'12484500', lat:47.2437, lon:-121.1848 },
+    { label:'Yakima Canyon',   sub:'Roza Dam → Ellensburg',  usgs:'12487000', lat:46.8701, lon:-120.4816 },
+    { label:'Methow River',    sub:'Winthrop → Pateros',     usgs:'12448500', lat:48.4726, lon:-120.1769 },
+    { label:'Skykomish',       sub:'Index → Monroe',         usgs:'12134500', lat:47.8526, lon:-121.6915 },
+    { label:'Snoqualmie MF',   sub:'Middle Fork',            usgs:'12141300', lat:47.5651, lon:-121.6476 },
+    { label:'Wenatchee',       sub:'Leavenworth → Columbia', usgs:'12462500', lat:47.5898, lon:-120.6199 },
+    { label:'Klickitat',       sub:'Canyon → Columbia',      usgs:'14113000', lat:45.8207, lon:-121.1543 },
+    { label:'Cowlitz',         sub:'Packwood → Riffe Lake',  usgs:'14226500', lat:46.6073, lon:-121.6791 },
+    { label:'Kalama',          sub:'Headwaters → Columbia',  usgs:'14223000', lat:46.0146, lon:-122.7001 },
+    { label:'Stillaguamish',   sub:'North Fork → Arlington', usgs:'12167000', lat:48.1898, lon:-121.9543 },
+    { label:'Naches River',    sub:'Upper → Confluence',     usgs:'12494400', lat:46.9787, lon:-120.8284 },
+    { label:'Green River',     sub:'Hanson Dam → Auburn',    usgs:'12113000', lat:47.3298, lon:-122.2298 },
+    { label:'Okanogan',        sub:'Tonasket → Omak',        usgs:'12447200', lat:48.2976, lon:-119.7093 },
+  ],
+  OR: [
+    { label:'Deschutes',       sub:'Maupin → Columbia',      usgs:'14092500', lat:45.2829, lon:-120.9075 },
+    { label:'North Umpqua',    sub:'Steamboat → Roseburg',   usgs:'14317500', lat:43.3468, lon:-123.1715 },
+    { label:'Metolius',        sub:'Camp Sherman → Billy Chinook', usgs:'14076500', lat:44.5132, lon:-121.6332 },
+    { label:'McKenzie',        sub:'Blue River → Springfield',usgs:'14162500', lat:44.2376, lon:-122.4765 },
+    { label:'Sandy River',     sub:'Zigzag → Columbia',      usgs:'14142500', lat:45.3969, lon:-122.2598 },
+    { label:'Rogue River',     sub:'Grants Pass → Gold Hill', usgs:'14361500', lat:42.4432, lon:-123.3268 },
+    { label:'Williamson',      sub:'Klamath Marsh → Agency', usgs:'11502500', lat:42.6168, lon:-121.8671 },
+    { label:'Crooked River',   sub:'Prineville → Ochoco Res',usgs:'14086000', lat:44.2968, lon:-120.8348 },
+    { label:'John Day',        sub:'Service Creek → Fossil', usgs:'14046000', lat:44.8032, lon:-120.0629 },
+    { label:'Clackamas',       sub:'Estacada → Oregon City', usgs:'14211010', lat:45.3012, lon:-122.3265 },
+    { label:'Wilson River',    sub:'Tillamook Forest',        usgs:'14301500', lat:45.4843, lon:-123.5798 },
+    { label:'Nestucca',        sub:'Upper → Pacific City',   usgs:'14303500', lat:45.1254, lon:-123.7123 },
+  ],
+  MT: [
+    { label:'Madison River',   sub:'Ennis → Three Forks',    usgs:'06037500', lat:45.6382, lon:-111.5354 },
+    { label:'Gallatin River',  sub:'Big Sky → Manhattan',    usgs:'06043500', lat:45.6641, lon:-111.1543 },
+    { label:'Yellowstone',     sub:'Livingston → Billings',  usgs:'06192500', lat:45.6657, lon:-110.5612 },
+    { label:'Big Hole',        sub:'Wisdom → Twin Bridges',  usgs:'06024580', lat:45.5432, lon:-112.9876 },
+    { label:'Bitterroot',      sub:'Darby → Missoula',       usgs:'12344000', lat:46.5012, lon:-114.0834 },
+    { label:'Clark Fork',      sub:'Missoula → Plains',      usgs:'12340000', lat:46.8721, lon:-114.0176 },
+    { label:'Blackfoot',       sub:'Lincoln → Bonner',       usgs:'12388400', lat:46.8654, lon:-113.0987 },
+    { label:'Missouri (MT)',   sub:'Holter Dam → Cascade',   usgs:'06054500', lat:47.0154, lon:-111.6543 },
+    { label:'Flathead',        sub:'Columbia Falls → Plains', usgs:'12363000', lat:48.3732, lon:-114.1876 },
+    { label:'Rock Creek (MT)', sub:'Clinton → Clark Fork',   usgs:'12334510', lat:46.6787, lon:-113.4312 },
+    { label:'Ruby River',      sub:'Alder → Twin Bridges',   usgs:'06016000', lat:45.5243, lon:-112.0987 },
+  ],
+  ID: [
+    { label:'Henry's Fork',   sub:'Island Park → Rexburg',  usgs:'13053000', lat:44.0832, lon:-111.4598 },
+    { label:'South Fork Snake',sub:'Palisades → Heise',      usgs:'13037500', lat:43.4176, lon:-111.3254 },
+    { label:'Silver Creek',    sub:'Picabo → Magic Res',     usgs:'13150430', lat:43.2854, lon:-114.1432 },
+    { label:'Boise River',     sub:'Lucky Peak → Garden City',usgs:'13206000', lat:43.5698, lon:-116.1543 },
+    { label:'Salmon River',    sub:'Stanley → Challis',      usgs:'13302500', lat:44.7132, lon:-114.9234 },
+    { label:'Clearwater',      sub:'Kooskia → Lewiston',     usgs:'13341050', lat:46.1432, lon:-115.9876 },
+    { label:'Teton River (ID)',sub:'Driggs → Rexburg',       usgs:'13063000', lat:43.8254, lon:-111.4123 },
+    { label:'Big Wood River',  sub:'Ketchum → Bellevue',     usgs:'13148500', lat:43.6543, lon:-114.3612 },
+    { label:'St. Joe River',   sub:'Avery → St. Maries',     usgs:'12413000', lat:47.2154, lon:-115.9432 },
+    { label:'North Fork Coeur d'Alene', sub:'Murray → Kingston', usgs:'12413470', lat:47.5487, lon:-116.1765 },
+    { label:'Lochsa River',    sub:'Powell → Lowell',        usgs:'13337000', lat:46.5034, lon:-115.5612 },
+  ],
+  CO: [
+    { label:'South Platte',    sub:'Deckers → Cheesman',     usgs:'06701900', lat:39.2154, lon:-105.2987 },
+    { label:'Colorado River',  sub:'Kremmling → Dotsero',    usgs:'09058000', lat:40.0587, lon:-106.3876 },
+    { label:'Fryingpan',       sub:'Ruedi Res → Basalt',     usgs:'09085000', lat:39.3654, lon:-107.0543 },
+    { label:'Arkansas River',  sub:'Salida → Cañon City',    usgs:'07091200', lat:38.5343, lon:-106.0012 },
+    { label:'Roaring Fork',    sub:'Aspen → Glenwood Springs',usgs:'09085100', lat:39.5432, lon:-107.3234 },
+    { label:'Gunnison',        sub:'Blue Mesa → Gunnison',   usgs:'09128000', lat:38.5465, lon:-107.6543 },
+    { label:'North Platte (CO)',sub:'Northgate Canyon',      usgs:'06620000', lat:40.8932, lon:-106.5876 },
+    { label:'Cache la Poudre', sub:'Fort Collins → Greeley', usgs:'06752000', lat:40.5943, lon:-105.0765 },
+    { label:'Taylor River',    sub:'Taylor Park → Gunnison', usgs:'09109000', lat:38.7654, lon:-106.7212 },
+    { label:'Dolores River',   sub:'McPhee → Gateway',       usgs:'09166500', lat:37.8743, lon:-108.4876 },
+    { label:'Rio Grande (CO)', sub:'Alamosa → South Fork',   usgs:'08220000', lat:37.4698, lon:-106.0887 },
+  ],
+  WY: [
+    { label:'Snake River (WY)',sub:'Jackson → Hoback',       usgs:'13013650', lat:43.4354, lon:-110.7654 },
+    { label:'Green River (WY)',sub:'Warren Bridge → Big Piney', usgs:'09188500', lat:42.8732, lon:-110.1987 },
+    { label:'North Platte (WY)',sub:'Saratoga → Alcova',     usgs:'06635000', lat:41.4543, lon:-106.7876 },
+    { label:'Bighorn River',   sub:'Thermopolis → Worland',  usgs:'06279500', lat:43.6543, lon:-108.2154 },
+    { label:'Yellowstone (WY)',sub:'Yellowstone Park',       usgs:'06191500', lat:44.9876, lon:-110.6543 },
+    { label:'Shoshone River',  sub:'Cody → Lovell',          usgs:'06289000', lat:44.5254, lon:-109.0287 },
+    { label:'Wind River',      sub:'Dubois → Riverton',      usgs:'06219500', lat:43.5432, lon:-108.8765 },
+    { label:'Hoback River',    sub:'Bondurant → Jackson',    usgs:'13016450', lat:43.2543, lon:-110.4876 },
+    { label:'Greys River',     sub:'Alpine → Snake Confluence',usgs:'13018750', lat:43.1632, lon:-110.9345 },
+    { label:'Laramie River',   sub:'Glendevey → Laramie',   usgs:'06659500', lat:41.3143, lon:-105.5987 },
+  ],
+  CA: [
+    { label:'Truckee River',   sub:'Tahoe City → Reno',      usgs:'10338000', lat:39.3254, lon:-120.1543 },
+    { label:'McCloud River',   sub:'Upper McCloud Falls',     usgs:'11460400', lat:41.1432, lon:-122.1234 },
+    { label:'Hat Creek',       sub:'Cassel → Pit River',     usgs:'11355500', lat:40.8765, lon:-121.5876 },
+    { label:'Pit River',       sub:'Fall River Mills → Shasta', usgs:'11381500', lat:40.9654, lon:-121.4432 },
+    { label:'Sacramento (Upper)', sub:'Dunsmuir → Redding',  usgs:'11342000', lat:41.2543, lon:-122.2765 },
+    { label:'Feather River',   sub:'Oroville → Sacramento',  usgs:'11407000', lat:39.5143, lon:-121.5234 },
+    { label:'Kern River',      sub:'Kernville → Isabella',   usgs:'11186000', lat:35.7543, lon:-118.4287 },
+    { label:'Kings River',     sub:'Pine Flat → Fresno',     usgs:'11251000', lat:36.8654, lon:-119.3187 },
+    { label:'Owen River',      sub:'Crowley Lake → Bishop',  usgs:'10336780', lat:37.5432, lon:-118.7654 },
+    { label:'Fall River (CA)', sub:'Thousand Springs',        usgs:'11355010', lat:41.0143, lon:-121.4432 },
+    { label:'Trinity River',   sub:'Lewiston → Douglas City',usgs:'11525500', lat:40.7243, lon:-122.7987 },
+  ],
+  AK: [
+    { label:'Kenai River',     sub:'Kenai Lake → Cook Inlet', usgs:'15266300', lat:60.4398, lon:-150.6543 },
+    { label:'Anchor River',    sub:'Anchor Point',            usgs:'15239900', lat:59.7765, lon:-151.7543 },
+    { label:'Kasilof River',   sub:'Tustumena Lake → Cook Inlet', usgs:'15267900', lat:60.3543, lon:-151.2654 },
+    { label:'Gulkana River',   sub:'Paxson → Copper River',  usgs:'15294300', lat:62.2876, lon:-145.3987 },
+    { label:'Copper River',    sub:'Chitina → Cordova',       usgs:'15214000', lat:61.5143, lon:-145.2765 },
+    { label:'Naknek River',    sub:'King Salmon',             usgs:'15300500', lat:58.6876, lon:-156.6543 },
+    { label:'Kvichak River',   sub:'Iliamna Lake → Kvichak Bay', usgs:'15302000', lat:59.3254, lon:-156.9876 },
+    { label:'Russian River',   sub:'Cooper Landing',          usgs:'15258000', lat:60.4832, lon:-149.9654 },
+    { label:'Alagnak (Branch)',sub:'Kukaklek Lake → Bristol Bay', usgs:'15301900', lat:59.1543, lon:-156.4321 },
+    { label:'Klutina River',   sub:'Copper Center',           usgs:'15212000', lat:61.9654, lon:-145.3123 },
+  ],
+  MN: [
+    { label:'Brule River (MN)',sub:'Brule → Lake Superior',  usgs:'04024000', lat:46.5543, lon:-91.5876 },
+    { label:'Baptism River',   sub:'Finland → Tettegouche',  usgs:'04015330', lat:47.2154, lon:-91.2987 },
+    { label:'Temperance River',sub:'Schroeder to Lake Superior',usgs:'04015438', lat:47.5543, lon:-90.8765 },
+    { label:'Cascade River',   sub:'Lutsen → Lake Superior', usgs:'04016000', lat:47.7032, lon:-90.5432 },
+    { label:'Knife River',     sub:'Two Harbors area',        usgs:'04014500', lat:46.9243, lon:-91.7987 },
+    { label:'Vermilion River', sub:'Cook → Tower area',      usgs:'05124000', lat:47.8234, lon:-92.7654 },
+    { label:'St. Louis River', sub:'Cloquet → Duluth',       usgs:'04024430', lat:46.7432, lon:-92.5123 },
+    { label:'Crow Wing River', sub:'Motley → Brainerd',      usgs:'05243725', lat:46.3154, lon:-94.6543 },
+  ],
+  MI: [
+    { label:'Au Sable River',  sub:'Grayling → Mio',         usgs:'04137500', lat:44.6543, lon:-84.6987 },
+    { label:'Pere Marquette',  sub:'Baldwin → Lake Michigan', usgs:'04059000', lat:43.8876, lon:-85.8543 },
+    { label:'Muskegon River',  sub:'Evart → Newaygo',        usgs:'04119000', lat:43.5932, lon:-85.4876 },
+    { label:'Manistee River',  sub:'Wellston → Manistee',    usgs:'04126520', lat:44.2543, lon:-85.9123 },
+    { label:'Jordan River (MI)',sub:'East Jordan → Advance', usgs:'04057005', lat:45.1243, lon:-85.1287 },
+    { label:'Betsie River',    sub:'Thompsonville → Frankfort',usgs:'04127997', lat:44.5432, lon:-85.9765 },
+    { label:'Black River (MI)',sub:'Onaway → Cheboygan',     usgs:'04001000', lat:45.3876, lon:-84.2543 },
+    { label:'Two Hearted',     sub:'McMillan → Lake Superior',usgs:'04062000', lat:46.5432, lon:-85.6987 },
+    { label:'Pigeon River',    sub:'Vanderbilt → Cheboygan', usgs:'04004000', lat:45.1432, lon:-84.4876 },
+    { label:'Boardman River',  sub:'Kalkaska → Traverse City',usgs:'04126600', lat:44.7654, lon:-85.5432 },
+  ],
+  PA: [
+    { label:'Penns Creek',     sub:'Coburn → Selinsgrove',   usgs:'01555000', lat:40.8543, lon:-77.2987 },
+    { label:'Brodhead Creek',  sub:'Analomink → Delaware',   usgs:'01440000', lat:41.0432, lon:-75.2765 },
+    { label:'Letort Spring Run',sub:'Carlisle',              usgs:'01569800', lat:40.2054, lon:-77.1987 },
+    { label:'Yellow Breeches', sub:'Boiling Springs → Susquehanna', usgs:'01570000', lat:40.1543, lon:-77.1234 },
+    { label:'Big Spring Creek',sub:'Newville area',          usgs:'01570500', lat:40.1876, lon:-77.4543 },
+    { label:'Falling Spring',  sub:'Chambersburg',           usgs:'01570893', lat:39.9354, lon:-77.6654 },
+    { label:'Little Juniata',  sub:'Tyrone → Petersburg',    usgs:'01562000', lat:40.6543, lon:-78.2987 },
+    { label:'Loyalsock Creek', sub:'Forksville → Montoursville', usgs:'01553500', lat:41.2543, lon:-76.9654 },
+    { label:'Spring Creek (PA)',sub:'Bellefonte → Milesburg',usgs:'01546500', lat:40.9143, lon:-77.7876 },
+    { label:'Tulpehocken Creek',sub:'Blue Marsh → Reading',  usgs:'01470870', lat:40.3343, lon:-76.0543 },
+  ],
+  NY: [
+    { label:'Beaverkill',      sub:'Roscoe → East Branch',   usgs:'01421000', lat:41.9543, lon:-74.9876 },
+    { label:'Willowemoc Creek',sub:'Livingston Manor → Roscoe', usgs:'01421618', lat:41.9032, lon:-74.8543 },
+    { label:'Delaware (West Branch)', sub:'Deposit → Hancock',usgs:'01423000', lat:42.1876, lon:-75.3654 },
+    { label:'Esopus Creek',    sub:'Shandaken → Kingston',   usgs:'01362500', lat:42.0876, lon:-74.3987 },
+    { label:'Catskill Creek',  sub:'Stamford → Catskill',    usgs:'01363000', lat:42.2543, lon:-74.5432 },
+    { label:'Schoharie Creek', sub:'Grand Gorge → Esperance',usgs:'01350000', lat:42.5143, lon:-74.5876 },
+    { label:'Ausable River',   sub:'Wilmington → Keeseville',usgs:'04275000', lat:44.4321, lon:-73.7654 },
+    { label:'Salmon River (NY)',sub:'Pulaski',               usgs:'04249000', lat:43.5698, lon:-76.1254 },
+    { label:'Battenkill',      sub:'Manchester VT → Hudson', usgs:'01329000', lat:43.1876, lon:-73.4321 },
+    { label:'Connetquot River',sub:'Long Island',            usgs:'01305000', lat:40.7432, lon:-73.1654 },
+  ],
+  NC: [
+    { label:'Watauga River',   sub:'Boone → Trade TN',       usgs:'03463300', lat:36.2143, lon:-81.6754 },
+    { label:'New River (NC)',  sub:'Todd → Virginia',         usgs:'03165000', lat:36.4432, lon:-81.6876 },
+    { label:'South Holston',   sub:'Holston Tailwater',      usgs:'03465500', lat:36.5432, lon:-82.0543 },
+    { label:'Nantahala River', sub:'Whitewater → Bryson City',usgs:'03503000', lat:35.3765, lon:-83.5987 },
+    { label:'Tuckasegee',      sub:'Bryson City → Whittier', usgs:'03502000', lat:35.4254, lon:-83.4321 },
+    { label:'Davidson River',  sub:'Pisgah Forest',          usgs:'03441000', lat:35.2876, lon:-82.6987 },
+    { label:'Linville River',  sub:'Linville Falls area',    usgs:'03451000', lat:35.9543, lon:-81.9765 },
+    { label:'French Broad',    sub:'Rosman → Asheville',     usgs:'03443000', lat:35.5432, lon:-82.5543 },
+    { label:'Wilson Creek',    sub:'Edgemont area',          usgs:'03453000', lat:36.0543, lon:-81.7876 },
+    { label:'Catawba River',   sub:'Old Fort → Hickory',     usgs:'02137727', lat:35.7143, lon:-81.9432 },
+  ],
+  TN: [
+    { label:'Clinch River (TN)',sub:'Norris Tailwater',      usgs:'03528000', lat:36.2154, lon:-84.0776 },
+    { label:'Caney Fork',      sub:'Center Hill Tailwater',  usgs:'03597860', lat:36.0932, lon:-85.8654 },
+    { label:'Hiwassee River',  sub:'Reliance to Charleston', usgs:'03568000', lat:35.1987, lon:-84.5012 },
+    { label:'South Holston (TN)',sub:'Holston Dam Tailwater',usgs:'07030392', lat:36.5543, lon:-82.1543 },
+    { label:'Watauga (TN)',    sub:'Wilbur Dam Tailwater',   usgs:'03465000', lat:36.3543, lon:-82.2987 },
+    { label:'Elk River (TN)',  sub:'Tims Ford Tailwater',    usgs:'03583000', lat:35.2543, lon:-86.2765 },
+    { label:'Little River (TN)',sub:'Metcalf Bottoms',       usgs:'03497300', lat:35.6543, lon:-83.7654 },
+    { label:'Tellico River',   sub:'Tellico Plains area',    usgs:'03541000', lat:35.3765, lon:-84.2987 },
+    { label:'Ocoee River',     sub:'Ducktown to Parksville', usgs:'03567000', lat:35.1154, lon:-84.5432 },
+    { label:'Pigeon River (TN)',sub:'Hartford area',         usgs:'03460000', lat:35.8143, lon:-83.1543 },
+  ],
+  VT: [
+    { label:'Batten Kill',     sub:'Manchester → Arlington', usgs:'01362000', lat:43.0987, lon:-73.0876 },
+    { label:'Lamoille River',  sub:'Johnson → Hardwick',     usgs:'04288000', lat:44.6343, lon:-72.6543 },
+    { label:'Mad River (VT)',  sub:'Waitsfield → Moretown',  usgs:'04284000', lat:44.1876, lon:-72.8432 },
+    { label:'Dog River',       sub:'Northfield area',        usgs:'04284300', lat:44.1543, lon:-72.6543 },
+    { label:'Black River (VT)',sub:'Ludlow → Springfield',   usgs:'01153550', lat:43.3987, lon:-72.5432 },
+    { label:'White River (VT)',sub:'Hancock → Sharon',       usgs:'01144000', lat:43.9765, lon:-72.5987 },
+    { label:'Winooski River',  sub:'Montpelier → Burlington',usgs:'04288500', lat:44.3432, lon:-72.5234 },
+    { label:'Otter Creek',     sub:'Middlebury → Vergennes', usgs:'04282000', lat:44.0143, lon:-73.1543 },
+  ],
+  WI: [
+    { label:'Driftless Coulee',sub:'Vernon County Streams',  usgs:'05410490', lat:43.5632, lon:-90.8765 },
+    { label:'Kinnickinnic',    sub:'River Falls area',       usgs:'05342000', lat:44.8643, lon:-92.6543 },
+    { label:'Bois Brule',      sub:'Brule → Lake Superior',  usgs:'04025500', lat:46.5543, lon:-91.6243 },
+    { label:'Wolf River (WI)',  sub:'Langlade → Shawano',   usgs:'04074950', lat:45.1543, lon:-88.9876 },
+    { label:'Prairie River',   sub:'Merrill area',           usgs:'04073500', lat:45.2543, lon:-89.7432 },
+    { label:'Namekagon',       sub:'Cable → Trego',          usgs:'05330000', lat:46.0232, lon:-91.3987 },
+    { label:'Timber Coulee',   sub:'Coon Valley area',       usgs:'05408000', lat:43.7154, lon:-90.9543 },
+    { label:'Rush River',      sub:'Martell area',           usgs:'05344500', lat:44.7154, lon:-92.4876 },
+    { label:'Oconto River',    sub:'Gillett → Oconto',       usgs:'04075000', lat:44.8876, lon:-88.3543 },
+    { label:'Peshtigo River',  sub:'Crivitz → Peshtigo',     usgs:'04077000', lat:45.2154, lon:-88.1987 },
+  ],
+};
+
+// ── RENDER STATE RIVER TABS ───────────────────────────────────────────────────
+function renderStateTabs(stateCode) {
+  const rivers = STATE_RIVERS[stateCode];
+  const nav = document.querySelector('.river-tabs');
+  
+  if (!rivers) {
+    // State not in our DB — keep existing tabs, just show search hint
+    document.getElementById('site-search-status').textContent = 
+      allSites.length + ' active gauges — type to filter · No preset tabs for ' + stateCode;
+    return;
+  }
+
+  // Build tabs HTML
+  nav.innerHTML = rivers.map((r, i) => `
+    <button class="river-tab ${i === 0 ? 'active' : ''}" onclick="loadStateRiver(${i}, '${stateCode}')">
+      ${r.label}
+      <span class="tab-sub">${r.sub}</span>
+    </button>
+  `).join('');
+
+  // Load first river immediately
+  loadStateRiver(0, stateCode);
+}
+
+function loadStateRiver(idx, stateCode) {
+  const rivers = STATE_RIVERS[stateCode];
+  if (!rivers || !rivers[idx]) return;
+  const r = rivers[idx];
+
+  // Update active tab
+  document.querySelectorAll('.river-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
+
+  // Build a minimal river config compatible with the dashboard
+  activeRiver = {
+    id: stateCode + '_' + idx,
+    label: r.label,
+    sublabel: r.sub,
+    usgs: r.usgs,
+    gaugeName: r.label + ' gauge',
+    lat: r.lat,
+    lon: r.lon,
+    wadingThresholds: { easy: 500, moderate: 1200, difficult: 2500, floatOnly: 4000 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — ' + r.label,
+    accessLabel: 'Access — ' + r.label,
+    aiContext: r.label + ', ' + stateCode + ' (' + r.sub + ')',
+    insightTip: 'Seasonal patterns, best hatches, typical fish species, and access notes for ' + r.label,
+  };
+
+  // Update all header/footer labels
+  const parts = r.label.split(' ');
+  const first = parts[0], rest = parts.slice(1).join(' ');
+  document.getElementById('river-title').innerHTML = rest
+    ? first + ' <em style="font-style:italic;color:var(--accent)">' + rest + '</em>'
+    : '<em style="font-style:italic;color:var(--accent)">' + first + '</em>';
+  document.getElementById('river-subtitle').innerHTML = '🎣 ' + r.sub + ' &nbsp;·&nbsp; Fishing Dashboard';
+  document.getElementById('gauge-label').textContent = 'USGS #' + r.usgs + ' · ' + r.label;
+  document.getElementById('footer-gauge').textContent = 'Flow: USGS #' + r.usgs + ' (' + r.label + ')';
+  document.getElementById('hatch-label').textContent = 'Hatches — ' + r.label;
+  document.getElementById('access-label').textContent = 'Access — ' + r.label;
+  document.getElementById('gage-note').textContent = r.label + ' gauge';
+  document.getElementById('airtemp-note').textContent = r.sub.split('→')[0].trim();
+  document.title = r.label + ' — DriftScout';
+
+  // Reset wading ticks
+  const t = activeRiver.wadingThresholds;
+  const fmt = n => n >= 1000 ? (n/1000).toFixed(0)+'k' : n.toString();
+  document.getElementById('wading-t1').textContent = fmt(t.easy) + ' cfs';
+  document.getElementById('wading-t2').textContent = fmt(t.moderate);
+  document.getElementById('wading-t3').textContent = fmt(t.difficult);
+  document.getElementById('wading-t4').textContent = fmt(t.floatOnly) + '+';
+
+  // Reset stat cards
+  flowData = []; currentFlow = null; currentGage = null;
+  currentWaterTemp = null; airTemp = null; weatherData = null;
+  ['flow-val','gage-val','wtemp-val','airtemp-val'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = '—'; el.classList.add('skeleton'); }
+  });
+  const wb = document.getElementById('wtemp-est-wrap');
+  if (wb) wb.style.display = 'none';
+  const baroEl = document.getElementById('baro-val');
+  if (baroEl) { baroEl.textContent = '--'; baroEl.classList.add('skeleton'); }
+  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:'IBM Plex Mono',monospace">asking Claude…</div>';
+  document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
+  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;font-family:'IBM Plex Mono',monospace">Detailed hatch data available for Washington preset rivers.</div>';
+  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;font-family:'IBM Plex Mono',monospace">Access point data available for Washington preset rivers.</div>';
+
+  const snap = activeRiver.id;
+  Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
+    if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
+  });
 }
 
 </script>
