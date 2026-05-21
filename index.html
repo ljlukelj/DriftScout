@@ -2339,7 +2339,7 @@ function switchRiver(riverId) {
   if (wb) wb.style.display = 'none';
   document.title = activeRiver.label + ' — DriftScout';
   // Reset rig box
-  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:\'IBM Plex Mono\',monospace">asking Claude…</div>';
+  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
 
   // Reset insights
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
@@ -2848,10 +2848,10 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Base everythin
         <div style="font-size:1.3rem;line-height:1;margin-top:2px">${s.emoji}</div>
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
+            <span style=";font-size:0.75rem;font-weight:600;color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
               ${s.rig}
             </span>
-            ${i === 0 ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>' : ''}
+            ${i === 0 ? '<span style=";font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>' : ''}
           </div>
           <div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">${s.flies}</div>
           <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic">${s.tip}</div>
@@ -2882,7 +2882,7 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Base everythin
       <div style="display:flex;gap:10px;align-items:flex-start;padding:${i < setups.length-1?'0 0 8px 0':'0'};${i < setups.length-1?'border-bottom:1px solid rgba(255,255,255,0.06)':''}">
         <div style="font-size:1.3rem;line-height:1;margin-top:2px">${s.emoji}</div>
         <div style="flex:1">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:${i===0?'var(--accent)':'var(--text)'};margin-bottom:2px">${s.rig}</div>
+          <div style=";font-size:0.75rem;font-weight:600;color:${i===0?'var(--accent)':'var(--text)'};margin-bottom:2px">${s.rig}</div>
           <div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">${s.flies}</div>
           <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic">${s.tip}</div>
         </div>
@@ -3109,7 +3109,7 @@ function renderKnots() {
         </div>
         <div class="knot-pro-tip" style="margin-bottom:10px">&#128161; ${k.tip}</div>
         <a href="${k.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
-           style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);text-decoration:none;letter-spacing:0.08em">
+           style=";font-size:0.65rem;color:var(--accent);text-decoration:none;letter-spacing:0.08em">
           Step-by-step guide at AnimatedKnots.com &#8599;
         </a>
       </div>
@@ -3772,15 +3772,83 @@ function loadStateRiver(idx, stateCode) {
   if (wb) wb.style.display = 'none';
   const baroEl = document.getElementById('baro-val');
   if (baroEl) { baroEl.textContent = '--'; baroEl.classList.add('skeleton'); }
-  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:'IBM Plex Mono',monospace">asking Claude…</div>';
+  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
-  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;font-family:'IBM Plex Mono',monospace">Detailed hatch data available for Washington preset rivers.</div>';
-  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0;font-family:'IBM Plex Mono',monospace">Access point data available for Washington preset rivers.</div>';
+  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for Washington preset rivers.</div>';
+  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for Washington preset rivers.</div>';
 
   const snap = activeRiver.id;
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
     if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
   });
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRIP LOG
+// ═══════════════════════════════════════════════════════════
+function setDefaultDate() {
+  const d = document.getElementById('log-date');
+  if (d && !d.value) d.value = new Date().toISOString().split('T')[0];
+}
+
+function getTripLog() {
+  try { return JSON.parse(localStorage.getItem('driftscout_trips') || '[]'); } catch { return []; }
+}
+
+function saveTripEntry() {
+  const date   = document.getElementById('log-date').value;
+  const river  = document.getElementById('log-river').value;
+  const flow   = document.getElementById('log-flow').value;
+  const fly    = document.getElementById('log-fly').value;
+  const method = document.getElementById('log-method').value;
+  const fish   = document.getElementById('log-fish').value;
+  const notes  = document.getElementById('log-notes').value;
+  if (!date || !river) { alert('Please fill in at least a date and river.'); return; }
+  const entries = getTripLog();
+  entries.unshift({ id: Date.now(), date, river, flow, fly, method, fish, notes });
+  localStorage.setItem('driftscout_trips', JSON.stringify(entries));
+  document.getElementById('log-fly').value = '';
+  document.getElementById('log-fish').value = '';
+  document.getElementById('log-notes').value = '';
+  renderTripLog();
+}
+
+function clearTripLog() {
+  if (!confirm('Clear all trip entries?')) return;
+  localStorage.removeItem('driftscout_trips');
+  renderTripLog();
+}
+
+function deleteTripEntry(id) {
+  const entries = getTripLog().filter(e => e.id !== id);
+  localStorage.setItem('driftscout_trips', JSON.stringify(entries));
+  renderTripLog();
+}
+
+function renderTripLog() {
+  const entries = getTripLog();
+  const container = document.getElementById('trip-entries');
+  if (!container) return;
+  if (!entries.length) {
+    container.innerHTML = '<div class="trip-empty">No trips logged yet.<br>Fill in the form above to record your first outing.</div>';
+    return;
+  }
+  container.innerHTML = entries.map(e => {
+    const tags = [e.method, e.flow ? e.flow + ' cfs' : null].filter(Boolean);
+    return '<div class="trip-entry">' +
+      '<div>' +
+        '<div class="trip-entry-top">' +
+          '<span class="trip-entry-river">' + e.river + '</span>' +
+          '<span class="trip-entry-date">' + e.date + '</span>' +
+        '</div>' +
+        (e.fly ? '<div class="trip-entry-fly">' + e.fly + '</div>' : '') +
+        (e.notes ? '<div class="trip-entry-note">' + e.notes + '</div>' : '') +
+        (e.fish ? '<div class="trip-entry-note" style="margin-top:4px">&#x1F41F; ' + e.fish + ' fish</div>' : '') +
+        '<div class="trip-entry-tags">' + tags.map(t => '<span class="trip-tag">' + t + '</span>').join('') + '</div>' +
+      '</div>' +
+      '<button class="btn-danger" onclick="deleteTripEntry(' + e.id + ')" title="Delete">&#x2715;</button>' +
+    '</div>';
+  }).join('');
 }
 
 </script>
