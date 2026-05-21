@@ -2927,10 +2927,16 @@ async function onStatePick() {
   const results = document.getElementById('site-results');
   const input = document.getElementById('site-search-input');
   if (!state) return;
+
   allSites = []; results.innerHTML = ''; input.value = '';
-  input.placeholder = 'Loading gauges\u2026';
+
+  // ── Render curated river tabs IMMEDIATELY — no waiting on network ──
+  renderStateTabs(state);
+
+  // ── Load USGS gauge list in background for the search box ──
+  input.placeholder = 'Loading gauges…';
   input.disabled = true;
-  status.textContent = '\u23f3 Loading gauges for ' + state + '\u2026';
+  status.textContent = '⏳ Loading search index for ' + state + '…';
   try {
     const url = `https://yakima-proxy.ljlukelj.workers.dev/sites?state=${state}`;
     const res = await fetch(url);
@@ -2939,16 +2945,13 @@ async function onStatePick() {
       .filter(l => l && !l.startsWith('#') && !l.startsWith('agency') && !l.startsWith('5s') && l.includes('\t'))
       .map(l => { const c = l.split('\t'); return { id: c[1], name: c[2], lat: c[4], lon: c[5] }; })
       .filter(s => s.id && s.name && s.id.length >= 8);
-    status.textContent = allSites.length + ' active gauges — type to filter';
-    // Re-enable search input
     input.disabled = false;
     input.placeholder = 'Type river name to filter…';
-    // Render curated tabs for this state
-    renderStateTabs(state);
+    status.textContent = allSites.length + ' active gauges — type to filter';
   } catch(e) {
     input.disabled = false;
-    input.placeholder = 'Type river name to filter\u2026';
-    status.textContent = '\u274c Error loading gauges. Check connection and try again.';
+    input.placeholder = 'Type river name to filter…';
+    status.textContent = '❌ Could not load search index.';
     console.error('Sites fetch error:', e);
   }
 }
@@ -3496,7 +3499,7 @@ const STATE_RIVERS = {
     { label:'Ruby River',      sub:'Alder → Twin Bridges',   usgs:'06016000', lat:45.5243, lon:-112.0987 },
   ],
   ID: [
-    { label:'Henry's Fork',   sub:'Island Park → Rexburg',  usgs:'13053000', lat:44.0832, lon:-111.4598 },
+    { label:'Henrys Fork',   sub:'Island Park → Rexburg',  usgs:'13053000', lat:44.0832, lon:-111.4598 },
     { label:'South Fork Snake',sub:'Palisades → Heise',      usgs:'13037500', lat:43.4176, lon:-111.3254 },
     { label:'Silver Creek',    sub:'Picabo → Magic Res',     usgs:'13150430', lat:43.2854, lon:-114.1432 },
     { label:'Boise River',     sub:'Lucky Peak → Garden City',usgs:'13206000', lat:43.5698, lon:-116.1543 },
@@ -3505,7 +3508,7 @@ const STATE_RIVERS = {
     { label:'Teton River (ID)',sub:'Driggs → Rexburg',       usgs:'13063000', lat:43.8254, lon:-111.4123 },
     { label:'Big Wood River',  sub:'Ketchum → Bellevue',     usgs:'13148500', lat:43.6543, lon:-114.3612 },
     { label:'St. Joe River',   sub:'Avery → St. Maries',     usgs:'12413000', lat:47.2154, lon:-115.9432 },
-    { label:'North Fork Coeur d'Alene', sub:'Murray → Kingston', usgs:'12413470', lat:47.5487, lon:-116.1765 },
+    { label:'N Fork Coeur dAlene', sub:'Murray to Kingston', usgs:'12413470', lat:47.5487, lon:-116.1765 },
     { label:'Lochsa River',    sub:'Powell → Lowell',        usgs:'13337000', lat:46.5034, lon:-115.5612 },
   ],
   CO: [
@@ -3654,23 +3657,54 @@ const STATE_RIVERS = {
 
 // ── RENDER STATE RIVER TABS ───────────────────────────────────────────────────
 function renderStateTabs(stateCode) {
-  const rivers = STATE_RIVERS[stateCode];
   const nav = document.querySelector('.river-tabs');
-  
-  if (!rivers) {
-    // State not in our DB — keep existing tabs, just show search hint
-    document.getElementById('site-search-status').textContent = 
-      allSites.length + ' active gauges — type to filter · No preset tabs for ' + stateCode;
+
+  // WA: restore the full preset tabs (with hatches, access points, etc.)
+  if (stateCode === 'WA') {
+    const waRivers = [
+      ['upperYakima',   'Upper Yakima',    'Easton → Thorpe'],
+      ['yakimaCanyon',  'Yakima Canyon',   'Roza Dam → Ellensburg'],
+      ['naches',        'Naches River',    'Upper → Confluence'],
+      ['snoqualmie',    'Snoqualmie MF',   'Middle Fork · Above Falls'],
+      ['methow',        'Methow',          'Winthrop → Pateros'],
+      ['okanogan',      'Okanogan',        'Tonasket → Omak'],
+      ['klickitat',     'Klickitat',       'Canyon → Columbia'],
+      ['cowlitz',       'Cowlitz',         'Packwood → Riffe Lake'],
+      ['kalama',        'Kalama',          'Headwaters → Columbia'],
+      ['skykomish',     'Skykomish',       'Index → Monroe'],
+      ['wenatchee',     'Wenatchee',       'Leavenworth → Columbia'],
+      ['greenRiver',    'Green River',     'Hanson Dam → Auburn'],
+      ['stillaguamish', 'Stillaguamish',   'North Fork → Arlington'],
+    ];
+    nav.innerHTML = waRivers.map(function(r, i) {
+      return '<button class="river-tab' + (i===0?' active':'') + '" data-wa="' + r[0] + '">' +
+        r[1] + '<span class="tab-sub">' + r[2] + '</span></button>';
+    }).join('');
+    nav.querySelectorAll('.river-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchRiver(this.dataset.wa); });
+    });
+    switchRiver('upperYakima');
     return;
   }
 
-  // Build tabs HTML
-  nav.innerHTML = rivers.map((r, i) => `
-    <button class="river-tab ${i === 0 ? 'active' : ''}" onclick="loadStateRiver(${i}, '${stateCode}')">
-      ${r.label}
-      <span class="tab-sub">${r.sub}</span>
-    </button>
-  `).join('');
+  const rivers = STATE_RIVERS[stateCode];
+  if (!rivers) {
+    document.getElementById('site-search-status').textContent =
+      'No preset tabs for ' + stateCode + ' — use search above';
+    return;
+  }
+
+  // Build tabs for other states using data attributes (no quote escaping issues)
+  nav.innerHTML = rivers.map(function(r, i) {
+    return '<button class="river-tab' + (i===0?' active':'') + '" data-idx="' + i + '" data-state="' + stateCode + '">' +
+      r.label + '<span class="tab-sub">' + r.sub + '</span></button>';
+  }).join('');
+
+  nav.querySelectorAll('.river-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      loadStateRiver(parseInt(this.dataset.idx), this.dataset.state);
+    });
+  });
 
   // Load first river immediately
   loadStateRiver(0, stateCode);
