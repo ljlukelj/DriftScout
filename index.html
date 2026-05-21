@@ -1461,6 +1461,7 @@
     <button class="mode-btn" onclick="switchMode('regs')"><span class="mode-icon">⚖️</span> Regulations</button>
     <button class="mode-btn" onclick="switchMode('calc')"><span class="mode-icon">📐</span> Calculator</button>
     <button class="mode-btn" onclick="switchMode('shops')"><span class="mode-icon">🏪</span> Fly Shops</button>
+    <button class="mode-btn" onclick="switchMode('hatch')"><span class="mode-icon">🔍</span> Match the Hatch</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -1797,8 +1798,8 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-regs" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Washington Fishing Regulations</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Quick reference — always verify with WDFW before fishing</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="regs-title">Washington Fishing Regulations</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="regs-subtitle">Quick reference — always verify with WDFW before fishing</div>
     </div>
     <div class="reg-warning">
       <strong>⚠️ Important:</strong> This is a quick reference only. Regulations change annually. Always check the current <a href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold)">WDFW Fishing Regulations</a> before fishing. Tribal waters have separate rules.
@@ -1925,14 +1926,63 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-shops" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Washington Fly Shops</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Local shops near the rivers you fish — best sources for current intel</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="shops-title">Washington Fly Shops</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="shops-subtitle">Local shops near the rivers you fish — best sources for current intel</div>
     </div>
     <div class="shop-grid" id="shop-grid"></div>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:8px">
       Know a shop we're missing? Support local shops — they keep these rivers fishing.
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MATCH THE HATCH PANEL -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="panel-hatch" class="tools-panel">
+    <div style="margin-bottom:24px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Match the Hatch</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Photo-identify any aquatic insect &middot; Get exact fly pattern matches</div>
+    </div>
+
+    <div id="hatch-upload-area" style="border:2px dashed var(--border);border-radius:6px;padding:48px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;margin-bottom:24px;background:var(--surface)"
+      onclick="document.getElementById("hatch-file-input").click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+      ondragleave="this.style.borderColor='var(--border)'"
+      ondrop="handleHatchDrop(event)">
+      <div style="font-size:3rem;margin-bottom:12px">&#128247;</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:8px">Drop a bug photo here</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:16px">or click to browse &middot; JPG, PNG, HEIC</div>
+      <div style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 20px;border-radius:2px">Choose Photo</div>
+    </div>
+    <input type="file" id="hatch-file-input" accept="image/*" style="display:none" onchange="handleHatchFile(event)">
+
+    <div id="hatch-preview-wrap" style="display:none;margin-bottom:24px">
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex-shrink:0">
+          <img id="hatch-preview-img" style="width:200px;height:200px;object-fit:cover;border-radius:4px;border:1px solid var(--border)" alt="Bug photo">
+          <div style="margin-top:8px">
+            <button onclick="document.getElementById("hatch-file-input").click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:5px 12px;border-radius:2px;cursor:pointer;width:100%">New Photo</button>
+          </div>
+        </div>
+        <div id="hatch-result" style="flex:1;min-width:220px">
+          <div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem">
+            <div class="spinner"></div>Identifying insect&hellip;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:18px 20px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Photo Tips for Best Results</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">01</span>Place bug on a light surface (rock, paper)</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">02</span>Get close &mdash; wings, body, and tails visible</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">03</span>Natural light works best, avoid flash</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">04</span>Include something for scale if possible</div>
+      </div>
+    </div>
+  </div>
+
 
   <footer>
     <div id="footer-gauge">Flow data: USGS Water Services · USGS #12484500 (Yakima at Umtanum)</div>
@@ -2791,23 +2841,69 @@ async function fetchWaterTemp(riverId) {
   const gage    = currentGage  ? `${currentGage.toFixed(2)} ft`    : 'unknown';
   const wTemp   = currentWaterTemp ? `${currentWaterTemp}°F`        : 'unavailable';
   const aTemp   = airTemp      ? `${Math.round(airTemp)}°F`         : 'unknown';
-  const hour    = new Date().getHours();
-  const timeOfDay = hour < 6 ? 'pre-dawn' : hour < 10 ? 'morning' : hour < 14 ? 'midday' : hour < 18 ? 'afternoon' : 'evening';
-  const month   = new Date().toLocaleString('en-US', { month: 'long' });
+
+  // ── Finer time-of-day buckets ──
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 6  ? 'pre-dawn (dark, fish near bottom)'
+    : hour < 9  ? 'early morning (low light, fish becoming active)'
+    : hour < 11 ? 'mid-morning (prime hatch window opening)'
+    : hour < 13 ? 'late morning (peak hatch window)'
+    : hour < 15 ? 'early afternoon (midday lull, fish deep or in shade)'
+    : hour < 17 ? 'mid-afternoon (activity picking up again)'
+    : hour < 19 ? 'evening (prime evening hatch and spinner fall)'
+    : 'dusk/dark (surface activity fading, streamers and big nymphs)';
+
+  const month = new Date().toLocaleString('en-US', { month: 'long' });
   const hatches = getHatches().filter(h => h.active).map(h => h.name).join(', ') || 'none strongly active';
+
+  // ── Flow trend (rising / falling / stable) ──
+  let flowTrend = 'stable';
+  const flowDeltaEl = document.getElementById('flow-delta');
+  if (flowDeltaEl) {
+    const txt = flowDeltaEl.textContent || '';
+    if (txt.includes('↑') && !txt.includes('↑ 0')) flowTrend = 'rising (' + txt.trim() + ')';
+    else if (txt.includes('↓') && !txt.includes('↓ 0')) flowTrend = 'falling (' + txt.trim() + ')';
+  }
+
+  // ── Barometric pressure trend ──
+  let baroTrend = 'unknown';
+  const baroNoteEl = document.getElementById('baro-note');
+  if (baroNoteEl) baroTrend = baroNoteEl.textContent.trim() || 'unknown';
+  const baroValEl = document.getElementById('baro-val');
+  const baroVal = baroValEl ? baroValEl.textContent.trim() + ' inHg' : 'unknown';
+
+  // ── Sky / weather condition from Open-Meteo weathercode ──
+  let skyCondition = 'unknown';
+  if (weatherData && weatherData.current_weather) {
+    const code = weatherData.current_weather.weathercode;
+    const wind = Math.round(weatherData.current_weather.windspeed || 0);
+    const isDay = weatherData.current_weather.is_day;
+    if ([0,1].includes(code)) skyCondition = 'clear and sunny';
+    else if ([2].includes(code)) skyCondition = 'partly cloudy';
+    else if ([3].includes(code)) skyCondition = 'overcast (ideal hatch conditions)';
+    else if ([45,48].includes(code)) skyCondition = 'foggy';
+    else if ([51,53,55,61,63,80,81].includes(code)) skyCondition = 'light to moderate rain';
+    else if ([65,82].includes(code)) skyCondition = 'heavy rain';
+    else if ([71,73,75,77,85,86].includes(code)) skyCondition = 'snow/wintry mix';
+    else if ([95,96,99].includes(code)) skyCondition = 'thunderstorms';
+    if (wind > 15) skyCondition += `, windy (${wind} mph — dries difficult`;
+    if (!isDay) skyCondition += ', nighttime';
+  }
 
   const prompt = `You are an expert fly fishing guide on ${activeRiver.aiContext}.
 
-Current conditions right now:
-- Flow: ${flow} (USGS #${activeRiver.usgs})
+Current live conditions (${new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}):
+- Flow: ${flow} and ${flowTrend}
 - Gauge height: ${gage}
 - Water temp: ${wTemp}
 - Air temp: ${aTemp}
+- Sky: ${skyCondition}
+- Barometric pressure: ${baroVal} — ${baroTrend}
 - Time of day: ${timeOfDay}
 - Month: ${month}
 - Active hatches: ${hatches}
 
-Give 2-3 distinct setup options ranked best to worst for these exact conditions. Each should be a genuinely different approach (e.g. nymph rig vs dry fly vs streamer — not two nymph rigs).
+Give 2-3 distinct setup options ranked best to worst for these exact conditions. Each must be a genuinely different approach (dry fly vs nymph vs streamer — not two nymph rigs). Let the baro trend, flow trend, sky, water temp, and time of day meaningfully drive your recommendations — not just the month.
 
 Respond with ONLY a JSON array — no markdown, no explanation — in this exact shape:
 [
@@ -2816,11 +2912,11 @@ Respond with ONLY a JSON array — no markdown, no explanation — in this exact
     "rig": "<setup name, max 4 words>",
     "emoji": "<single emoji>",
     "flies": "<specific pattern names with hook sizes>",
-    "tip": "<one key tactical tip for these conditions, max 12 words>"
+    "tip": "<one key tactical tip driven by today's specific conditions, max 14 words>"
   }
 ]
 
-Be specific. Use real patterns that work on ${activeRiver.label}. Base everything on the live conditions.`;
+Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the tip WHY these conditions call for this approach.`;
 
   try {
     const res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
@@ -3042,11 +3138,11 @@ loadAll();
 // ═══════════════════════════════════════════════════════════
 function switchMode(mode) {
   document.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    const modes = ['rivers','knots','triplog','regs','calc','shops'];
+    const modes = ['rivers','knots','triplog','regs','calc','shops','hatch'];
     btn.classList.toggle('active', modes[i] === mode);
   });
   document.getElementById('river-dashboard').style.display = mode === 'rivers' ? 'block' : 'none';
-  ['knots','triplog','regs','calc','shops'].forEach(m => {
+  ['knots','triplog','regs','calc','shops','hatch'].forEach(m => {
     const el = document.getElementById('panel-' + m);
     if (el) el.style.display = m === mode ? 'block' : 'none';
   });
@@ -3248,6 +3344,7 @@ function circlePts(cx,cy,rx,ry, n, zFn) {
 
 function renderShops() {
   const grid = document.getElementById('shop-grid');
+  if (!grid) return;
   if (grid.children.length > 0) return;
   grid.innerHTML = SHOPS.map(s => `
     <div class="shop-card">
@@ -3281,6 +3378,7 @@ const SHOPS = [
 
 function renderShops() {
   const grid = document.getElementById('shop-grid');
+  if (!grid) return;
   if (grid.children.length > 0) return;
   grid.innerHTML = SHOPS.map(s => `
     <div class="shop-card">
@@ -3684,6 +3782,8 @@ function renderStateTabs(stateCode) {
       btn.addEventListener('click', function() { switchRiver(this.dataset.wa); });
     });
     switchRiver('upperYakima');
+    updateShopsForState('WA');
+    updateRegsForState('WA');
     return;
   }
 
@@ -3708,6 +3808,9 @@ function renderStateTabs(stateCode) {
 
   // Load first river immediately
   loadStateRiver(0, stateCode);
+  // Update shops and regs for this state
+  updateShopsForState(stateCode);
+  updateRegsForState(stateCode);
 }
 
 function loadStateRiver(idx, stateCode) {
@@ -3849,6 +3952,435 @@ function renderTripLog() {
       '<button class="btn-danger" onclick="deleteTripEntry(' + e.id + ')" title="Delete">&#x2715;</button>' +
     '</div>';
   }).join('');
+}
+
+// =============================================================
+// STATE-AWARE SHOPS & REGULATIONS
+// =============================================================
+
+const STATE_SHOPS = {
+  WA: [
+    { name:'The Evening Hatch', location:'Ellensburg, WA', rivers:'Yakima River & Canyon', tags:['Guided','Gear','Flies','Lessons'], website:'https://www.eveninghatch.com', phone:'(509) 962-5959' },
+    { name:'Worley Bugger Fly Co.', location:'Ellensburg, WA', rivers:'Upper Yakima, Canyon', tags:['Gear','Flies','Classes','Repairs'], website:'https://www.worleybugger.com', phone:'(509) 962-2033' },
+    { name:'The Spotted Frog', location:'Yakima, WA', rivers:'Yakima Canyon, Naches', tags:['Guided','Gear','Flies'], website:'https://spottedfroglyfishing.com', phone:'(509) 225-0909' },
+    { name:"Red's Fly Shop", location:'Winthrop, WA', rivers:'Methow, Okanogan', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.redsflyshop.com', phone:'(509) 997-3900' },
+    { name:'Creekside Angling', location:'Issaquah, WA', rivers:'Snoqualmie, Cedar, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.creeksideangling.com', phone:'(425) 392-3800' },
+    { name:"Patrick's Fly Shop", location:'Seattle, WA', rivers:'All WA rivers', tags:['Gear','Flies','Classes','Reports'], website:'https://www.patricksflyfishing.com', phone:'(206) 325-8988' },
+    { name:'Avid Angler', location:'Lake Forest Park, WA', rivers:'Puget Sound rivers, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.avidangler.com', phone:'(206) 362-4030' },
+    { name:"Swede's Fly Shop", location:'Randle, WA', rivers:'Cowlitz River', tags:['Guided','Gear','Flies','Intel'], website:'https://www.swedesflyfishing.com', phone:'(360) 497-7397' },
+    { name:'Confluence Fly Shop', location:'Hood River, OR', rivers:'Klickitat, Deschutes, Columbia Gorge', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.confluenceflyshop.com', phone:'(541) 386-6002' },
+    { name:"Kaufmann's Streamborn", location:'Tigard, OR', rivers:'All PNW rivers', tags:['Gear','Flies','Books','Mail Order'], website:'https://www.kman.com', phone:'(800) 442-4359' },
+  ],
+  OR: [
+    { name:'The Fly Fisher Place', location:'Sisters, OR', rivers:'Metolius, Deschutes, McKenzie', tags:['Guided','Gear','Flies','Classes'], website:'https://www.theflyfisherplace.com', phone:'(541) 549-3474' },
+    { name:'The Deschutes Angler', location:'Maupin, OR', rivers:'Deschutes River', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.deschutesangler.com', phone:'(541) 395-0995' },
+    { name:'Confluence Fly Shop', location:'Hood River, OR', rivers:'Deschutes, Klickitat, Sandy', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.confluenceflyshop.com', phone:'(541) 386-6002' },
+    { name:'The Caddis Fly', location:'Eugene, OR', rivers:'McKenzie, Willamette, North Umpqua', tags:['Guided','Gear','Flies','Classes'], website:'https://www.thecaddisfly.com', phone:'(541) 342-7005' },
+    { name:'Steamboat Inn', location:'Steamboat, OR', rivers:'North Umpqua', tags:['Guided','Lodging','Flies','Gear'], website:'https://www.thesteamboatinn.com', phone:'(541) 498-2230' },
+    { name:'Home Waters Fly Fishing', location:'Eugene, OR', rivers:'McKenzie, Willamette, statewide', tags:['Guided','Gear','Flies','Lessons'], website:'https://www.homewaters.com', phone:'(541) 342-6691' },
+    { name:'Camp Sherman Store', location:'Camp Sherman, OR', rivers:'Metolius River', tags:['Gear','Flies','Local Intel'], website:'https://www.campshermanstore.com', phone:'(541) 595-6711' },
+    { name:"Kaufmann's Streamborn", location:'Tigard, OR', rivers:'All PNW rivers', tags:['Gear','Flies','Books','Mail Order'], website:'https://www.kman.com', phone:'(800) 442-4359' },
+  ],
+  MT: [
+    { name:'Blue Ribbon Flies', location:'West Yellowstone, MT', rivers:'Madison, Firehole, Gallatin, Yellowstone', tags:['Guided','Gear','Flies','Classes'], website:'https://www.blueribbonflies.com', phone:'(406) 646-7642' },
+    { name:'Madison River Fishing Co.', location:'Ennis, MT', rivers:'Madison River', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.mrfc.com', phone:'(406) 682-4293' },
+    { name:'Grizzly Hackle', location:'Missoula, MT', rivers:'Bitterroot, Clark Fork, Blackfoot', tags:['Guided','Gear','Flies','Classes'], website:'https://www.grizzlyhackle.com', phone:'(406) 721-8996' },
+    { name:'Gallatin River Guides', location:'Big Sky, MT', rivers:'Gallatin River', tags:['Guided','Gear','Flies'], website:'https://www.montanaflyfishing.com', phone:'(406) 995-2290' },
+    { name:'The Tackle Shop', location:'Ennis, MT', rivers:'Madison, Big Hole, Ruby', tags:['Guided','Gear','Flies','Reports'], website:'https://www.thetackleshop.com', phone:'(406) 682-4263' },
+    { name:'Blackfoot River Outfitters', location:'Missoula, MT', rivers:'Blackfoot, Clark Fork, Rock Creek', tags:['Guided','Gear','Flies','Trips'], website:'https://www.blackfootriver.com', phone:'(406) 542-7411' },
+    { name:'Cross Currents', location:'Helena, MT', rivers:'Missouri, Smith, statewide', tags:['Guided','Gear','Flies'], website:'https://www.crosscurrentsflyfishing.com', phone:'(406) 449-2292' },
+    { name:'Big Hole River Outfitters', location:'Wise River, MT', rivers:'Big Hole River', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.bigholeriver.com', phone:'(406) 832-3252' },
+  ],
+  ID: [
+    { name:'Henry Fork Anglers', location:'Island Park, ID', rivers:'Henrys Fork', tags:['Guided','Gear','Flies','Reports'], website:'https://www.henrysforkanglers.com', phone:'(208) 558-7525' },
+    { name:'South Fork Outfitters', location:'Swan Valley, ID', rivers:'South Fork Snake', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.southforkoutfitters.com', phone:'(208) 483-2722' },
+    { name:'Silver Creek Outfitters', location:'Ketchum, ID', rivers:'Silver Creek, Big Wood, South Fork Snake', tags:['Guided','Gear','Flies','Classes'], website:'https://www.silvercreekoutfitters.com', phone:'(208) 726-5282' },
+    { name:'Hyde Outfitters', location:'Idaho Falls, ID', rivers:'South Fork Snake, Henrys Fork, Teton', tags:['Guided','Gear','Flies'], website:'https://www.hydeoutfitters.com', phone:'(208) 529-4343' },
+    { name:'Stonefly Angler', location:'Boise, ID', rivers:'Boise River, Salmon, statewide', tags:['Gear','Flies','Guided','Classes'], website:'https://www.stoneflyidaho.com', phone:'(208) 338-1700' },
+    { name:'Tight Lines Fly Shop', location:'Twin Falls, ID', rivers:'Snake River, Salmon, statewide', tags:['Gear','Flies','Guided'], website:'https://www.tightlinesflyfishing.com', phone:'(208) 734-8008' },
+  ],
+  CO: [
+    { name:'Anglers All', location:'Littleton, CO', rivers:'South Platte, Arkansas, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.anglersall.com', phone:'(303) 794-1139' },
+    { name:'Dragonfly Anglers', location:'Crested Butte, CO', rivers:'Gunnison, Taylor, East', tags:['Guided','Gear','Flies'], website:'https://www.dragonfly-anglers.com', phone:'(970) 349-1228' },
+    { name:'Roaring Fork Anglers', location:'Glenwood Springs, CO', rivers:'Roaring Fork, Colorado, Fryingpan', tags:['Guided','Gear','Flies','Classes'], website:'https://www.roaringforkanglers.com', phone:'(970) 945-0180' },
+    { name:'Fryingpan Anglers', location:'Basalt, CO', rivers:'Fryingpan River', tags:['Guided','Gear','Flies','Licenses'], website:'https://www.fryingpananglers.com', phone:'(970) 927-3441' },
+    { name:'Taylor Creek Fly Shop', location:'Basalt, CO', rivers:'Fryingpan, Roaring Fork, Colorado', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.taylorcreek.com', phone:'(970) 927-4374' },
+    { name:'Arkansas Valley Fly Shop', location:'Buena Vista, CO', rivers:'Arkansas River', tags:['Guided','Gear','Flies'], website:'https://www.arkansasvalleyflyfishing.com', phone:'(719) 395-8081' },
+    { name:'Minturn Anglers', location:'Minturn, CO', rivers:'Eagle River, Colorado', tags:['Guided','Gear','Flies'], website:'https://www.minturnanglers.com', phone:'(970) 827-9500' },
+    { name:'St. Peters Fly Shop', location:'Fort Collins, CO', rivers:'Cache la Poudre, North Platte', tags:['Guided','Gear','Flies','Classes'], website:'https://www.stpetersflyfishing.com', phone:'(970) 498-8968' },
+  ],
+  WY: [
+    { name:'Jack Dennis Outdoor Shop', location:'Jackson, WY', rivers:'Snake River, Green River, Yellowstone', tags:['Guided','Gear','Flies','Classes'], website:'https://www.jackdennis.com', phone:'(307) 733-3270' },
+    { name:'High Country Flies', location:'Jackson, WY', rivers:'Snake River, Green River, statewide', tags:['Guided','Gear','Flies','Reports'], website:'https://www.highcountryflies.com', phone:'(307) 733-7210' },
+    { name:'Reel Deal Anglers', location:'Cody, WY', rivers:'Shoshone, Bighorn, Yellowstone Park', tags:['Guided','Gear','Flies'], website:'https://www.reeldealanglers.com', phone:'(307) 527-6928' },
+    { name:'Wyoming Fly Fishing', location:'Lander, WY', rivers:'Wind River, Popo Agie, statewide', tags:['Guided','Gear','Flies'], website:'https://www.wyomingflyfishing.com', phone:'(307) 332-4137' },
+    { name:'The Trout Shop', location:'Saratoga, WY', rivers:'North Platte Gold Medal tailwater', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.saratogatroutshop.com', phone:'(307) 326-8544' },
+  ],
+  CA: [
+    { name:'The Fly Shop', location:'Redding, CA', rivers:'McCloud, Pit, Upper Sacramento, Hat Creek', tags:['Guided','Gear','Flies','Classes','Trips'], website:'https://www.theflyshop.com', phone:'(800) 669-3474' },
+    { name:'Ted Fay Fly Shop', location:'Dunsmuir, CA', rivers:'Upper Sacramento', tags:['Guided','Gear','Flies','Local Intel'], website:'https://www.tedfay.com', phone:'(530) 235-2969' },
+    { name:'Clearwater House on Hat Creek', location:'Cassel, CA', rivers:'Hat Creek, Pit River, Fall River', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.clearwaterhouse.com', phone:'(530) 335-5500' },
+    { name:'Truckee River Outfitters', location:'Truckee, CA', rivers:'Truckee River, local Sierra streams', tags:['Guided','Gear','Flies','Classes'], website:'https://www.truckeeriveroutfitters.com', phone:'(530) 582-0900' },
+    { name:'Kern River Fly Fishing', location:'Kernville, CA', rivers:'Kern River', tags:['Guided','Gear','Flies'], website:'https://www.kernriverflyfishing.com', phone:'(760) 376-2040' },
+    { name:'Mammoth Fly Fishing', location:'Mammoth Lakes, CA', rivers:'Owens River, Hot Creek, local lakes', tags:['Guided','Gear','Flies'], website:'https://www.mammothflyfishing.com', phone:'(760) 934-3404' },
+  ],
+  AK: [
+    { name:'Alaska Fly Fishing Goods', location:'Anchorage, AK', rivers:'Kenai, Russian, statewide', tags:['Gear','Flies','Guided','Reports'], website:'https://www.alaskaflyfishinggoods.com', phone:'(907) 222-1230' },
+    { name:'Kenai Riverfront Resort', location:'Soldotna, AK', rivers:'Kenai River', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.kenairiverfront.com', phone:'(907) 262-4000' },
+    { name:'Soldotna Fly Shop', location:'Soldotna, AK', rivers:'Kenai, Kasilof, Anchor', tags:['Gear','Flies','Guided','Licenses'], website:'https://www.soldotnaflyfishing.com', phone:'(907) 262-7491' },
+    { name:'Alaska Sportsman Lodge', location:'King Salmon, AK', rivers:'Naknek, Kvichak, Alagnak', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.alaskasportsmanlodge.com', phone:'(907) 246-3287' },
+    { name:'Rainbow King Lodge', location:'Iliamna, AK', rivers:'Kvichak, Alagnak, Bristol Bay', tags:['Guided','Lodging','Flies','Remote'], website:'https://www.rainbowking.com', phone:'(907) 571-1313' },
+  ],
+};
+
+const STATE_REGS = {
+  WA: {
+    title:'Washington Fishing Regulations',
+    agency:'WDFW', agencyUrl:'https://wdfw.wa.gov/fishing/regulations',
+    eRegsUrl:'https://www.eregulations.com/washington/fishing',
+    licenseUrl:'https://fishhunt.dfw.wa.gov/',
+    season:'Varies by river and species — many WA rivers open year-round for trout',
+    highlights:[
+      'Selective gear rules on most premier trout streams (barbless, artificial only)',
+      'Wild trout must be released on selective gear waters',
+      'Steelhead: wild fish release only on most rivers; check for adipose clip',
+      'Salmon/steelhead seasons set annually — always verify current year rules',
+      'Tribal co-management waters have separate regulations — check boundaries',
+    ],
+    license:'Annual freshwater license required. Combination license available.',
+    notes:'WA uses a punch card system for salmon and steelhead — carry it when fishing.',
+  },
+  OR: {
+    title:'Oregon Fishing Regulations',
+    agency:'ODFW', agencyUrl:'https://myodfw.com/fishing/regulations',
+    eRegsUrl:'https://www.eregulations.com/oregon/fishing',
+    licenseUrl:'https://odfw.huntfishoregon.com/',
+    season:'Varies widely — Deschutes and most coastal rivers have year-round sections',
+    highlights:[
+      'Deschutes: flies and lures only on most trophy sections; wild redband release required',
+      'North Umpqua: flies only above Soda Springs — one of few fly-only rivers in the US',
+      'Wild steelhead: release only on most rivers; check adipose fin for hatchery marks',
+      'Metolius River: catch-and-release only for all species',
+      'Annual emergency closures common — check ODFW before any trip',
+    ],
+    license:'Annual angling license required. Combined harvest tag for salmon/steelhead.',
+    notes:'OR requires a Combined Angling Tag for salmon, steelhead, sturgeon, and halibut.',
+  },
+  MT: {
+    title:'Montana Fishing Regulations',
+    agency:'Montana FWP', agencyUrl:'https://fwp.mt.gov/fish/regulations',
+    eRegsUrl:'https://www.eregulations.com/montana/fishing',
+    licenseUrl:'https://fwp.mt.gov/fish/license',
+    season:'Most trout streams open third Saturday in May through November 30',
+    highlights:[
+      'Madison, Gallatin, Yellowstone: catch-and-release strongly recommended for wild trout',
+      'Clark Fork and tributaries: check specific size and bag limits by section',
+      'Bull trout: fully protected statewide — immediate release required',
+      'Non-residents require a separate Conservation License plus fishing license',
+      'Some rivers have special regulations for specific species — check the booklet',
+    ],
+    license:'Conservation license plus fishing license required. Non-resident fees significantly higher.',
+    notes:'MT FWP publishes an annual regulation booklet — pick one up at any license vendor.',
+  },
+  ID: {
+    title:'Idaho Fishing Regulations',
+    agency:'IDFG', agencyUrl:'https://idfg.idaho.gov/fish/regs',
+    eRegsUrl:'https://www.eregulations.com/idaho/fishing',
+    licenseUrl:'https://idfg.idaho.gov/license',
+    season:'Varies by water — many trout streams open year-round',
+    highlights:[
+      'Henrys Fork: catch-and-release only in many sections; artificial only above Last Chance',
+      'Silver Creek: artificial flies and lures only; catch-and-release for trout',
+      'South Fork Snake: check current bag limits — actively managed trophy fishery',
+      'Salmon and steelhead: harvest rules change annually based on run forecasts',
+      'Bull trout: fully protected statewide — immediate release required',
+    ],
+    license:'Annual fishing license required. Separate salmon/steelhead tag required.',
+    notes:'IDFG updates emergency rules frequently — check their website before each trip.',
+  },
+  CO: {
+    title:'Colorado Fishing Regulations',
+    agency:'CPW', agencyUrl:'https://cpw.state.co.us/thingstodo/Pages/Fishing-Regulations.aspx',
+    eRegsUrl:'https://www.eregulations.com/colorado/fishing',
+    licenseUrl:'https://cpw.state.co.us/buyapply/Pages/Fishing.aspx',
+    season:'Year-round on most Gold Medal and designated waters',
+    highlights:[
+      'Gold Medal waters (South Platte, Fryingpan, Taylor) have special regulations',
+      'Most Gold Medal: artificial flies and lures only; 2-fish bag limit minimum 15 inches',
+      'Wild Trout waters: catch-and-release only or very restrictive limits',
+      'Arkansas River: check specific sections — regulations vary significantly',
+      'Possession of live bait prohibited on many quality waters',
+    ],
+    license:'Annual fishing license required. 1-day and 5-day licenses available for visitors.',
+    notes:'CO has some of the most detailed section-specific rules in the West — read carefully.',
+  },
+  WY: {
+    title:'Wyoming Fishing Regulations',
+    agency:'WGFD', agencyUrl:'https://wgfd.wyo.gov/Fishing/Fishing-Regulations',
+    eRegsUrl:'https://www.eregulations.com/wyoming/fishing',
+    licenseUrl:'https://wgfd.wyo.gov/Licensing',
+    season:'Most trout waters open January 1 through October 31',
+    highlights:[
+      'Snake River Fine-spotted Cutthroat: catch-and-release only in most sections',
+      'Green River below Fontenelle: special regulations — check current rules',
+      'North Platte Miracle Mile: artificial only; check bag and size limits',
+      'Yellowstone Park has separate NPS regulations — different from state rules',
+      'Bighorn River below Yellowtail: trophy section with special regulations',
+    ],
+    license:'Annual fishing license required. Separate conservation stamp may be required.',
+    notes:'Yellowstone Park fishing requires a separate NPS permit, not covered by state license.',
+  },
+  CA: {
+    title:'California Fishing Regulations',
+    agency:'CDFW', agencyUrl:'https://wildlife.ca.gov/Regulations/Sport-Fish',
+    eRegsUrl:'https://www.eregulations.com/california/fishing',
+    licenseUrl:'https://www.ca.wildlifeaccountmanager.com/',
+    season:'Varies — many streams open last Saturday in April through November 15',
+    highlights:[
+      'Wild trout program waters: artificial lures with barbless hooks; catch-and-release',
+      'McCloud, Hat Creek, Fall River: special artificial-only regulations',
+      'Trophy trout waters have specific size and bag limits',
+      'Native steelhead: closed most areas; check for rare open sections',
+      'Two-rod stamp allows fishing with two rods on most waters',
+    ],
+    license:'Annual fishing license required. Two-rod stamp available. Report card for steelhead/salmon.',
+    notes:'CA requires a separate Steelhead Report Card available at license vendors.',
+  },
+  AK: {
+    title:'Alaska Fishing Regulations',
+    agency:'ADF&G', agencyUrl:'https://www.adfg.alaska.gov/index.cfm?adfg=fishingregs.main',
+    eRegsUrl:'https://www.eregulations.com/alaska/fishing',
+    licenseUrl:'https://www.adfg.alaska.gov/index.cfm?adfg=license.main',
+    season:'Varies dramatically by drainage and species — consult area-specific regulations',
+    highlights:[
+      'King salmon: strict limits and closures many years — verify current rules before any trip',
+      'Rainbow and steelhead: many rivers are catch-and-release only for wild fish',
+      'King salmon report cards often required regardless of harvest intent',
+      'Remote drainages may have completely different rules than road-system waters',
+      'Emergency orders can close fisheries with 48-hour notice — check before flying in',
+    ],
+    license:'Annual license required. King salmon stamp required. Harvest record cards for salmon.',
+    notes:'AK regulations are complex and change frequently. Call ADF&G regional office before remote trips.',
+  },
+  DEFAULT: {
+    title:'State Fishing Regulations',
+    agency:'State Wildlife Agency', agencyUrl:'https://www.fishingregulations.com',
+    eRegsUrl:'https://www.eregulations.com',
+    licenseUrl:'',
+    season:'Varies by water and species',
+    highlights:[
+      'Always check current regulations before fishing — rules change annually',
+      'Obtain required fishing license and any applicable stamps or tags',
+      'Check for special regulations on specific waters (barbless, artificial only, C&R)',
+      'Wild fish typically have stricter regulations than hatchery fish',
+      'Verify tribal co-management boundaries if applicable in your region',
+    ],
+    license:'State fishing license required for all waters. Additional stamps may be required.',
+    notes:'Visit your state wildlife agency website for the current regulations booklet.',
+  },
+};
+
+function updateShopsForState(stateCode) {
+  var shops = STATE_SHOPS[stateCode] || STATE_SHOPS.WA;
+  var grid = document.getElementById('shop-grid');
+  if (!grid) return;
+  // Update panel headings
+  var stateNames = {WA:'Washington',OR:'Oregon',MT:'Montana',ID:'Idaho',CO:'Colorado',
+    WY:'Wyoming',CA:'California',AK:'Alaska',MN:'Minnesota',MI:'Michigan',
+    PA:'Pennsylvania',NY:'New York',NC:'North Carolina',TN:'Tennessee',
+    VT:'Vermont',WI:'Wisconsin'};
+  var stateName = stateNames[stateCode] || stateCode;
+  var t = document.getElementById('shops-title');
+  var s = document.getElementById('shops-subtitle');
+  if (t) t.textContent = stateName + ' Fly Shops';
+  if (s) s.textContent = 'Local shops near the rivers you fish in ' + stateName + ' — best sources for current intel';
+  grid.innerHTML = shops.map(function(s) {
+    return '<div class="shop-card">' +
+      '<div class="shop-name">' + s.name + '</div>' +
+      '<div class="shop-location">&#128205; ' + s.location + '</div>' +
+      '<div class="shop-rivers">' + s.rivers + '</div>' +
+      '<div class="shop-tags">' + s.tags.map(function(t){ return '<span class="shop-tag">'+t+'</span>'; }).join('') + '</div>' +
+      '<div class="shop-links">' +
+        '<a href="' + s.website + '" target="_blank" class="shop-link">Website &#8599;</a>' +
+        '<a href="tel:' + s.phone.replace(/[^0-9]/g,'') + '" class="shop-link">&#128222; Call</a>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function updateRegsForState(stateCode) {
+  var r = STATE_REGS[stateCode] || STATE_REGS.DEFAULT;
+  var stateAgencies = {WA:'WDFW',OR:'ODFW',MT:'MT FWP',ID:'IDFG',CO:'CPW',
+    WY:'WGFD',CA:'CDFW',AK:'ADF&G'};
+  var t = document.getElementById('regs-title');
+  var s = document.getElementById('regs-subtitle');
+  if (t) t.textContent = r.title;
+  var agency = stateAgencies[stateCode] || 'state agency';
+  if (s) s.textContent = stateCode === 'WA'
+    ? 'Quick reference — always verify with WDFW before fishing'
+    : 'Quick reference — always verify with ' + agency + ' before fishing';
+  var select = document.getElementById('regs-river-select');
+  var selectWrap = select ? select.parentElement : null;
+  var content = document.getElementById('regs-content');
+  if (stateCode === 'WA') {
+    if (selectWrap) selectWrap.style.display = '';
+    renderRegs();
+    return;
+  }
+  if (selectWrap) selectWrap.style.display = 'none';
+  if (!content) return;
+  content.innerHTML =
+    '<div class="reg-card"><div class="reg-card-title">&#128197; Season</div><ul><li>' + r.season + '</li></ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#128203; Key Rules</div><ul>' +
+      r.highlights.map(function(h){ return '<li>' + h + '</li>'; }).join('') +
+    '</ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#127918; License Required</div><ul><li>' + r.license + '</li></ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#128221; Notes</div><ul><li>' + r.notes + '</li></ul></div>' +
+    '<div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">' +
+      '<a href="' + r.agencyUrl + '" target="_blank" class="shop-link">' + r.agency + ' Official Regs &#8599;</a>' +
+      '<a href="' + r.eRegsUrl + '" target="_blank" class="shop-link">eRegulations.com &#8599;</a>' +
+      (r.licenseUrl ? '<a href="' + r.licenseUrl + '" target="_blank" class="shop-link">Buy License &#8599;</a>' : '') +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// MATCH THE HATCH — Photo bug identifier
+// ═══════════════════════════════════════════════════════════
+
+function handleHatchDrop(event) {
+  event.preventDefault();
+  document.getElementById('hatch-upload-area').style.borderColor = 'var(--border)';
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processHatchImage(file);
+}
+
+function handleHatchFile(event) {
+  const file = event.target.files[0];
+  if (file) processHatchImage(file);
+}
+
+function processHatchImage(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result.split(',')[1];
+    const mediaType = file.type || 'image/jpeg';
+
+    // Show preview
+    document.getElementById('hatch-preview-img').src = e.target.result;
+    document.getElementById('hatch-upload-area').style.display = 'none';
+    document.getElementById('hatch-preview-wrap').style.display = 'block';
+    document.getElementById('hatch-loading').style.display = 'flex';
+    document.getElementById('hatch-result').innerHTML =
+      '<div id="hatch-loading" style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem"><div class="spinner"></div>Identifying insect…</div>';
+
+    identifyHatch(base64, mediaType);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function identifyHatch(base64, mediaType) {
+  const resultEl = document.getElementById('hatch-result');
+  const riverCtx = activeRiver ? activeRiver.label + ' (' + activeRiver.sublabel + ')' : 'a Pacific Northwest trout stream';
+
+  const prompt = `You are an expert aquatic entomologist and fly fishing guide. The angler is fishing ${riverCtx}.
+
+Examine this photo carefully and identify the insect. Respond with ONLY a JSON object in this exact shape — no markdown, no explanation:
+
+{
+  "identified": true,
+  "commonName": "<common name e.g. Blue-Wing Olive>",
+  "latinName": "<genus/species if identifiable, e.g. Baetis tricaudatus>",
+  "order": "<insect order e.g. Ephemeroptera>",
+  "lifeStage": "<Nymph | Emerger | Dun | Spinner | Adult | Larva | Pupa>",
+  "size": "<estimated body length e.g. 8-12mm / hook size #16-18>",
+  "confidence": "<High | Medium | Low>",
+  "notes": "<one sentence observation about the specimen that helps identification>",
+  "patterns": [
+    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" },
+    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" },
+    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" }
+  ]
+}
+
+If you cannot identify an insect in the photo (no bug visible, image too blurry, or not an aquatic insect), respond with:
+{ "identified": false, "reason": "<brief explanation>" }
+
+Return 3-4 fly patterns that best match this exact life stage and size. Be specific to what is shown in the photo.`;
+
+  try {
+    const res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    const data = await res.json();
+    const text = (data.content?.[0]?.text || '').trim().replace(/```json|```/g, '').trim();
+    const result = JSON.parse(text);
+
+    if (!result.identified) {
+      resultEl.innerHTML =
+        '<div style="padding:16px;background:var(--surface2);border-radius:4px;border:1px solid var(--border)">' +
+        '<div style=";font-size:0.7rem;color:var(--amber);margin-bottom:6px">Could not identify</div>' +
+        '<div style="font-size:0.82rem;color:var(--muted)">' + (result.reason || 'No aquatic insect detected in photo.') + '</div>' +
+        '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Try a closer photo with the insect on a light background.</div>' +
+        '</div>';
+      return;
+    }
+
+    // Confidence color
+    var confColor = result.confidence === 'High' ? 'var(--green)' : result.confidence === 'Medium' ? 'var(--amber)' : 'var(--red)';
+
+    // Patterns HTML
+    var patternsHtml = (result.patterns || []).map(function(p, i) {
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;' +
+        (i < (result.patterns.length-1) ? 'border-bottom:1px solid var(--border)' : '') + '">' +
+        '<div style=";font-size:0.7rem;color:var(--accent);flex-shrink:0;min-width:24px;margin-top:1px">' + (i+1) + '</div>' +
+        '<div>' +
+          '<div style=";font-size:0.8rem;font-weight:500;color:var(--text)">' + p.name + ' <span style="color:var(--muted)">' + p.size + '</span></div>' +
+          '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">' + p.notes + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    resultEl.innerHTML =
+      // ID header
+      '<div style="margin-bottom:16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+          '<div style=";font-size:1.2rem;font-weight:700;font-style:italic;color:var(--text)">' + result.commonName + '</div>' +
+          '<span style=";font-size:0.55rem;background:rgba(0,0,0,0.06);color:' + confColor + ';border:1px solid currentColor;padding:1px 6px;border-radius:2px">' + result.confidence + ' confidence</span>' +
+        '</div>' +
+        '<div style=";font-size:0.68rem;color:var(--muted);font-style:italic;margin-bottom:6px">' + (result.latinName || '') + '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<span style=";font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px">' + result.order + '</span>' +
+          '<span style=";font-size:0.6rem;background:rgba(200,68,26,0.1);color:var(--accent);border:1px solid rgba(200,68,26,0.25);padding:2px 8px;border-radius:2px">' + result.lifeStage + '</span>' +
+          '<span style=";font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px">' + result.size + '</span>' +
+        '</div>' +
+        (result.notes ? '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic">' + result.notes + '</div>' : '') +
+      '</div>' +
+      // Matching patterns
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px 16px">' +
+        '<div style=";font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Matching Fly Patterns</div>' +
+        patternsHtml +
+      '</div>';
+
+  } catch(e) {
+    resultEl.innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem">' +
+      'Identification failed. Check your connection and try again.<br><br>' +
+      '<button onclick="document.getElementById("hatch-file-input").click()" style=";font-size:0.65rem;color:var(--accent);border:1px solid var(--accent);background:none;padding:6px 14px;border-radius:2px;cursor:pointer">Try Again</button>' +
+      '</div>';
+  }
 }
 
 </script>
