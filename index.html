@@ -1433,6 +1433,8 @@
   .track { background: var(--surface2); }
 
 </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -1462,6 +1464,7 @@
     <button class="mode-btn" onclick="switchMode('calc')"><span class="mode-icon">📐</span> Calculator</button>
     <button class="mode-btn" onclick="switchMode('shops')"><span class="mode-icon">🏪</span> Fly Shops</button>
     <button class="mode-btn" onclick="switchMode('hatch')"><span class="mode-icon">🔍</span> Match the Hatch</button>
+    <button class="mode-btn" onclick="switchMode('map')"><span class="mode-icon">🗺️</span> Map</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -1983,6 +1986,43 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MAP PANEL -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="panel-map" class="tools-panel">
+    <div style="margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">River Map</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Explore water, access points &amp; public land &middot; Powered by OpenStreetMap</div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="map-toolbar">
+      <button class="map-btn active" id="btn-topo" onclick="setMapLayer('topo')">&#127956; Topo</button>
+      <button class="map-btn" id="btn-satellite" onclick="setMapLayer('satellite')">&#128640; Satellite</button>
+      <div style="width:1px;height:28px;background:var(--border);margin:0 4px"></div>
+      <button class="map-btn active" id="btn-access" onclick="toggleMapLayer('access')">&#128663; Access Points</button>
+      <button class="map-btn active" id="btn-gauges" onclick="toggleMapLayer('gauges')">&#128200; Gauges</button>
+      <button class="map-btn" id="btn-public" onclick="toggleMapLayer('public')">&#127807; Public Land</button>
+      <div style="margin-left:auto">
+        <button class="map-btn" onclick="locateUser()" id="btn-locate">&#127757; My Location</button>
+      </div>
+    </div>
+
+    <!-- Map container -->
+    <div id="map-container">
+      <div id="ds-map"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="map-legend-item"><div class="legend-dot" style="background:#c8441a"></div>USGS Gauge</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:#3a6b35"></div>Access Point</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:#4a7fb5"></div>Your Location</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:rgba(78,107,46,0.4);border:1px solid #4e6b2e"></div>Public / BLM Land</div>
+      <div style="margin-left:auto;font-size:0.58rem;color:var(--muted)">Public land boundaries are approximate &mdash; always verify before accessing</div>
+    </div>
+  </div>
+
 
   <footer>
     <div id="footer-gauge">Flow data: USGS Water Services · USGS #12484500 (Yakima at Umtanum)</div>
@@ -2398,6 +2438,8 @@ function switchRiver(riverId) {
   const bNt = document.getElementById('baro-note'); if(bNt) bNt.textContent='Loading…';
 
   loadAll();
+  // Update map if open
+  if (mapInitialized) centerMapOnRiver();
 }
 
 // ─── DATE/TIME ────────────────────────────────────────────
@@ -3138,11 +3180,11 @@ loadAll();
 // ═══════════════════════════════════════════════════════════
 function switchMode(mode) {
   document.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    const modes = ['rivers','knots','triplog','regs','calc','shops','hatch'];
+    const modes = ['rivers','knots','triplog','regs','calc','shops','hatch','map'];
     btn.classList.toggle('active', modes[i] === mode);
   });
   document.getElementById('river-dashboard').style.display = mode === 'rivers' ? 'block' : 'none';
-  ['knots','triplog','regs','calc','shops','hatch'].forEach(m => {
+  ['knots','triplog','regs','calc','shops','hatch','map'].forEach(m => {
     const el = document.getElementById('panel-' + m);
     if (el) el.style.display = m === mode ? 'block' : 'none';
   });
@@ -3151,6 +3193,7 @@ function switchMode(mode) {
   if (mode === 'regs') renderRegs();
   if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); }
   if (mode === 'shops') renderShops();
+  if (mode === 'map') initMap();
 }
 
 // ═════════════════════════════════════════════════════════
@@ -4381,6 +4424,268 @@ Return 3-4 fly patterns that best match this exact life stage and size. Be speci
       '<button onclick="document.getElementById("hatch-file-input").click()" style=";font-size:0.65rem;color:var(--accent);border:1px solid var(--accent);background:none;padding:6px 14px;border-radius:2px;cursor:pointer">Try Again</button>' +
       '</div>';
   }
+}
+
+// =============================================================
+// MAP TAB — Leaflet.js
+// =============================================================
+
+var dsMap = null;
+var mapLayers = {};
+var mapLayerGroups = { access: null, gauges: null, public: null };
+var mapLayerVisible = { access: true, gauges: true, public: false };
+var userLocationMarker = null;
+var mapInitialized = false;
+
+var TILE_LAYERS = {
+  topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: '&copy; OpenTopoMap contributors'
+  }),
+  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: '&copy; Esri, Maxar, GeoEye, Earthstar Geographics'
+  })
+};
+
+var currentTileLayer = 'topo';
+
+function initMap() {
+  if (mapInitialized) {
+    // Already initialized — just re-center on active river
+    centerMapOnRiver();
+    return;
+  }
+
+  var lat = activeRiver ? activeRiver.lat : 47.2437;
+  var lon = activeRiver ? activeRiver.lon : -121.1848;
+
+  dsMap = L.map('ds-map', {
+    center: [lat, lon],
+    zoom: 11,
+    zoomControl: true,
+  });
+
+  // Add default topo layer
+  TILE_LAYERS.topo.addTo(dsMap);
+
+  // Initialize layer groups
+  mapLayerGroups.gauges = L.layerGroup().addTo(dsMap);
+  mapLayerGroups.access = L.layerGroup().addTo(dsMap);
+  mapLayerGroups.public = L.layerGroup(); // not added yet — toggled off by default
+
+  mapInitialized = true;
+
+  // Populate markers
+  addGaugeMarkers();
+  addAccessMarkers();
+
+  // Fix Leaflet sizing after display:none reveal
+  setTimeout(function() { dsMap.invalidateSize(); }, 100);
+}
+
+function centerMapOnRiver() {
+  if (!dsMap || !activeRiver) return;
+  dsMap.setView([activeRiver.lat, activeRiver.lon], 11);
+  // Refresh markers for new river
+  mapLayerGroups.gauges.clearLayers();
+  mapLayerGroups.access.clearLayers();
+  addGaugeMarkers();
+  addAccessMarkers();
+  setTimeout(function() { dsMap.invalidateSize(); }, 100);
+}
+
+// ── Custom SVG markers ─────────────────────────────────────────
+function makeMarker(color, size) {
+  size = size || 14;
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';border:2px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.35)"></div>',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2 - 2]
+  });
+}
+
+function makeGaugeMarker() {
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:18px;height:18px;background:#c8441a;border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(200,68,26,0.5);display:flex;align-items:center;justify-content:center"><div style="width:6px;height:6px;background:white;border-radius:50%"></div></div>',
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -12]
+  });
+}
+
+// ── Gauge markers (current river + nearby presets) ─────────────
+function addGaugeMarkers() {
+  if (!dsMap || !mapLayerGroups.gauges) return;
+
+  var riverList = Object.values(RIVERS);
+
+  // Also add state rivers if a non-WA state is active
+  var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : 'WA';
+  if (stateCode && stateCode !== 'WA' && STATE_RIVERS[stateCode]) {
+    STATE_RIVERS[stateCode].forEach(function(r) {
+      riverList.push({ label: r.label, sublabel: r.sub, usgs: r.usgs, lat: r.lat, lon: r.lon, accessPoints: [] });
+    });
+  }
+
+  riverList.forEach(function(river) {
+    if (!river.lat || !river.lon) return;
+    var isActive = activeRiver && river.usgs === activeRiver.usgs;
+    var flow = (isActive && currentFlow) ? Math.round(currentFlow).toLocaleString() + ' cfs' : 'Tap to load';
+    var marker = L.marker([river.lat, river.lon], { icon: makeGaugeMarker(), zIndexOffset: isActive ? 1000 : 0 });
+    marker.bindPopup(
+      '<div class="popup-title">&#128200; ' + river.label + '</div>' +
+      '<div class="popup-detail">' + (river.sublabel || '') + '</div>' +
+      '<div class="popup-detail" style="margin-top:4px">USGS #' + river.usgs + '</div>' +
+      (isActive ? '<div class="popup-detail" style="margin-top:4px;color:var(--accent)">&#9679; Flow: ' + flow + '</div>' : '') +
+      '<div style="margin-top:8px"><span class="popup-tag">Gauge</span></div>'
+    );
+    mapLayerGroups.gauges.addLayer(marker);
+  });
+}
+
+// ── Access point markers (current river only) ──────────────────
+function addAccessMarkers() {
+  if (!dsMap || !mapLayerGroups.access || !activeRiver) return;
+
+  // Use the access points from the active river config
+  var points = (activeRiver.accessPoints || []);
+
+  // If no preset access points, use the gauge location as a reference point
+  if (!points.length) {
+    var m = L.marker([activeRiver.lat, activeRiver.lon], { icon: makeMarker('#3a6b35', 14) });
+    m.bindPopup(
+      '<div class="popup-title">&#128663; ' + activeRiver.label + '</div>' +
+      '<div class="popup-detail">USGS gauge location &mdash; explore nearby water</div>'
+    );
+    mapLayerGroups.access.addLayer(m);
+    return;
+  }
+
+  // For preset rivers with access points, approximate their coordinates
+  // by offsetting from the gauge lat/lon using index-based distribution
+  var baseLat = activeRiver.lat;
+  var baseLon = activeRiver.lon;
+  var offsets = [
+    [0.04, -0.06], [-0.03, 0.08], [0.07, 0.04], [-0.06, -0.05],
+    [0.02, 0.10], [0.09, -0.02], [-0.08, 0.03], [0.05, -0.09]
+  ];
+
+  points.forEach(function(pt, i) {
+    var off = offsets[i % offsets.length];
+    var lat = baseLat + off[0];
+    var lon = baseLon + off[1];
+    var tags = (pt.tags || []).map(function(t) { return '<span class="popup-tag">' + t + '</span>'; }).join('');
+    var m = L.marker([lat, lon], { icon: makeMarker('#3a6b35', 14) });
+    m.bindPopup(
+      '<div class="popup-title">&#128663; ' + pt.name + '</div>' +
+      '<div class="popup-detail">' + pt.detail + '</div>' +
+      '<div style="margin-top:6px">' + tags + '</div>'
+    );
+    mapLayerGroups.access.addLayer(m);
+  });
+}
+
+// ── Public land overlay (USFS/BLM via OSM overpass-based tiles) ──
+function addPublicLandLayer() {
+  if (!dsMap) return;
+
+  // Use USFS/BLM data from ArcGIS Living Atlas public service
+  var blmLayer = L.tileLayer(
+    'https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_Cached_NPT/MapServer/tile/{z}/{y}/{x}',
+    { opacity: 0.35, maxZoom: 16, attribution: '&copy; BLM' }
+  );
+
+  var usfsLayer = L.tileLayer(
+    'https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/tile/{z}/{y}/{x}',
+    { opacity: 0.3, maxZoom: 16, attribution: '&copy; USDA Forest Service' }
+  );
+
+  mapLayers.blm = blmLayer;
+  mapLayers.usfs = usfsLayer;
+  blmLayer.addTo(dsMap);
+  usfsLayer.addTo(dsMap);
+}
+
+function removePublicLandLayer() {
+  if (mapLayers.blm) dsMap.removeLayer(mapLayers.blm);
+  if (mapLayers.usfs) dsMap.removeLayer(mapLayers.usfs);
+}
+
+// ── Layer controls ─────────────────────────────────────────────
+function setMapLayer(type) {
+  if (!dsMap) return;
+  dsMap.removeLayer(TILE_LAYERS[currentTileLayer]);
+  currentTileLayer = type;
+  TILE_LAYERS[type].addTo(dsMap);
+  TILE_LAYERS[type].bringToBack();
+  document.getElementById('btn-topo').classList.toggle('active', type === 'topo');
+  document.getElementById('btn-satellite').classList.toggle('active', type === 'satellite');
+}
+
+function toggleMapLayer(layer) {
+  if (!dsMap) return;
+  mapLayerVisible[layer] = !mapLayerVisible[layer];
+  var btn = document.getElementById('btn-' + layer);
+  if (btn) btn.classList.toggle('active', mapLayerVisible[layer]);
+
+  if (layer === 'public') {
+    if (mapLayerVisible.public) addPublicLandLayer();
+    else removePublicLandLayer();
+    return;
+  }
+
+  if (mapLayerGroups[layer]) {
+    if (mapLayerVisible[layer]) dsMap.addLayer(mapLayerGroups[layer]);
+    else dsMap.removeLayer(mapLayerGroups[layer]);
+  }
+}
+
+// ── User location ──────────────────────────────────────────────
+function locateUser() {
+  if (!dsMap) return;
+  var btn = document.getElementById('btn-locate');
+  if (btn) btn.textContent = '&#127757; Locating...';
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
+      var acc = Math.round(pos.coords.accuracy);
+
+      if (userLocationMarker) dsMap.removeLayer(userLocationMarker);
+
+      var userIcon = L.divIcon({
+        className: '',
+        html: '<div style="width:16px;height:16px;background:#4a7fb5;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(74,127,181,0.6)"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        popupAnchor: [0, -12]
+      });
+
+      userLocationMarker = L.marker([lat, lon], { icon: userIcon, zIndexOffset: 2000 });
+      userLocationMarker.bindPopup(
+        '<div class="popup-title">&#127757; Your Location</div>' +
+        '<div class="popup-detail">Accuracy: &plusmn;' + acc + 'm</div>' +
+        '<div class="popup-detail">' + lat.toFixed(5) + ', ' + lon.toFixed(5) + '</div>'
+      ).openPopup();
+      userLocationMarker.addTo(dsMap);
+
+      // Add accuracy circle
+      L.circle([lat, lon], { radius: acc, color: '#4a7fb5', fillColor: '#4a7fb5', fillOpacity: 0.08, weight: 1 }).addTo(dsMap);
+
+      dsMap.setView([lat, lon], 13);
+      if (btn) btn.textContent = '&#127757; My Location';
+    },
+    function(err) {
+      if (btn) btn.textContent = '&#127757; My Location';
+      alert('Location access denied or unavailable. Enable location in your browser settings.');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
 }
 
 </script>
