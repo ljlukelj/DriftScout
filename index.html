@@ -1804,8 +1804,8 @@
       <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="regs-title">Washington Fishing Regulations</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="regs-subtitle">Quick reference — always verify with WDFW before fishing</div>
     </div>
-    <div class="reg-warning">
-      <strong>⚠️ Important:</strong> This is a quick reference only. Regulations change annually. Always check the current <a href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold)">WDFW Fishing Regulations</a> before fishing. Tribal waters have separate rules.
+    <div class="reg-warning" id="regs-warning">
+      <strong>⚠️ Important:</strong> This is a quick reference only. Regulations change annually. Always check the current <a id="regs-warning-link" href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold)">WDFW Fishing Regulations</a> before fishing. Tribal waters have separate rules.
     </div>
     <div style="margin-bottom:16px">
       <label class="form-label" style="display:block;margin-bottom:8px">Select River</label>
@@ -2003,7 +2003,7 @@
       <button class="map-btn active" id="btn-access" onclick="toggleMapLayer('access')">&#128663; Access Points</button>
       <button class="map-btn active" id="btn-gauges" onclick="toggleMapLayer('gauges')">&#128200; Gauges</button>
       <button class="map-btn" id="btn-public" onclick="toggleMapLayer('public')">&#127807; Public Land</button>
-      <div style="flex-basis:100%;margin-top:2px" id="map-locate-wrap"><button class="map-btn" style="width:100%" onclick="locateUser()" id="btn-locate">&#127757; My Location</button>
+      <div style="margin-left:auto"><button class="map-btn" onclick="locateUser()" id="btn-locate">&#127757; My Location</button>
       </div>
     </div>
 
@@ -3192,7 +3192,12 @@ function switchMode(mode) {
   if (mode === 'regs') renderRegs();
   if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); }
   if (mode === 'shops') renderShops();
-  if (mode === 'map') initMap();
+  if (mode === 'map') {
+    // Ensure the container has height before Leaflet init
+    var mc = document.getElementById('map-container');
+    if (mc) mc.style.height = Math.max(480, window.innerHeight - 260) + 'px';
+    initMap();
+  }
 }
 
 // ═════════════════════════════════════════════════════════
@@ -4254,16 +4259,25 @@ function updateRegsForState(stateCode) {
   var r = STATE_REGS[stateCode] || STATE_REGS.DEFAULT;
   var stateAgencies = {WA:'WDFW',OR:'ODFW',MT:'MT FWP',ID:'IDFG',CO:'CPW',
     WY:'WGFD',CA:'CDFW',AK:'ADF&G'};
+  var agency = stateAgencies[stateCode] || 'state fish & wildlife agency';
+
+  // Update title and subtitle
   var t = document.getElementById('regs-title');
   var s = document.getElementById('regs-subtitle');
   if (t) t.textContent = r.title;
-  var agency = stateAgencies[stateCode] || 'state agency';
-  if (s) s.textContent = stateCode === 'WA'
-    ? 'Quick reference — always verify with WDFW before fishing'
-    : 'Quick reference — always verify with ' + agency + ' before fishing';
+  if (s) s.textContent = 'Quick reference — always verify with ' + agency + ' before fishing';
+
+  // Update the warning banner link + text
+  var warnLink = document.getElementById('regs-warning-link');
+  if (warnLink) {
+    warnLink.href = r.agencyUrl;
+    warnLink.textContent = agency + ' Fishing Regulations';
+  }
+
   var select = document.getElementById('regs-river-select');
   var selectWrap = select ? select.parentElement : null;
   var content = document.getElementById('regs-content');
+
   if (stateCode === 'WA') {
     if (selectWrap) selectWrap.style.display = '';
     renderRegs();
@@ -4482,8 +4496,10 @@ function initMap() {
   addGaugeMarkers();
   addAccessMarkers();
 
-  // Fix Leaflet sizing after display:none reveal
-  setTimeout(function() { dsMap.invalidateSize(); }, 100);
+  // Leaflet needs multiple invalidateSize calls when revealed from display:none
+  setTimeout(function() { dsMap.invalidateSize(); }, 50);
+  setTimeout(function() { dsMap.invalidateSize(); }, 300);
+  setTimeout(function() { dsMap.invalidateSize(); }, 800);
 }
 
 function centerMapOnRiver() {
@@ -4494,7 +4510,8 @@ function centerMapOnRiver() {
   mapLayerGroups.access.clearLayers();
   addGaugeMarkers();
   addAccessMarkers();
-  setTimeout(function() { dsMap.invalidateSize(); }, 100);
+  setTimeout(function() { dsMap.invalidateSize(); }, 50);
+  setTimeout(function() { dsMap.invalidateSize(); }, 400);
 }
 
 // ── Custom SVG markers ─────────────────────────────────────────
