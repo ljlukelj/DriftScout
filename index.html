@@ -4425,6 +4425,17 @@ async function identifyHatch(base64, mediaType) {
 }
 
 
+// ── MAP STATE VARIABLES ────────────────────────────────────────
+var dsMap = null;
+var mapLayers = {};
+var mapLayerGroups = { access: null, gauges: null, public: null };
+var mapLayerVisible = { access: true, gauges: true, public: false };
+var userLocationMarker = null;
+var mapInitialized = false;
+var TILE_LAYERS = null;
+var currentTileLayer = 'topo';
+
+
 function initMap() {
   if (mapInitialized) {
     centerMapOnRiver();
