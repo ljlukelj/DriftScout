@@ -2003,8 +2003,7 @@
       <button class="map-btn active" id="btn-access" onclick="toggleMapLayer('access')">&#128663; Access Points</button>
       <button class="map-btn active" id="btn-gauges" onclick="toggleMapLayer('gauges')">&#128200; Gauges</button>
       <button class="map-btn" id="btn-public" onclick="toggleMapLayer('public')">&#127807; Public Land</button>
-      <div style="margin-left:auto">
-        <button class="map-btn" onclick="locateUser()" id="btn-locate">&#127757; My Location</button>
+      <div style="flex-basis:100%;margin-top:2px" id="map-locate-wrap"><button class="map-btn" style="width:100%" onclick="locateUser()" id="btn-locate">&#127757; My Location</button>
       </div>
     </div>
 
@@ -4368,7 +4367,10 @@ Return 3-4 fly patterns that best match this exact life stage and size. Be speci
     });
 
     const data = await res.json();
+    // Handle API-level errors (rate limit, auth, etc.)
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
     const text = (data.content?.[0]?.text || '').trim().replace(/```json|```/g, '').trim();
+    if (!text) throw new Error('Empty response from AI');
     const result = JSON.parse(text);
 
     if (!result.identified) {
