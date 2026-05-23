@@ -4453,25 +4453,34 @@ var mapLayerVisible = { access: true, gauges: true, public: false };
 var userLocationMarker = null;
 var mapInitialized = false;
 
-var TILE_LAYERS = {
-  topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    maxZoom: 17,
-    attribution: '&copy; OpenTopoMap contributors'
-  }),
-  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19,
-    attribution: '&copy; Esri, Maxar, GeoEye, Earthstar Geographics'
-  })
-};
-
+var TILE_LAYERS = null; // initialized lazily inside initMap()
 var currentTileLayer = 'topo';
 
 function initMap() {
   if (mapInitialized) {
-    // Already initialized — just re-center on active river
     centerMapOnRiver();
     return;
   }
+
+  // Safety check — Leaflet must be loaded
+  if (typeof L === 'undefined') {
+    console.error('Leaflet not loaded');
+    document.getElementById('ds-map').innerHTML =
+      '<div style="padding:40px;text-align:center;color:#6b6659;font-family:IBM Plex Mono,monospace;font-size:0.8rem">Map failed to load. Check your internet connection and reload.</div>';
+    return;
+  }
+
+  // Build tile layers here (not at parse time) so L is guaranteed available
+  TILE_LAYERS = {
+    topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 17,
+      attribution: '&copy; OpenTopoMap contributors'
+    }),
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: '&copy; Esri, Maxar, GeoEye, Earthstar Geographics'
+    })
+  };
 
   var lat = activeRiver ? activeRiver.lat : 47.2437;
   var lon = activeRiver ? activeRiver.lon : -121.1848;
@@ -4482,7 +4491,6 @@ function initMap() {
     zoomControl: true,
   });
 
-  // Add default topo layer
   TILE_LAYERS.topo.addTo(dsMap);
 
   // Initialize layer groups
@@ -4636,7 +4644,7 @@ function removePublicLandLayer() {
 
 // ── Layer controls ─────────────────────────────────────────────
 function setMapLayer(type) {
-  if (!dsMap) return;
+  if (!dsMap || !TILE_LAYERS) return;
   dsMap.removeLayer(TILE_LAYERS[currentTileLayer]);
   currentTileLayer = type;
   TILE_LAYERS[type].addTo(dsMap);
