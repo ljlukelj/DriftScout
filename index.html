@@ -1948,7 +1948,7 @@
     </div>
 
     <div id="hatch-upload-area" style="border:2px dashed var(--border);border-radius:6px;padding:48px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;margin-bottom:24px;background:var(--surface)"
-      onclick="document.getElementById("hatch-file-input").click()"
+      onclick="document.getElementById('hatch-file-input').click()"
       ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
       ondragleave="this.style.borderColor='var(--border)'"
       ondrop="handleHatchDrop(event)">
@@ -1964,7 +1964,7 @@
         <div style="flex-shrink:0">
           <img id="hatch-preview-img" style="width:200px;height:200px;object-fit:cover;border-radius:4px;border:1px solid var(--border)" alt="Bug photo">
           <div style="margin-top:8px">
-            <button onclick="document.getElementById("hatch-file-input").click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:5px 12px;border-radius:2px;cursor:pointer;width:100%">New Photo</button>
+            <button onclick="document.getElementById('hatch-file-input').click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:5px 12px;border-radius:2px;cursor:pointer;width:100%">New Photo</button>
           </div>
         </div>
         <div id="hatch-result" style="flex:1;min-width:220px">
@@ -4316,145 +4316,33 @@ function handleHatchFile(event) {
 }
 
 function processHatchImage(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const base64 = e.target.result.split(',')[1];
-    const mediaType = file.type || 'image/jpeg';
-
-    // Show preview
-    document.getElementById('hatch-preview-img').src = e.target.result;
-    document.getElementById('hatch-upload-area').style.display = 'none';
-    document.getElementById('hatch-preview-wrap').style.display = 'block';
-    document.getElementById('hatch-loading').style.display = 'flex';
-    document.getElementById('hatch-result').innerHTML =
-      '<div id="hatch-loading" style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem"><div class="spinner"></div>Identifying insect…</div>';
-
-    identifyHatch(base64, mediaType);
-  };
-  reader.readAsDataURL(file);
-}
-
-async function identifyHatch(base64, mediaType) {
-  const resultEl = document.getElementById('hatch-result');
-  const riverCtx = activeRiver ? activeRiver.label + ' (' + activeRiver.sublabel + ')' : 'a Pacific Northwest trout stream';
-
-  const prompt = `You are an expert aquatic entomologist and fly fishing guide. The angler is fishing ${riverCtx}.
-
-Examine this photo carefully and identify the insect. Respond with ONLY a JSON object in this exact shape — no markdown, no explanation:
-
-{
-  "identified": true,
-  "commonName": "<common name e.g. Blue-Wing Olive>",
-  "latinName": "<genus/species if identifiable, e.g. Baetis tricaudatus>",
-  "order": "<insect order e.g. Ephemeroptera>",
-  "lifeStage": "<Nymph | Emerger | Dun | Spinner | Adult | Larva | Pupa>",
-  "size": "<estimated body length e.g. 8-12mm / hook size #16-18>",
-  "confidence": "<High | Medium | Low>",
-  "notes": "<one sentence observation about the specimen that helps identification>",
-  "patterns": [
-    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" },
-    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" },
-    { "name": "<fly pattern name>", "size": "<hook size>", "notes": "<when/how to fish it>" }
-  ]
-}
-
-If you cannot identify an insect in the photo (no bug visible, image too blurry, or not an aquatic insect), respond with:
-{ "identified": false, "reason": "<brief explanation>" }
-
-Return 3-4 fly patterns that best match this exact life stage and size. Be specific to what is shown in the photo.`;
-
-  try {
-    const res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 800,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-            { type: 'text', text: prompt }
-          ]
-        }]
-      })
-    });
-
-    const data = await res.json();
-    // Handle API-level errors (rate limit, auth, etc.)
-    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-    const text = (data.content?.[0]?.text || '').trim().replace(/```json|```/g, '').trim();
-    if (!text) throw new Error('Empty response from AI');
-    const result = JSON.parse(text);
-
-    if (!result.identified) {
-      resultEl.innerHTML =
-        '<div style="padding:16px;background:var(--surface2);border-radius:4px;border:1px solid var(--border)">' +
-        '<div style=";font-size:0.7rem;color:var(--amber);margin-bottom:6px">Could not identify</div>' +
-        '<div style="font-size:0.82rem;color:var(--muted)">' + (result.reason || 'No aquatic insect detected in photo.') + '</div>' +
-        '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Try a closer photo with the insect on a light background.</div>' +
-        '</div>';
-      return;
+  var objectUrl = URL.createObjectURL(file);
+  document.getElementById('hatch-preview-img').src = objectUrl;
+  document.getElementById('hatch-upload-area').style.display = 'none';
+  document.getElementById('hatch-preview-wrap').style.display = 'block';
+  document.getElementById('hatch-result').innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem"><div class="spinner"></div>Resizing &amp; identifying…</div>';
+  var img = new Image();
+  img.onload = function() {
+    var MAX = 1024;
+    var w = img.width, h = img.height;
+    if (w > MAX || h > MAX) {
+      if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+      else { w = Math.round(w * MAX / h); h = MAX; }
     }
-
-    // Confidence color
-    var confColor = result.confidence === 'High' ? 'var(--green)' : result.confidence === 'Medium' ? 'var(--amber)' : 'var(--red)';
-
-    // Patterns HTML
-    var patternsHtml = (result.patterns || []).map(function(p, i) {
-      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;' +
-        (i < (result.patterns.length-1) ? 'border-bottom:1px solid var(--border)' : '') + '">' +
-        '<div style=";font-size:0.7rem;color:var(--accent);flex-shrink:0;min-width:24px;margin-top:1px">' + (i+1) + '</div>' +
-        '<div>' +
-          '<div style=";font-size:0.8rem;font-weight:500;color:var(--text)">' + p.name + ' <span style="color:var(--muted)">' + p.size + '</span></div>' +
-          '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">' + p.notes + '</div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-
-    resultEl.innerHTML =
-      // ID header
-      '<div style="margin-bottom:16px">' +
-        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
-          '<div style=";font-size:1.2rem;font-weight:700;font-style:italic;color:var(--text)">' + result.commonName + '</div>' +
-          '<span style=";font-size:0.55rem;background:rgba(0,0,0,0.06);color:' + confColor + ';border:1px solid currentColor;padding:1px 6px;border-radius:2px">' + result.confidence + ' confidence</span>' +
-        '</div>' +
-        '<div style=";font-size:0.68rem;color:var(--muted);font-style:italic;margin-bottom:6px">' + (result.latinName || '') + '</div>' +
-        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-          '<span style=";font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px">' + result.order + '</span>' +
-          '<span style=";font-size:0.6rem;background:rgba(200,68,26,0.1);color:var(--accent);border:1px solid rgba(200,68,26,0.25);padding:2px 8px;border-radius:2px">' + result.lifeStage + '</span>' +
-          '<span style=";font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px">' + result.size + '</span>' +
-        '</div>' +
-        (result.notes ? '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic">' + result.notes + '</div>' : '') +
-      '</div>' +
-      // Matching patterns
-      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px 16px">' +
-        '<div style=";font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Matching Fly Patterns</div>' +
-        patternsHtml +
-      '</div>';
-
-  } catch(e) {
-    resultEl.innerHTML =
-      '<div style="color:var(--muted);font-size:0.82rem">' +
-      'Identification failed. Check your connection and try again.<br><br>' +
-      '<button onclick="document.getElementById("hatch-file-input").click()" style=";font-size:0.65rem;color:var(--accent);border:1px solid var(--accent);background:none;padding:6px 14px;border-radius:2px;cursor:pointer">Try Again</button>' +
-      '</div>';
-  }
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    var base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+    URL.revokeObjectURL(objectUrl);
+    identifyHatch(base64, 'image/jpeg');
+  };
+  img.onerror = function() {
+    document.getElementById('hatch-result').innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem">Could not load image. Try a different photo.</div>';
+  };
+  img.src = objectUrl;
 }
-
-// =============================================================
-// MAP TAB — Leaflet.js
-// =============================================================
-
-var dsMap = null;
-var mapLayers = {};
-var mapLayerGroups = { access: null, gauges: null, public: null };
-var mapLayerVisible = { access: true, gauges: true, public: false };
-var userLocationMarker = null;
-var mapInitialized = false;
-
-var TILE_LAYERS = null; // initialized lazily inside initMap()
-var currentTileLayer = 'topo';
 
 function initMap() {
   if (mapInitialized) {
