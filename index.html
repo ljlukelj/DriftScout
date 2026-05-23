@@ -3193,10 +3193,14 @@ function switchMode(mode) {
   if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); }
   if (mode === 'shops') renderShops();
   if (mode === 'map') {
-    // Ensure the container has height before Leaflet init
     var mc = document.getElementById('map-container');
     if (mc) mc.style.height = Math.max(480, window.innerHeight - 260) + 'px';
-    initMap();
+    // Use requestAnimationFrame to ensure panel is visible before Leaflet init
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        initMap();
+      });
+    });
   }
 }
 
@@ -4344,6 +4348,83 @@ function processHatchImage(file) {
   img.src = objectUrl;
 }
 
+async function identifyHatch(base64, mediaType) {
+  var resultEl = document.getElementById('hatch-result');
+  var riverCtx = activeRiver ? activeRiver.label + ' (' + activeRiver.sublabel + ')' : 'a Pacific Northwest trout stream';
+
+  var prompt = 'You are an expert aquatic entomologist and fly fishing guide. The angler is fishing ' + riverCtx + '.\n\nExamine this photo carefully and identify the insect. Respond with ONLY a JSON object in this exact shape — no markdown, no explanation:\n\n{\n  "identified": true,\n  "commonName": "<common name e.g. Blue-Wing Olive>",\n  "latinName": "<genus/species if identifiable>",\n  "order": "<insect order e.g. Ephemeroptera>",\n  "lifeStage": "<Nymph | Emerger | Dun | Spinner | Adult | Larva | Pupa>",\n  "size": "<estimated body length e.g. 8-12mm / hook size #16-18>",\n  "confidence": "<High | Medium | Low>",\n  "notes": "<one sentence observation about the specimen>",\n  "patterns": [\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" },\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" },\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" }\n  ]\n}\n\nIf no insect is visible or identifiable, respond with:\n{ "identified": false, "reason": "<brief explanation>" }\n\nReturn 3-4 fly patterns matching this exact life stage and size.';
+
+  try {
+    var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    var data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    var text = (data.content && data.content[0] && data.content[0].text || '').trim().replace(/```json|```/g, '').trim();
+    if (!text) throw new Error('Empty response from AI');
+    var result = JSON.parse(text);
+
+    if (!result.identified) {
+      resultEl.innerHTML =
+        '<div style="padding:16px;background:var(--surface2);border-radius:4px;border:1px solid var(--border)">' +
+        '<div style="font-size:0.7rem;color:var(--amber);margin-bottom:6px;font-family:IBM Plex Mono,monospace">Could not identify</div>' +
+        '<div style="font-size:0.82rem;color:var(--muted)">' + (result.reason || 'No aquatic insect detected.') + '</div>' +
+        '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Try a closer photo on a light background.</div>' +
+        '</div>';
+      return;
+    }
+
+    var confColor = result.confidence === 'High' ? 'var(--green)' : result.confidence === 'Medium' ? 'var(--amber)' : 'var(--red)';
+    var patternsHtml = (result.patterns || []).map(function(p, i) {
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;' + (i < (result.patterns.length-1) ? 'border-bottom:1px solid var(--border)' : '') + '">' +
+        '<div style="font-size:0.7rem;color:var(--accent);flex-shrink:0;min-width:20px;margin-top:1px">' + (i+1) + '</div>' +
+        '<div><div style="font-size:0.8rem;font-weight:500;color:var(--text)">' + p.name + ' <span style="color:var(--muted)">' + p.size + '</span></div>' +
+        '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">' + p.notes + '</div></div></div>';
+    }).join('');
+
+    resultEl.innerHTML =
+      '<div style="margin-bottom:16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+          '<div style="font-size:1.1rem;font-weight:700;font-style:italic;color:var(--text)">' + result.commonName + '</div>' +
+          '<span style="font-size:0.55rem;color:' + confColor + ';border:1px solid currentColor;padding:1px 6px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + result.confidence + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.68rem;color:var(--muted);font-style:italic;margin-bottom:6px">' + (result.latinName || '') + '</div>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+          '<span style="font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.order||'') + '</span>' +
+          '<span style="font-size:0.6rem;background:rgba(200,68,26,0.1);color:var(--accent);border:1px solid rgba(200,68,26,0.25);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.lifeStage||'') + '</span>' +
+          '<span style="font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.size||'') + '</span>' +
+        '</div>' +
+        (result.notes ? '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic">' + result.notes + '</div>' : '') +
+      '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px 16px">' +
+        '<div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-family:IBM Plex Mono,monospace">Matching Fly Patterns</div>' +
+        patternsHtml +
+      '</div>';
+
+  } catch(e) {
+    console.error('Hatch ID error:', e);
+    resultEl.innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem">' +
+      '<div style="color:var(--red);margin-bottom:8px">Error: ' + e.message + '</div>' +
+      '<button onclick="document.getElementById(&quot;hatch-file-input&quot;).click()" style="font-size:0.65rem;color:var(--accent);border:1px solid var(--accent);background:none;padding:6px 14px;border-radius:2px;cursor:pointer">Try New Photo</button>' +
+      '</div>';
+  }
+}
+
+
 function initMap() {
   if (mapInitialized) {
     centerMapOnRiver();
@@ -4392,10 +4473,17 @@ function initMap() {
   addGaugeMarkers();
   addAccessMarkers();
 
-  // Leaflet needs multiple invalidateSize calls when revealed from display:none
-  setTimeout(function() { dsMap.invalidateSize(); }, 50);
-  setTimeout(function() { dsMap.invalidateSize(); }, 300);
-  setTimeout(function() { dsMap.invalidateSize(); }, 800);
+  // Force size recalculation
+  dsMap.invalidateSize();
+  setTimeout(function() { dsMap.invalidateSize(); }, 200);
+  setTimeout(function() { dsMap.invalidateSize(); }, 600);
+
+  // ResizeObserver as backup for any layout shifts
+  if (typeof ResizeObserver !== 'undefined') {
+    var ro = new ResizeObserver(function() { if (dsMap) dsMap.invalidateSize(); });
+    ro.observe(document.getElementById('ds-map'));
+    setTimeout(function() { ro.disconnect(); }, 3000);
+  }
 }
 
 function centerMapOnRiver() {
