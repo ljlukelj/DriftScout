@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f2ed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DriftScout">
+<meta name="description" content="Fly fishing dashboard with live USGS river data, AI rig recommendations, hatch calendar, and bug identification.">
 <title>DriftScout — Fishing Dashboard</title>
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -1736,7 +1742,10 @@
         <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Trip Log & Fly Box</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">What worked, where, when — saved locally in your browser</div>
       </div>
-      <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="exportTripLog()" style="font-size:0.6rem;padding:7px 14px">&#8595; Export CSV</button>
+        <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      </div>
     </div>
     <div class="trip-form">
       <div class="trip-form-row">
@@ -1919,6 +1928,43 @@
             <option value="vdeep">Very Deep (6+ ft)</option>
           </select>
           <div class="leader-result" id="weight-result"></div>
+        </div>
+      </div>
+      <div class="calc-card" style="grid-column:1/-1">
+        <div class="calc-title">Indicator Depth Calculator</div>
+        <div class="leader-calc">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;flex-wrap:wrap">
+            <div>
+              <label>Water Depth</label>
+              <select id="ind-depth" onchange="calcIndicator()">
+                <option value="1">1 ft — very shallow</option>
+                <option value="2" selected>2 ft — shallow</option>
+                <option value="3">3 ft — medium</option>
+                <option value="4">4 ft — medium-deep</option>
+                <option value="5">5 ft — deep</option>
+                <option value="6">6 ft — very deep</option>
+                <option value="8">8 ft — pool</option>
+              </select>
+            </div>
+            <div>
+              <label>Current Speed</label>
+              <select id="ind-speed" onchange="calcIndicator()">
+                <option value="slow">Slow / Flat</option>
+                <option value="medium" selected>Medium / Riffle</option>
+                <option value="fast">Fast / Pocket Water</option>
+              </select>
+            </div>
+            <div>
+              <label>Fly Type</label>
+              <select id="ind-fly" onchange="calcIndicator()">
+                <option value="nymph">Nymph (weighted)</option>
+                <option value="soft" selected>Soft Hackle / Wet</option>
+                <option value="midge">Midge / Small nymph</option>
+                <option value="heavy">Heavy Stonefly nymph</option>
+              </select>
+            </div>
+          </div>
+          <div class="leader-result" id="indicator-result" style="margin-top:14px"></div>
         </div>
       </div>
     </div>
@@ -2437,8 +2483,14 @@ function switchRiver(riverId) {
   const bNt = document.getElementById('baro-note'); if(bNt) bNt.textContent='Loading…';
 
   loadAll();
-  // Update map if open
   if (mapInitialized) centerMapOnRiver();
+  // Silently sync regs dropdown to new river
+  var rs = document.getElementById('regs-river-select');
+  if (rs) {
+    for (var i = 0; i < rs.options.length; i++) {
+      if (rs.options[i].value === riverId) { rs.selectedIndex = i; break; }
+    }
+  }
 }
 
 // ─── DATE/TIME ────────────────────────────────────────────
@@ -3240,9 +3292,40 @@ function switchMode(mode) {
     if (el) el.style.display = m === mode ? 'block' : 'none';
   });
   if (mode === 'knots') renderKnots();
-  if (mode === 'triplog') { setDefaultDate(); renderTripLog(); }
-  if (mode === 'regs') renderRegs();
-  if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); }
+  if (mode === 'triplog') {
+    setDefaultDate();
+    renderTripLog();
+    // Auto-fill active river and current flow
+    var logRiver = document.getElementById('log-river');
+    var logFlow  = document.getElementById('log-flow');
+    if (logRiver && activeRiver) {
+      // Match by label — find closest option
+      var label = activeRiver.label;
+      for (var i = 0; i < logRiver.options.length; i++) {
+        if (logRiver.options[i].value === label || logRiver.options[i].text === label) {
+          logRiver.selectedIndex = i; break;
+        }
+      }
+    }
+    if (logFlow && currentFlow && !logFlow.value) {
+      logFlow.value = Math.round(currentFlow);
+    }
+  }
+  if (mode === 'regs') {
+    // Sync dropdown to active river if it's a WA preset
+    var regsSelect = document.getElementById('regs-river-select');
+    if (regsSelect && activeRiver && activeRiver.id && !activeRiver.id.startsWith('custom_')) {
+      var waId = activeRiver.id.replace(/^WA_\d+$/, '');
+      // Only sync if it's a known WA river key
+      for (var i = 0; i < regsSelect.options.length; i++) {
+        if (regsSelect.options[i].value === activeRiver.id) {
+          regsSelect.selectedIndex = i; break;
+        }
+      }
+    }
+    renderRegs();
+  }
+  if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); calcIndicator(); }
   if (mode === 'shops') renderShops();
   if (mode === 'map') {
     var mc = document.getElementById('map-container');
@@ -3612,6 +3695,49 @@ function renderRegs() {
 // ═════════════════════════════════════════════════════════
 // CALCULATOR
 // ═════════════════════════════════════════════════════════
+function calcIndicator() {
+  var depth  = parseFloat(document.getElementById('ind-depth').value  || 2);
+  var speed  = document.getElementById('ind-speed').value  || 'medium';
+  var fly    = document.getElementById('ind-fly').value    || 'nymph';
+
+  // Base: indicator placement = 1.5x water depth
+  var base = depth * 1.5;
+
+  // Speed adjustment — faster water, fish deeper in column
+  var speedAdj = speed === 'slow' ? -0.3 : speed === 'fast' ? 0.5 : 0;
+
+  // Fly sink rate adjustment
+  var flyAdj = fly === 'heavy' ? -0.4 : fly === 'midge' ? 0.3 : fly === 'soft' ? 0.1 : 0;
+
+  var placement = Math.max(0.5, base + speedAdj + flyAdj);
+  var low  = Math.max(0.5, (placement - 0.3)).toFixed(1);
+  var high = (placement + 0.3).toFixed(1);
+
+  // Leader below indicator
+  var tippetLen = (placement * 0.4).toFixed(1);
+
+  // Indicator size recommendation
+  var indSize = depth <= 2 ? 'Small (yarn or small Thingamabobber)'
+    : depth <= 4 ? 'Medium Thingamabobber or Air-Lock'
+    : 'Large Thingamabobber or foam indicator';
+
+  // Tactical tip
+  var tip = speed === 'fast'
+    ? 'Mend upstream immediately after cast. High-stick to keep indicator drag-free.'
+    : speed === 'slow'
+    ? 'Use a lighter indicator — less splash, less drag. Watch for subtle dips.'
+    : 'Standard across-and-down mend. Strike on any hesitation or upstream movement.';
+
+  var el = document.getElementById('indicator-result');
+  if (!el) return;
+  el.innerHTML =
+    '<div class="leader-result-row"><span class="lbl">Indicator Placement</span><span class="val">' + low + ' – ' + high + ' ft above fly</span></div>' +
+    '<div class="leader-result-row"><span class="lbl">Tippet Below Indicator</span><span class="val">' + tippetLen + ' ft</span></div>' +
+    '<div class="leader-result-row"><span class="lbl">Indicator Size</span><span class="val" style="font-size:0.65rem;text-align:right;max-width:180px">' + indSize + '</span></div>' +
+    '<div class="leader-result-row" style="border:none"><span class="lbl">Tip</span><span class="val" style="font-size:0.62rem;text-align:right;max-width:200px;color:var(--muted)">' + tip + '</span></div>';
+}
+
+
 function calcLeader() {
   const len = parseFloat(document.getElementById('leader-length').value);
   const tippet = document.getElementById('leader-tippet').value;
@@ -3992,6 +4118,23 @@ function loadStateRiver(idx, stateCode) {
 // ═══════════════════════════════════════════════════════════
 // TRIP LOG
 // ═══════════════════════════════════════════════════════════
+function exportTripLog() {
+  var entries = getTripLog();
+  if (!entries.length) { alert('No trips to export.'); return; }
+  var headers = ['Date','River','Flow (cfs)','Fly Pattern','Method','Fish Count','Notes'];
+  var rows = entries.map(function(e) {
+    return [e.date, e.river, e.flow||'', e.fly||'', e.method||'', e.fish||'', (e.notes||'').replace(/,/g,'；').replace(/\n/g,' ')].join(',');
+  });
+  var csv = headers.join(',') + '\n' + rows.join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'driftscout-trips-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+
 function setDefaultDate() {
   const d = document.getElementById('log-date');
   if (d && !d.value) d.value = new Date().toISOString().split('T')[0];
