@@ -2458,21 +2458,26 @@ document.getElementById('current-date').textContent = formatDate();
 
 // ─── USGS DATA ────────────────────────────────────────────
 async function fetchUSGS(riverId) {
-  const url = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${activeRiver.usgs}`;
+  const siteId = activeRiver.usgs;
+  const url = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${siteId}`;
 
-  let json;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Proxy returned ' + res.status);
-    json = await res.json();
-  } catch(err) {
-    ['flow-val','gage-val'].forEach(id => {
-      const el = document.getElementById(id);
-      el.textContent = 'ERR';
-      el.classList.remove('skeleton');
-    });
-    document.getElementById('last-updated').textContent = 'Flow fetch failed — ' + err.message;
-    throw err;
+  // Check session cache first
+  let json = _cacheGet(_usgsCache, siteId);
+  if (!json) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Proxy returned ' + res.status);
+      json = await res.json();
+      _cacheSet(_usgsCache, siteId, json);
+    } catch(err) {
+      ['flow-val','gage-val'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = 'ERR';
+        el.classList.remove('skeleton');
+      });
+      document.getElementById('last-updated').textContent = 'Flow fetch failed — ' + err.message;
+      throw err;
+    }
   }
 
   // Parse legacy USGS waterservices format
@@ -2513,7 +2518,8 @@ async function fetchUSGS(riverId) {
       v: parseFloat(v.value)
     }));
 
-    document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}`;
+    const fromCache = !!_cacheGet(_usgsCache, siteId);
+    document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}${fromCache ? ' · cached' : ''}`;
   }
 
   if (gageVals.length) {
@@ -2558,9 +2564,15 @@ async function fetchUSGS(riverId) {
 
 // ─── WEATHER ──────────────────────────────────────────────
 async function fetchWeather(riverId) {
+  const wxKey = activeRiver.lat.toFixed(3) + ',' + activeRiver.lon.toFixed(3);
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${activeRiver.lat}&longitude=${activeRiver.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=surface_pressure&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=7`;
-  const res = await fetch(url);
-  const json = await res.json();
+
+  let json = _cacheGet(_wxCache, wxKey);
+  if (!json) {
+    const res = await fetch(url);
+    json = await res.json();
+    _cacheSet(_wxCache, wxKey, json);
+  }
 
   if (activeRiver.id !== riverId) return;
 
@@ -3152,6 +3164,22 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   });
 }
 
+// ── SESSION CACHE (5-min TTL) ─────────────────────────────────────────────────
+const _usgsCache = new Map();   // siteId -> { json, ts }
+const _wxCache   = new Map();   // "lat,lon" -> { json, ts }
+const CACHE_TTL  = 5 * 60 * 1000; // 5 minutes
+
+function _cacheGet(map, key) {
+  const entry = map.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > CACHE_TTL) { map.delete(key); return null; }
+  return entry.json;
+}
+function _cacheSet(map, key, json) {
+  map.set(key, { json, ts: Date.now() });
+}
+
+
 // ─── BOOT ─────────────────────────────────────────────────
 async function loadAll() {
   const riverSnapshot = activeRiver.id;
@@ -3173,6 +3201,30 @@ async function loadAll() {
 }
 
 loadAll();
+
+// ── Background prefetch all preset WA rivers after initial load ───────────────
+// Staggered 800ms apart so they don't compete with the active river fetch
+setTimeout(function() {
+  var presets = Object.values(RIVERS);
+  presets.forEach(function(river, i) {
+    if (river.usgs === activeRiver.usgs) return; // already loaded
+    setTimeout(function() {
+      var siteId = river.usgs;
+      if (_cacheGet(_usgsCache, siteId)) return; // already cached
+      fetch('https://yakima-proxy.ljlukelj.workers.dev/usgs?site=' + siteId)
+        .then(function(r) { return r.json(); })
+        .then(function(json) { _cacheSet(_usgsCache, siteId, json); })
+        .catch(function() {}); // silent fail — prefetch only
+      var wxKey = river.lat.toFixed(3) + ',' + river.lon.toFixed(3);
+      if (!_cacheGet(_wxCache, wxKey)) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + river.lat + '&longitude=' + river.lon + '&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=surface_pressure&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=7')
+          .then(function(r) { return r.json(); })
+          .then(function(json) { _cacheSet(_wxCache, wxKey, json); })
+          .catch(function() {});
+      }
+    }, (i + 1) * 800);
+  });
+}, 3000); // wait 3s after page load before prefetching
 
 // ═══════════════════════════════════════════════════════════
 // MODE SWITCHER
