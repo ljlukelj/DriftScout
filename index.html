@@ -1450,6 +1450,151 @@
   /* Wading bar track */
   .track { background: var(--surface2); }
 
+
+  /* ═══════════════════════════════════════════════════════════
+     MOBILE RESPONSIVE — max-width 768px
+  ════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    .wrapper { padding: 0 12px 40px; }
+
+    /* ── HEADER ── */
+    header { padding: 12px 0 12px; margin-bottom: 16px; }
+    .header-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .driftscout-logo-img { width: clamp(200px, 72vw, 320px) !important; margin-left: -6px !important; margin-bottom: 0 !important; }
+    #river-title { font-size: 1rem !important; margin-top: 2px !important; }
+    .header-meta { text-align: left; font-size: 0.65rem; line-height: 1.6; }
+
+    /* ── MAIN NAV TABS — single scrollable row, no wrap ── */
+    .mode-switcher {
+      gap: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+      margin-bottom: 16px;
+    }
+    .mode-switcher::-webkit-scrollbar { display: none; }
+    .mode-btn {
+      font-size: 0.58rem;
+      padding: 10px 9px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: max-content;
+    }
+
+    /* ── RIVER TABS — single scrollable row, no wrap ── */
+    .river-tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+      margin-bottom: 16px;
+      padding-bottom: 0;
+    }
+    .river-tabs::-webkit-scrollbar { display: none; }
+    .river-tab {
+      font-size: 0.6rem;
+      padding: 8px 10px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: max-content;
+    }
+    .river-tab .tab-sub { font-size: 0.5rem; }
+
+    /* ── RIVER SEARCH ── */
+    .river-search-box { padding: 12px 14px; margin-bottom: 14px; }
+    .river-search-row { flex-direction: column; }
+    .search-select { width: 100%; }
+    #site-search-input { width: 100%; min-width: unset; }
+
+    /* ── CONDITION BANNER ── */
+    .condition-banner { flex-direction: column; gap: 8px; padding: 14px 16px; }
+    .condition-status { font-size: 1.2rem; }
+    .refresh-btn { margin-left: 0; width: 100%; text-align: center; padding: 8px; }
+
+    /* ── STAT GRID ── */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .stat-card { padding: 14px 12px; }
+    .stat-value { font-size: 1.4rem; }
+    #card-temp { grid-column: 1 / -1; }
+
+    /* ── WADING BAR ── */
+    .wading-bar { padding: 14px 16px; margin-bottom: 16px; }
+    .track-zones { font-size: 0.55rem; }
+
+    /* ── CHART ── */
+    .chart-section { padding: 14px 12px; margin-bottom: 16px; }
+    .chart-wrap { height: 140px; }
+
+    /* ── FORECAST ── */
+    .forecast-row { grid-template-columns: repeat(4, 1fr) !important; gap: 6px; margin-bottom: 16px; }
+    .forecast-row .forecast-day:nth-child(n+5) { display: none; }
+    .forecast-day { padding: 10px 4px; }
+    .fc-icon { font-size: 1.1rem; }
+    .fc-rating { font-size: 0.75rem; }
+    .fc-temp { font-size: 0.58rem; }
+
+    /* ── HATCHES ── */
+    .hatch-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+    .hatch-card { padding: 14px; }
+
+    /* ── AI INSIGHTS ── */
+    .insights-box { padding: 16px; margin-bottom: 16px; }
+    .insights-header { flex-direction: column; gap: 6px; align-items: flex-start; }
+
+    /* ── ACCESS POINTS ── */
+    .access-list { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+
+    /* ── KNOTS ── */
+    .knot-grid { grid-template-columns: 1fr; gap: 12px; }
+    .knot-header { padding: 14px 14px 10px; }
+
+    /* ── TRIP LOG ── */
+    .trip-form { grid-template-columns: 1fr; gap: 12px; padding: 16px; }
+    .trip-form-row.full { grid-column: 1; }
+    .trip-entry { grid-template-columns: 1fr auto; }
+
+    /* ── REGULATIONS ── */
+    .regs-content { grid-template-columns: 1fr; }
+    .reg-warning { padding: 12px 14px; font-size: 0.78rem; }
+
+    /* ── CALCULATOR ── */
+    .calc-grid { grid-template-columns: 1fr !important; gap: 14px; }
+    .calc-card { padding: 16px; }
+    .tippet-table { font-size: 0.68rem; }
+    .tippet-table th { font-size: 0.55rem; }
+
+    /* ── SHOPS ── */
+    .shop-grid { grid-template-columns: 1fr; }
+    .shop-card { padding: 14px 16px; }
+
+    /* ── MATCH THE HATCH ── */
+    #hatch-upload-area { padding: 32px 16px; }
+    #hatch-preview-wrap > div { flex-direction: column; }
+    #hatch-preview-img { width: 100% !important; height: 220px !important; }
+
+    /* ── MAP ── */
+    #map-container { height: 55vh; min-height: 320px; }
+    .map-toolbar { gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+    .map-btn { font-size: 0.58rem; padding: 6px 10px; }
+    .map-legend { gap: 10px; font-size: 0.58rem; }
+    .map-legend > div:last-child { display: none; }
+
+    /* ── FOOTER ── */
+    footer { flex-direction: column; gap: 4px; font-size: 0.58rem; padding-top: 16px; }
+  }
+
+  /* ── Very small screens (< 380px) ── */
+  @media (max-width: 380px) {
+    .mode-btn { font-size: 0.52rem; padding: 9px 7px 11px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-value { font-size: 1.2rem; }
+    .driftscout-logo-img { width: 200px !important; }
+    .forecast-row { grid-template-columns: repeat(3, 1fr) !important; }
+    .forecast-row .forecast-day:nth-child(n+4) { display: none; }
+  }
+
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
