@@ -1666,6 +1666,7 @@
   </div>
 
   <!-- Flow Chart -->
+  <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)">48hr Flow History</span></div>
   <div class="chart-section">
     <div class="section-header">
       <div class="section-title">River Flow — 7-Day History + Trend</div>
@@ -1677,17 +1678,13 @@
   </div>
 
   <!-- 7-Day Fishing Forecast -->
-  <div style="margin-bottom:12px">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">7-Day Fishing Forecast</span>
-  </div>
+  <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)">7-Day Fishing Forecast</span></div>
   <div class="forecast-row" id="forecast-row">
     <!-- filled by JS -->
   </div>
 
   <!-- Current Hatches -->
-  <div style="margin-bottom:12px">
-    <span id="hatch-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Current & Upcoming Hatches — Upper River</span>
-  </div>
+  <div class="section-divider"><span id="hatch-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Current & Upcoming Hatches — Upper River</span></div>
   <div class="hatch-grid" id="hatch-grid">
     <!-- filled by JS -->
   </div>
@@ -1707,9 +1704,7 @@
   </div>
 
   <!-- Access Points -->
-  <div style="margin-bottom:12px">
-    <span id="access-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Access Points — Easton to Thorpe</span>
-  </div>
+  <div class="section-divider"><span id="access-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Access Points — Easton to Thorpe</span></div>
   <div class="access-list" id="access-list">
   </div>
 
@@ -4179,7 +4174,7 @@ function renderTripLog() {
   const container = document.getElementById('trip-entries');
   if (!container) return;
   if (!entries.length) {
-    container.innerHTML = '<div class="trip-empty">No trips logged yet.<br>Fill in the form above to record your first outing.</div>';
+    container.innerHTML = '<div class="trip-empty"><span class="trip-empty-title">No trips logged yet</span>Fill in the form above to record your first outing.</div>';
     return;
   }
   container.innerHTML = entries.map(e => {
