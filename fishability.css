@@ -1,0 +1,292 @@
+/* ─── FISHABILITY SCORE CARD ─────────────────────────────────────────────────
+   Add to your main stylesheet. Prefixed with ds- to avoid collisions.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.ds-score-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #e5e0d8);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  font-family: inherit;
+}
+
+.ds-score-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.ds-score-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted, #888);
+  margin-bottom: 4px;
+}
+
+.ds-score-river {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+  margin: 0 0 2px;
+}
+
+.ds-score-sub {
+  font-size: 13px;
+  color: var(--text-muted, #888);
+}
+
+.ds-score-badge {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ds-score-num {
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-block;
+}
+
+.ds-score-denom {
+  font-size: 16px;
+  color: var(--text-muted, #888);
+  font-weight: 400;
+}
+
+.ds-score-word {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Score bar */
+.ds-score-bar-wrap {
+  height: 6px;
+  background: var(--surface-secondary, #f2ede6);
+  border-radius: 99px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.ds-score-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Signal grid */
+.ds-signals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.ds-signal {
+  background: var(--surface-secondary, #f7f4ef);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-signal-label {
+  font-size: 11px;
+  color: var(--text-muted, #888);
+  margin-bottom: 1px;
+}
+
+.ds-signal-val {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.ds-est-badge {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted, #888);
+  background: var(--surface-secondary, #eee);
+  padding: 1px 5px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+/* Recommendation row */
+.ds-rec-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle, #e5e0d8);
+  padding-top: 1rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ds-rec-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-rec-method-label {
+  font-size: 11px;
+  color: var(--text-muted, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ds-rec-method {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.ds-rec-flies {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+  margin-top: 1px;
+}
+
+.ds-confidence-pill {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* Why panel */
+.ds-why-btn {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-top: 6px;
+  font-family: inherit;
+}
+
+.ds-why-chevron {
+  transition: transform 0.2s ease;
+}
+.ds-why-chevron.open {
+  transform: rotate(180deg);
+}
+
+.ds-why-panel {
+  display: none;
+  background: var(--surface-secondary, #f7f4ef);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+
+.ds-why-panel.open {
+  display: block;
+}
+
+.ds-why-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-primary, #1a1a1a);
+  line-height: 1.5;
+}
+
+.ds-why-row:last-child {
+  margin-bottom: 0;
+}
+
+.ds-why-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.ds-why-note {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle, #e5e0d8);
+}
+
+.ds-updated {
+  font-size: 11px;
+  color: var(--text-muted, #888);
+  margin: 8px 0 0;
+}
+
+/* ─── SKELETON STATES ────────────────────────────────────────────────────────
+   Pulse animation while USGS data loads
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@keyframes ds-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.ds-skel {
+  background: var(--surface-secondary, #e8e3db);
+  border-radius: 4px;
+  display: block;
+  animation: ds-pulse 1.6s ease-in-out infinite;
+}
+
+.ds-skel-label {
+  font-size: 11px;
+  color: var(--text-muted, #aaa);
+  margin-top: 4px;
+  animation: ds-pulse 1.6s ease-in-out infinite;
+}
+
+.ds-skeleton-card {
+  pointer-events: none;
+}
+
+/* ─── ERROR STATE ────────────────────────────────────────────────────────────*/
+
+.ds-score-error {
+  border-color: var(--border-subtle, #e5e0d8);
+}
+
+/* ─── MOBILE ─────────────────────────────────────────────────────────────────*/
+
+@media (max-width: 480px) {
+  .ds-score-num {
+    font-size: 36px;
+  }
+  .ds-signals {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .ds-signal {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .ds-signal-val {
+    font-size: 13px;
+  }
+  .ds-score-card {
+    padding: 1rem;
+  }
+}
