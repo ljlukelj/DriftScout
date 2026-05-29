@@ -3396,9 +3396,32 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating report…</span></div>';
   document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Hatch data available for preset PNW rivers.</div>';
   document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access points available for preset PNW rivers.</div>';
+  // Reset fishability score to skeleton immediately
+  const scoreElCR = document.getElementById('fishability-score-container');
+  if (scoreElCR) scoreElCR.innerHTML = showFishabilitySkeletonHTML();
+
   const snap = activeRiver.id;
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
-    if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
+    if (activeRiver.id !== snap) return;
+    fetchWaterTemp(snap);
+    generateInsights(snap);
+    // Render fishability score
+    try {
+      const scoreEl2 = document.getElementById('fishability-score-container');
+      if (scoreEl2) {
+        const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
+        const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
+        const baroNote = document.getElementById('baro-note')?.textContent || '';
+        const weather = {
+          pressureInHg: baroVal,
+          pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
+          airTempF: airTemp
+        };
+        const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
+        scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
+        animateFishabilityBar(scoreEl2);
+      }
+    } catch(e) { console.error('Fishability score render error:', e); }
   });
 }
 
