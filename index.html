@@ -1900,7 +1900,10 @@
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn-primary" onclick="exportTripLog()" style="font-size:0.6rem;padding:7px 14px">&#8595; Export CSV</button>
+  <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="exportTripCSV()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--accent);color:var(--accent)">↓ Export CSV</button>
         <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      </div>
       </div>
     </div>
     <div class="trip-form">
@@ -3824,15 +3827,28 @@ function switchMode(mode) {
     var logRiver = document.getElementById('log-river');
     var logFlow  = document.getElementById('log-flow');
     if (logRiver && activeRiver) {
-      // Match by label — find closest option
       var label = activeRiver.label;
+      var matched = false;
       for (var i = 0; i < logRiver.options.length; i++) {
         if (logRiver.options[i].value === label || logRiver.options[i].text === label) {
-          logRiver.selectedIndex = i; break;
+          logRiver.selectedIndex = i; matched = true; break;
         }
       }
+      // Custom/search river not in preset list — inject it dynamically
+      if (!matched && label) {
+        // Remove any previously injected custom option
+        var prev = logRiver.querySelector('option[data-custom]');
+        if (prev) prev.remove();
+        var opt = document.createElement('option');
+        opt.value = label;
+        opt.textContent = label;
+        opt.setAttribute('data-custom', '1');
+        opt.selected = true;
+        logRiver.insertBefore(opt, logRiver.firstChild);
+      }
     }
-    if (logFlow && currentFlow && !logFlow.value) {
+    // Always sync flow — user may have switched rivers since last visit
+    if (logFlow && currentFlow) {
       logFlow.value = Math.round(currentFlow);
     }
   }
@@ -4707,6 +4723,33 @@ function clearTripLog() {
   if (!confirm('Clear all trip entries?')) return;
   try { localStorage.removeItem('driftscout_trips'); } catch(e) {}
   renderTripLog();
+}
+
+function exportTripCSV() {
+  var entries = getTripLog();
+  if (!entries.length) { alert('No trips to export yet.'); return; }
+  var header = ['Date','River','Flow (cfs)','Fly Pattern','Method','Fish Count','Notes'];
+  var rows = entries.map(function(e) {
+    return [
+      e.date || '',
+      e.river || '',
+      e.flow || '',
+      e.fly || '',
+      e.method || '',
+      e.fish || '',
+      (e.notes || '').replace(/"/g, '""')  // escape quotes
+    ].map(function(v) { return '"' + v + '"'; }).join(',');
+  });
+  var csv = [header.join(',')].concat(rows).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'driftscout-trips-' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function deleteTripEntry(id) {
