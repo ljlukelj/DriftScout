@@ -3333,14 +3333,33 @@ function filterSites() {
     const hits = allSites.filter(s => s.name.toLowerCase().includes(q)).slice(0, 50);
     if (!hits.length) { results.innerHTML = '<div class="site-result-item"><div class="site-result-name" style="color:var(--muted)">No matches</div></div>'; return; }
     results.innerHTML = hits.map(function(s) {
-      var n = s.name.replace(/'/g, '&#39;');
       var lat = parseFloat(s.lat).toFixed(3);
-      return '<div class="site-result-item" onclick="loadCustomRiver(\"' + s.id + '\",\"' + n + '\",' + s.lat + ',' + s.lon + ')">' +
-        '<div class="site-result-name">' + s.name + '</div>' +
-        '<div class="site-result-id">USGS #' + s.id + ' &middot; ' + lat + 'N</div></div>';
+      // Use data-* attributes — no quote-escaping issues with any site name
+      var el = document.createElement('div');
+      el.className = 'site-result-item';
+      el.dataset.siteId  = s.id;
+      el.dataset.siteName = s.name;
+      el.dataset.lat = s.lat;
+      el.dataset.lon = s.lon;
+      el.innerHTML = '<div class="site-result-name">' + s.name + '</div>' +
+        '<div class="site-result-id">USGS #' + s.id + ' &middot; ' + lat + 'N</div>';
+      return el.outerHTML;
     }).join('');
   }, 200);
 }
+
+// Delegated click handler for search results — fires for any .site-result-item
+document.addEventListener('DOMContentLoaded', function() {
+  var resultsEl = document.getElementById('site-results');
+  if (resultsEl) {
+    resultsEl.addEventListener('click', function(e) {
+      var item = e.target.closest('.site-result-item');
+      if (!item || !item.dataset.siteId) return;
+      loadCustomRiver(item.dataset.siteId, item.dataset.siteName,
+                      parseFloat(item.dataset.lat), parseFloat(item.dataset.lon));
+    });
+  }
+});
 
 function loadCustomRiver(siteId, siteName, lat, lon) {
   document.getElementById('site-results').innerHTML = '';
