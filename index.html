@@ -3723,26 +3723,30 @@ async function loadAll() {
     if (activeRiver.id === riverSnapshot) {
       fetchWaterTemp(riverSnapshot);
       generateInsights(riverSnapshot);
-      // Refresh map gauge colors now that flow data is loaded
-      if (mapInitialized && mapLayerGroups.gauges) {
-        mapLayerGroups.gauges.clearLayers();
-        addGaugeMarkers();
-      }
-      // Render fishability score
-      const scoreEl2 = document.getElementById('fishability-score-container');
-      if (scoreEl2) {
-        const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
-        const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
-        const baroNote = document.getElementById('baro-note')?.textContent || '';
-        const weather = {
-          pressureInHg: baroVal,
-          pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
-          airTempF: airTemp
-        };
-        const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
-        scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
-        animateFishabilityBar(scoreEl2);
-      }
+      // Refresh map gauge colors — isolated try/catch so map errors never block score render
+      try {
+        if (mapInitialized && mapLayerGroups.gauges) {
+          mapLayerGroups.gauges.clearLayers();
+          addGaugeMarkers();
+        }
+      } catch(mapErr) { console.warn('Map refresh error (non-fatal):', mapErr); }
+      // Render fishability score — always runs regardless of map state
+      try {
+        const scoreEl2 = document.getElementById('fishability-score-container');
+        if (scoreEl2) {
+          const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
+          const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
+          const baroNote = document.getElementById('baro-note')?.textContent || '';
+          const weather = {
+            pressureInHg: baroVal,
+            pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
+            airTempF: airTemp
+          };
+          const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
+          scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
+          animateFishabilityBar(scoreEl2);
+        }
+      } catch(scoreErr) { console.error('Fishability score render error:', scoreErr); }
     }
   } catch(e) { console.error('Data load error:', e); }
 }
