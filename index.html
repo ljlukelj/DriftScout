@@ -3218,33 +3218,30 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the
 
   } catch(e) {
     if (activeRiver.id !== riverId) return;
-    // Generic fallback — season-appropriate, not WA-specific
+    // Generic season/flow-aware fallback
     const flow_n = currentFlow || 0;
     const m = new Date().getMonth() + 1;
     let setups;
     if (flow_n > 3000) {
       setups = [
         { emoji:'🎣', rig:'Heavy Streamer', flies:'Woolly Bugger #4–6 + split shot', tip:'High water — swing deep along seams and banks' },
-        { emoji:'🪁', rig:'Double Nymph', flies:'Stonefly Nymph #6 + Pheasant Tail #14', tip:'Weight heavy, dead drift in slack behind boulders' }
+        { emoji:'🪱', rig:'Double Nymph', flies:'Stonefly Nymph #6 + Pheasant Tail #14', tip:'Weight heavy, dead drift in slack behind boulders' }
       ];
     } else if (m >= 6 && m <= 9) {
-      // Summer: terrestrials and dries
       setups = [
         { emoji:'🦗', rig:'Hopper-Dropper', flies:'Stimulator #10 + Copper John #16', tip:'Fish grassy banks and shade lines at midday' },
-        { emoji:'🪁', rig:'Euro Nymph', flies:"Hare's Ear #12 + Zebra Midge #20", tip:'Tight-line through riffles when surface activity slows' },
-        { emoji:'🎣', rig:'Dry Fly', flies:'Elk Hair Caddis #14–16 + Parachute Adams #18', tip:'Evening caddis — fish the soft water behind rocks' }
+        { emoji:'🪱', rig:'Euro Nymph', flies:"Hare's Ear #12 + Zebra Midge #20", tip:'Tight-line through riffles when surface activity slows' },
+        { emoji:'🪰', rig:'Dry Fly', flies:'Elk Hair Caddis #14–16 + Parachute Adams #18', tip:'Evening caddis — fish soft water behind rocks' }
       ];
     } else if (m >= 3 && m <= 5) {
-      // Spring: nymphs and emerging dries
       setups = [
-        { emoji:'🪁', rig:'Double Nymph', flies:'Stonefly #8 + Beadhead Nymph #16', tip:'Spring runoff — weight down, target slow inside bends' },
-        { emoji:'🪰', rig:'Dry Fly', flies:'Parachute Adams #16–18 + CDC Emerger #18', tip:'Watch for BWO hatches on overcast afternoons' },
-        { emoji:'🎣', rig:'Streamer', flies:'Sculpin or Wooly Bugger #4–8', tip:'Rising water — streamers draw aggressive strikes' }
+        { emoji:'🪱', rig:'Double Nymph', flies:'Stonefly #8 + Beadhead Nymph #16', tip:'Spring runoff — weight down, target slow inside bends' },
+        { emoji:'🪰', rig:'Dry / Emerger', flies:'Parachute Adams #16–18 + CDC Emerger #18', tip:'Watch for BWO hatches on overcast afternoons' },
+        { emoji:'🎣', rig:'Streamer', flies:'Sculpin or Woolly Bugger #4–8', tip:'Rising water — streamers draw aggressive strikes' }
       ];
     } else {
-      // Fall/winter: midges and streamers
       setups = [
-        { emoji:'🪁', rig:'Midge Nymph', flies:'Zebra Midge #20–22 + Mercury Midge #22', tip:'Cold water — slow down presentations, fish tailouts' },
+        { emoji:'🪱', rig:'Midge Nymph', flies:'Zebra Midge #20–22 + Mercury Midge #22', tip:'Cold water — slow presentations, fish tailouts' },
         { emoji:'🪰', rig:'Dry / Emerger', flies:'Parachute Adams #18 + CDC Midge #22', tip:'Watch for BWO hatches on overcast midday windows' },
         { emoji:'🎣', rig:'Streamer', flies:'Woolly Bugger or Sculpin #4–6', tip:'Low light — swing through deep slots and undercut banks' }
       ];
@@ -3732,6 +3729,9 @@ async function loadAll() {
 }
 
 loadAll();
+
+// Auto-load WA gauge search index on startup (WA pre-selected, onStatePick never fires)
+setTimeout(function() { onStatePick(); }, 1500);
 
 // ── Background prefetch all preset WA rivers after initial load ───────────────
 // Staggered 800ms apart so they don't compete with the active river fetch
@@ -4587,31 +4587,10 @@ function loadStateRiver(idx, stateCode) {
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
   document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for Washington preset rivers.</div>';
   document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for Washington preset rivers.</div>';
-  // Reset fishability score container
-  const scoreEl = document.getElementById('fishability-score-container');
-  if (scoreEl) scoreEl.innerHTML = showFishabilitySkeletonHTML();
 
   const snap = activeRiver.id;
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
-    if (activeRiver.id === snap) {
-      fetchWaterTemp(snap);
-      generateInsights(snap);
-      // Render fishability score for non-WA river
-      const scoreEl2 = document.getElementById('fishability-score-container');
-      if (scoreEl2) {
-        const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
-        const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
-        const baroNote = document.getElementById('baro-note')?.textContent || '';
-        const weather = {
-          pressureInHg: baroVal,
-          pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
-          airTempF: airTemp
-        };
-        const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
-        scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
-        animateFishabilityBar(scoreEl2);
-      }
-    }
+    if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
   });
 }
 
