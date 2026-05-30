@@ -4530,6 +4530,7 @@ const STATE_RIVERS = {
     { label:'Rush River',      sub:'Martell area',           usgs:'05344500', lat:44.7154, lon:-92.4876 },
     { label:'Oconto River',    sub:'Gillett → Oconto',       usgs:'04075000', lat:44.8876, lon:-88.3543 },
     { label:'Peshtigo River',  sub:'Crivitz → Peshtigo',     usgs:'04077000', lat:45.2154, lon:-88.1987 },
+  ],
 
   UT: [
     { label:'Green River (UT)',    sub:'Flaming Gorge → Jensen',   usgs:'09234500', lat:40.8574, lon:-109.4043 },
@@ -4655,7 +4656,6 @@ const STATE_RIVERS = {
     { label:'Nueces River',       sub:'Uvalde → Corpus Christi',   usgs:'08194500', lat:29.2244, lon:-99.7894 },
     { label:'Rio Grande (TX)',    sub:'Big Bend → Del Rio',         usgs:'08374550', lat:29.2536, lon:-103.2508 },
     { label:'Pedernales River',   sub:'Fredericksburg → Austin',   usgs:'08153500', lat:30.3086, lon:-98.3714 },
-  ],
   ],
 };
 
@@ -5006,7 +5006,7 @@ const STATE_SHOPS = {
   ],
   MN: [
     { name:'Duluth Pack Fly Shop', location:'Duluth, MN', rivers:'Brule, Baptism, North Shore streams', tags:['Guided','Gear','Flies','Canoe'], website:'https://www.duluthpack.com', phone:'(218) 722-1707' },
-    { name:'Bob Mitchell's Fly Shop', location:'Lake Elmo, MN', rivers:'Statewide, North Shore, Driftless', tags:['Gear','Flies','Classes','Reports'], website:'https://www.bobmitchellsflyshop.com', phone:'(651) 770-5854' },
+    { name:"Bob Mitchell's Fly Shop", location:'Lake Elmo, MN', rivers:'Statewide, North Shore, Driftless', tags:['Gear','Flies','Classes','Reports'], website:'https://www.bobmitchellsflyshop.com', phone:'(651) 770-5854' },
     { name:'Rivers Edge Fly Shop', location:'Brainerd, MN', rivers:'Crow Wing, Mississippi headwaters', tags:['Guided','Gear','Flies'], website:'https://www.riversedgeflyshop.com', phone:'(218) 829-5767' },
   ],
   MI: [
@@ -5060,12 +5060,12 @@ const STATE_SHOPS = {
     { name:'Rainbow Ryders Fly Shop', location:'Albuquerque, NM', rivers:'AZ/NM border rivers', tags:['Gear','Flies','Guided'], website:'https://www.rainbowryders.com', phone:'(505) 823-1111' },
   ],
   VA: [
-    { name:'Murray's Fly Shop', location:'Edinburg, VA', rivers:'Shenandoah, Mossy Creek, Jackson River', tags:['Guided','Gear','Flies','Classes'], website:'https://www.murraysflyshop.com', phone:'(540) 984-4212' },
+    { name:"Murray's Fly Shop", location:'Edinburg, VA', rivers:'Shenandoah, Mossy Creek, Jackson River', tags:['Guided','Gear','Flies','Classes'], website:'https://www.murraysflyshop.com', phone:'(540) 984-4212' },
     { name:'Blue Ridge Fly Fishers Shop', location:'Roanoke, VA', rivers:'Jackson, Roanoke, James River', tags:['Guided','Gear','Flies'], website:'https://www.blueridgeflyfishers.com', phone:'(540) 344-2870' },
     { name:'Mossy Creek Fly Fishing', location:'Harrisonburg, VA', rivers:'Mossy Creek, Shenandoah, Rapidan', tags:['Guided','Gear','Flies','Reports'], website:'https://www.mossycreekflyfishing.com', phone:'(540) 434-2444' },
   ],
   AR: [
-    { name:'Dally's Ozark Fly Fisher', location:'Cotter, AR', rivers:'White River, North Fork — best shop on the White', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.ozarkflyfisher.com', phone:'(870) 435-6166' },
+    { name:"Dally's Ozark Fly Fisher", location:'Cotter, AR', rivers:'White River, North Fork — best shop on the White', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.ozarkflyfisher.com', phone:'(870) 435-6166' },
     { name:'Headhunters Fly Shop (AR)', location:'Mountain Home, AR', rivers:'White River, Bull Shoals, Norfork', tags:['Guided','Gear','Flies'], website:'https://www.whiteriverflyfishing.com', phone:'(870) 425-6618' },
     { name:'Rim Shoals Fly Fishing', location:'Flippin, AR', rivers:'White River below Bull Shoals Dam', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.rimshoals.com', phone:'(870) 453-2838' },
   ],
@@ -5079,8 +5079,8 @@ const STATE_SHOPS = {
     { name:'Orvis Louisville', location:'Louisville, KY', rivers:'Statewide, Cumberland, Green River', tags:['Gear','Flies','Classes','Orvis'], website:'https://www.orvis.com/louisville', phone:'(502) 584-0407' },
   ],
   MO: [
-    { name:'Maison de Peche', location:'Van Buren, MO', rivers:'Current River, Eleven Point, Jack's Fork', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.maisondepeche.com', phone:'(573) 323-4040' },
-    { name:'Current River Troutfitters', location:'Eminence, MO', rivers:'Current River, North Fork, Jack's Fork', tags:['Guided','Gear','Flies'], website:'https://www.currentrivertroutfitters.com', phone:'(573) 226-3492' },
+    { name:'Maison de Peche', location:'Van Buren, MO', rivers:"Current River, Eleven Point, Jack's Fork", tags:['Guided','Gear','Flies','Lodging'], website:'https://www.maisondepeche.com', phone:'(573) 323-4040' },
+    { name:'Current River Troutfitters', location:'Eminence, MO', rivers:"Current River, North Fork, Jack's Fork", tags:['Guided','Gear','Flies'], website:'https://www.currentrivertroutfitters.com', phone:'(573) 226-3492' },
     { name:'Blue Ribbon Flies (MO)', location:'Joplin, MO', rivers:'Ozark streams — Current, Eleven Point', tags:['Gear','Flies','Classes'], website:'https://www.blueribbonflies.net', phone:'(417) 782-2822' },
   ],
   WV: [
@@ -5090,7 +5090,7 @@ const STATE_SHOPS = {
   ME: [
     { name:'Orvis Freeport', location:'Freeport, ME', rivers:'Kennebec, Penobscot, Androscoggin', tags:['Gear','Flies','Classes','Orvis'], website:'https://www.orvis.com/freeport', phone:'(207) 552-4607' },
     { name:'Libby Camps Fly Shop', location:'Ashland, ME', rivers:'Aroostook, Fish River, St. John watershed', tags:['Guided','Flies','Lodging','Remote'], website:'https://www.libbycamps.com', phone:'(207) 435-8274' },
-    { name:'Pierce Leighton's Fly Shop', location:'Greenville, ME', rivers:'Kennebec, Moosehead area, Penobscot', tags:['Guided','Gear','Flies'], website:'https://www.maineguide.com', phone:'(207) 695-2266' },
+    { name:"Pierce Leighton's Fly Shop", location:'Greenville, ME', rivers:'Kennebec, Moosehead area, Penobscot', tags:['Guided','Gear','Flies'], website:'https://www.maineguide.com', phone:'(207) 695-2266' },
   ],
   NH: [
     { name:'Granite State Fly Fishing', location:'Concord, NH', rivers:'Androscoggin, Connecticut, Saco', tags:['Guided','Gear','Flies','Classes'], website:'https://www.granitestateflyfish.com', phone:'(603) 225-5771' },
@@ -5099,7 +5099,7 @@ const STATE_SHOPS = {
 
   NE: [
     { name:'Platte River Fly Shop', location:'Kearney, NE', rivers:'Niobrara, Platte, Sandhills spring creeks', tags:['Guided','Gear','Flies'], website:'https://www.platteriverflyfishing.com', phone:'(308) 234-6789' },
-    { name:'Sportsmen's Warehouse Omaha', location:'Omaha, NE', rivers:'Statewide NE rivers', tags:['Gear','Flies','Licenses'], website:'https://www.sportsmenswarehouse.com', phone:'(402) 895-0500' },
+    { name:"Sportsmen's Warehouse Omaha", location:'Omaha, NE', rivers:'Statewide NE rivers', tags:['Gear','Flies','Licenses'], website:'https://www.sportsmenswarehouse.com', phone:'(402) 895-0500' },
   ],
   NV: [
     { name:'The Reno Fly Shop', location:'Reno, NV', rivers:'Truckee River, Carson River, Walker River', tags:['Guided','Gear','Flies','Classes'], website:'https://www.renoflyshop.com', phone:'(775) 323-6555' },
@@ -5262,7 +5262,7 @@ const STATE_REGS = {
   UT: { title:'Utah Fishing Regulations', agency:'UDWR', agencyUrl:'https://wildlife.utah.gov/fishing-regulations.html', eRegsUrl:'https://www.eregulations.com/utah/fishing', licenseUrl:'https://wildlife.utah.gov/licenses', season:'Most rivers open year-round; some high elevation streams seasonal', highlights:['Green River: flies and lures only in A section below Flaming Gorge Dam','Provo River: special regulations on different sections — check by reach','Wild trout areas require extra care — many are catch-and-release','Reciprocal fishing agreements with neighboring states on border waters'], license:'Utah fishing license required.', warning:'Green River Section A (Flaming Gorge): flies and lures only, no bait, slot limits.' },
   NM: { title:'New Mexico Fishing Regulations', agency:'NM DGF', agencyUrl:'https://www.wildlife.state.nm.us/fishing/fishing-regulations/', eRegsUrl:'https://www.eregulations.com/newmexico/fishing', licenseUrl:'https://www.wildlife.state.nm.us/licenses', season:'Most waters open year-round; some streams have special winter closures', highlights:['San Juan River: flies and lures only in quality water section','Rio Grande Gorge: special regulations in Wild Rivers Recreation Area','Special trout license required in addition to fishing license','Tribal lands require separate permits — Jicarilla Apache, Mescalero Apache'], license:'NM fishing license + special trout license required.', warning:'San Juan quality water section: strictly flies and artificial lures only, slot limits.' },
   AZ: { title:'Arizona Fishing Regulations', agency:'AZ G&F', agencyUrl:'https://www.azgfd.com/Fishing/Regulations/', eRegsUrl:'https://www.eregulations.com/arizona/fishing', licenseUrl:'https://www.azgfd.com/Licensing', season:'Year-round on most waters; White Mountains streams may have seasonal rules', highlights:['White River: tribal waters — Fort Apache permit required','Colorado at Lees Ferry: flies and lures only, slot limits on rainbow trout','Oak Creek: artificial lures and flies only on upper sections','Arizona-New Mexico reciprocal license on border waters'], license:'AZ fishing license required; tribal permit for reservation waters.', warning:'White River runs through Fort Apache Reservation — state license NOT valid, tribal permit required.' },
-  VA: { title:'Virginia Fishing Regulations', agency:'VDGIF', agencyUrl:'https://dwr.virginia.gov/fishing/regulations/', eRegsUrl:'https://www.eregulations.com/virginia/fishing', licenseUrl:'https://dwr.virginia.gov/licensing', season:'Trout season varies — stocked waters open year-round; wild trout streams have spring opener', highlights:['Mossy Creek: special regulation water — single hook, artificial only, C&R','Jackson River: quality section with slot limits below Gathright Dam','Shenandoah: check both forks separately — different rules','National forest waters may have additional restrictions'], license:'Virginia fishing license required.', warning:'Mossy Creek is one of VA's most regulated streams — artificial only, single hook.' },
+  VA: { title:'Virginia Fishing Regulations', agency:'VDGIF', agencyUrl:'https://dwr.virginia.gov/fishing/regulations/', eRegsUrl:'https://www.eregulations.com/virginia/fishing', licenseUrl:'https://dwr.virginia.gov/licensing', season:'Trout season varies — stocked waters open year-round; wild trout streams have spring opener', highlights:['Mossy Creek: special regulation water — single hook, artificial only, C&R','Jackson River: quality section with slot limits below Gathright Dam','Shenandoah: check both forks separately — different rules','National forest waters may have additional restrictions'], license:'Virginia fishing license required.', warning:"Mossy Creek is one of VA's most regulated streams — artificial only, single hook." },
   AR: { title:'Arkansas Fishing Regulations', agency:'AGFC', agencyUrl:'https://www.agfc.com/en/fishing/regulations/', eRegsUrl:'https://www.eregulations.com/arkansas/fishing', licenseUrl:'https://www.agfc.com/en/licensing', season:'White River system open year-round — best trout fishing in the South', highlights:['White River: catch-and-release section from dam to Cotter bridge','Bull Shoals and Norfork Dam tailwaters: size and creel limits apply','Trout license endorsement required in addition to base license','Rainbow and brown trout in tailwaters; brook trout in high elevation streams'], license:'Arkansas fishing license + trout permit required.', warning:'Bull Shoals tailwater: minimum 16" on brown trout — check current AGFC creel limits.' },
   GA: { title:'Georgia Fishing Regulations', agency:'GA DNR', agencyUrl:'https://georgiawildlife.com/fishing/regulations', eRegsUrl:'https://www.eregulations.com/georgia/fishing', licenseUrl:'https://georgiawildlife.com/licenses', season:'Trout streams open year-round statewide; GSMNP has separate rules', highlights:['Wild trout streams: artificial lures only in designated waters','Delayed harvest streams: artificial only Oct 1–May 14 in designated sections','GSMNP requires separate national park permit','Chattahoochee below Buford Dam: special regulations — check GA DNR'], license:'Georgia fishing license required.', warning:'Check individual stream type (wild trout, public fishing area, or regular) — each has different rules.' },
   KY: { title:'Kentucky Fishing Regulations', agency:'KDFWR', agencyUrl:'https://fw.ky.gov/Fish/Pages/Fishing-Regulations.aspx', eRegsUrl:'https://www.eregulations.com/kentucky/fishing', licenseUrl:'https://fw.ky.gov/License/Pages/default.aspx', season:'Trout season varies by water type; Cumberland tailwater open year-round', highlights:['Cumberland River (Wolf Creek tailwater): year-round, slot limits on rainbow trout','Catch-and-release trout areas designated on some streams','State fishing license required for age 16+','TVA reservoirs and tailwaters follow federal regulations in addition to state'], license:'Kentucky fishing license required.', warning:'Cumberland tailwater slot limit: 15–20" rainbow must be released — check current limits.' },
