@@ -2670,36 +2670,16 @@ document.getElementById('current-date').textContent = formatDate();
 // ─── USGS DATA ────────────────────────────────────────────
 async function fetchUSGS(riverId) {
   const siteId = activeRiver.usgs;
-  const urlFull    = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${siteId}`;
-  const urlCurrent = `https://yakima-proxy.ljlukelj.workers.dev/usgs/current?site=${siteId}`;
+  const url = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${siteId}`;
 
-  // Check session cache first — return immediately if fresh
+  // Return immediately from session cache if fresh (browser also caches 60s via worker)
   let json = _cacheGet(_usgsCache, siteId);
   if (!json) {
     try {
-      // Phase 1: fetch 3hr window for fast current-conditions paint
-      const resCurrent = await fetch(urlCurrent);
-      if (!resCurrent.ok) throw new Error('Proxy returned ' + resCurrent.status);
-      const jsonCurrent = await resCurrent.json();
-
-      // Paint stat cards immediately from fast fetch
-      if (activeRiver.id === riverId) {
-        _parseAndRenderUSGS(jsonCurrent, riverId, false); // false = no chart yet
-      }
-
-      // Phase 2: fetch full P2D in background for chart (non-blocking)
-      fetch(urlFull)
-        .then(r => r.ok ? r.json() : Promise.reject('fetch failed'))
-        .then(jsonFull => {
-          if (activeRiver.id !== riverId) return;
-          _cacheSet(_usgsCache, siteId, jsonFull);
-          _parseAndRenderUSGS(jsonFull, riverId, true); // true = render chart
-        })
-        .catch(() => {}); // chart just won't show if this fails
-
-      // Use current data as the authoritative json for callers
-      json = jsonCurrent;
-      _cacheSet(_usgsCache, siteId, jsonCurrent);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Proxy returned ' + res.status);
+      json = await res.json();
+      _cacheSet(_usgsCache, siteId, json);
     } catch(err) {
       ['flow-val','gage-val'].forEach(id => {
         const el = document.getElementById(id);
@@ -2711,7 +2691,6 @@ async function fetchUSGS(riverId) {
     }
   }
 
-  // Parse and render (called by both cache hit and phase-2 full fetch)
   _parseAndRenderUSGS(json, riverId, true);
 }
 
@@ -2754,7 +2733,7 @@ function _parseAndRenderUSGS(json, riverId, renderChart) {
       v: parseFloat(v.value)
     }));
 
-    const fromCache = !!_cacheGet(_usgsCache, siteId);
+    const fromCache = !!_cacheGet(_usgsCache, activeRiver.usgs);
     document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}${fromCache ? ' · cached' : ''}`;
   }
 
@@ -3834,7 +3813,7 @@ setTimeout(function() {
       var siteId = river.usgs;
       if (_cacheGet(_usgsCache, siteId)) return; // already cached
       // Use /usgs/current for prefetch — faster, good enough for cache warming
-      fetch('https://yakima-proxy.ljlukelj.workers.dev/usgs/current?site=' + siteId)
+      fetch('https://yakima-proxy.ljlukelj.workers.dev/usgs?site=' + siteId)
         .then(function(r) { return r.json(); })
         .then(function(json) { _cacheSet(_usgsCache, siteId, json); })
         .catch(function() {}); // silent fail — prefetch only
