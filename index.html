@@ -3408,23 +3408,7 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
     if (activeRiver.id !== snap) return;
     fetchWaterTemp(snap);
     generateInsights(snap);
-    // Render fishability score
-    try {
-      const scoreEl2 = document.getElementById('fishability-score-container');
-      if (scoreEl2) {
-        const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
-        const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
-        const baroNote = document.getElementById('baro-note')?.textContent || '';
-        const weather = {
-          pressureInHg: baroVal,
-          pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
-          airTempF: airTemp
-        };
-        const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
-        scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
-        animateFishabilityBar(scoreEl2);
-      }
-    } catch(e) { console.error('Fishability score render error:', e); }
+    _renderFishabilityScore();
   });
 }
 
@@ -3514,6 +3498,24 @@ function getFishabilityHatch(gaugeId, month) {
   if (yakima.includes(gaugeId)) return yk[month];
   if (methow.includes(gaugeId))  return mw[month];
   return ws[month];
+}
+
+function _renderFishabilityScore() {
+  try {
+    const el = document.getElementById('fishability-score-container');
+    if (!el) return;
+    const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
+    const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
+    const baroNote = document.getElementById('baro-note')?.textContent || '';
+    const weather = {
+      pressureInHg: baroVal,
+      pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
+      airTempF: airTemp
+    };
+    const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
+    el.innerHTML = renderFishabilityScoreHTML(result);
+    animateFishabilityBar(el);
+  } catch(e) { console.error('Score render error:', e); }
 }
 
 function calcFishabilityScore(parsed, gaugeId, weather = {}) {
@@ -3757,22 +3759,7 @@ async function loadAll() {
         }
       } catch(mapErr) { console.warn('Map refresh error (non-fatal):', mapErr); }
       // Render fishability score — always runs regardless of map state
-      try {
-        const scoreEl2 = document.getElementById('fishability-score-container');
-        if (scoreEl2) {
-          const parsed = parseUSGS(_cacheGet(_usgsCache, activeRiver.usgs));
-          const baroVal = parseFloat(document.getElementById('baro-val')?.textContent) || null;
-          const baroNote = document.getElementById('baro-note')?.textContent || '';
-          const weather = {
-            pressureInHg: baroVal,
-            pressureTrend: baroNote.includes('Rising') ? 'rising' : baroNote.includes('Falling') ? 'falling' : 'stable',
-            airTempF: airTemp
-          };
-          const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
-          scoreEl2.innerHTML = renderFishabilityScoreHTML(result);
-          animateFishabilityBar(scoreEl2);
-        }
-      } catch(scoreErr) { console.error('Fishability score render error:', scoreErr); }
+      _renderFishabilityScore();
     }
   } catch(e) { console.error('Data load error:', e); }
 }
@@ -4650,9 +4637,16 @@ function loadStateRiver(idx, stateCode) {
   document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for Washington preset rivers.</div>';
   document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for Washington preset rivers.</div>';
 
+  // Reset score to skeleton immediately on river switch
+  const _sEl = document.getElementById('fishability-score-container');
+  if (_sEl) _sEl.innerHTML = showFishabilitySkeletonHTML();
+
   const snap = activeRiver.id;
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
-    if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
+    if (activeRiver.id !== snap) return;
+    fetchWaterTemp(snap);
+    generateInsights(snap);
+    _renderFishabilityScore();
   });
 }
 
