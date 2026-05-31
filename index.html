@@ -3495,40 +3495,698 @@ const FISHABILITY_RIVER_CONFIGS = {
   '12462500': { wadeable:[300,3000], ideal:[500,2000] },
   '12113000': { wadeable:[300,2500], ideal:[500,1500] },
   '12167000': { wadeable:[300,3500], ideal:[600,2000] },
+
+  // ── OREGON ──────────────────────────────────────────────────────────────────
+  '14092500': { wadeable:[200,2500], ideal:[400,1500] },  // Deschutes
+  '14317500': { wadeable:[100,1200], ideal:[200,800]  },  // North Umpqua
+  '14076500': { wadeable:[100,800],  ideal:[150,500]  },  // Metolius (spring creek)
+  '14162500': { wadeable:[200,2500], ideal:[400,1500] },  // McKenzie
+  '14142500': { wadeable:[300,3500], ideal:[600,2000] },  // Sandy River
+  '14361500': { wadeable:[300,4000], ideal:[600,2500] },  // Rogue River
+  '11502500': { wadeable:[100,600],  ideal:[150,400]  },  // Williamson (spring creek)
+  '14086000': { wadeable:[100,1200], ideal:[200,800]  },  // Crooked River
+  '14046000': { wadeable:[200,3000], ideal:[400,1800] },  // John Day
+  '14211010': { wadeable:[200,2500], ideal:[400,1500] },  // Clackamas
+  '14301500': { wadeable:[100,1500], ideal:[200,900]  },  // Wilson River
+  '14303500': { wadeable:[100,1200], ideal:[200,700]  },  // Nestucca
+  // ── MONTANA ─────────────────────────────────────────────────────────────────
+  '06037500': { wadeable:[200,2000], ideal:[400,1200] },  // Madison
+  '06043500': { wadeable:[200,1800], ideal:[350,1100] },  // Gallatin
+  '06192500': { wadeable:[500,5000], ideal:[800,3000] },  // Yellowstone
+  '06024580': { wadeable:[100,1500], ideal:[200,900]  },  // Big Hole
+  '12344000': { wadeable:[200,2500], ideal:[400,1500] },  // Bitterroot
+  '12340000': { wadeable:[500,6000], ideal:[800,3500] },  // Clark Fork
+  '12388400': { wadeable:[150,1800], ideal:[300,1100] },  // Blackfoot
+  '06054500': { wadeable:[300,4000], ideal:[600,2500] },  // Missouri (MT)
+  '12363000': { wadeable:[500,6000], ideal:[800,4000] },  // Flathead
+  '12334510': { wadeable:[100,1200], ideal:[200,700]  },  // Rock Creek (MT)
+  '06016000': { wadeable:[50,400],   ideal:[80,250]   },  // Ruby River
+  // ── IDAHO ───────────────────────────────────────────────────────────────────
+  '13053000': { wadeable:[200,2000], ideal:[400,1200] },  // Henrys Fork
+  '13037500': { wadeable:[500,6000], ideal:[800,4000] },  // South Fork Snake
+  '13150430': { wadeable:[50,300],   ideal:[80,200]   },  // Silver Creek (spring creek)
+  '13206000': { wadeable:[100,1200], ideal:[200,800]  },  // Boise River
+  '13302500': { wadeable:[500,8000], ideal:[800,5000] },  // Salmon River
+  '13341050': { wadeable:[500,6000], ideal:[800,4000] },  // Clearwater
+  '13063000': { wadeable:[100,1000], ideal:[200,600]  },  // Teton River
+  '13148500': { wadeable:[100,1200], ideal:[200,700]  },  // Big Wood River
+  '12413000': { wadeable:[200,2500], ideal:[400,1500] },  // St. Joe River
+  '12413470': { wadeable:[100,1500], ideal:[200,900]  },  // N Fork Coeur d'Alene
+  '13337000': { wadeable:[300,4000], ideal:[600,2500] },  // Lochsa River
+  // ── COLORADO ────────────────────────────────────────────────────────────────
+  '06701900': { wadeable:[50,600],   ideal:[80,400]   },  // South Platte
+  '09058000': { wadeable:[200,3000], ideal:[400,1800] },  // Colorado River
+  '09085000': { wadeable:[50,400],   ideal:[80,250]   },  // Fryingpan (tailwater)
+  '07091200': { wadeable:[100,1500], ideal:[200,900]  },  // Arkansas River
+  '09085100': { wadeable:[200,2500], ideal:[400,1500] },  // Roaring Fork
+  '09128000': { wadeable:[200,2500], ideal:[400,1500] },  // Gunnison
+  '06620000': { wadeable:[200,2500], ideal:[400,1500] },  // North Platte (CO)
+  '06752000': { wadeable:[100,1500], ideal:[200,900]  },  // Cache la Poudre
+  '09109000': { wadeable:[50,400],   ideal:[80,250]   },  // Taylor River (tailwater)
+  '09166500': { wadeable:[100,1500], ideal:[200,900]  },  // Dolores River
+  '08220000': { wadeable:[100,2000], ideal:[200,1200] },  // Rio Grande (CO)
+  // ── WYOMING ─────────────────────────────────────────────────────────────────
+  '13013650': { wadeable:[300,4000], ideal:[600,2500] },  // Snake River (WY)
+  '09188500': { wadeable:[200,3000], ideal:[400,1800] },  // Green River (WY)
+  '06635000': { wadeable:[200,3000], ideal:[400,1800] },  // North Platte (WY)
+  '06279500': { wadeable:[500,6000], ideal:[800,4000] },  // Bighorn River
+  '06191500': { wadeable:[500,6000], ideal:[800,4000] },  // Yellowstone (WY)
+  '06289000': { wadeable:[200,2500], ideal:[400,1500] },  // Shoshone River
+  '06219500': { wadeable:[300,4000], ideal:[600,2500] },  // Wind River
+  '13016450': { wadeable:[100,1500], ideal:[200,900]  },  // Hoback River
+  '13018750': { wadeable:[100,1200], ideal:[200,700]  },  // Greys River
+  '06659500': { wadeable:[100,1200], ideal:[200,700]  },  // Laramie River
+  // ── CALIFORNIA ──────────────────────────────────────────────────────────────
+  '10338000': { wadeable:[100,1200], ideal:[200,700]  },  // Truckee River
+  '11460400': { wadeable:[50,600],   ideal:[80,400]   },  // McCloud River
+  '11355500': { wadeable:[50,400],   ideal:[80,250]   },  // Hat Creek (spring creek)
+  '11381500': { wadeable:[200,3000], ideal:[400,1800] },  // Pit River
+  '11342000': { wadeable:[300,4000], ideal:[600,2500] },  // Sacramento (Upper)
+  '11407000': { wadeable:[300,4000], ideal:[600,2500] },  // Feather River
+  '11186000': { wadeable:[100,1500], ideal:[200,900]  },  // Kern River
+  '11251000': { wadeable:[100,1500], ideal:[200,900]  },  // Kings River
+  '10336780': { wadeable:[50,600],   ideal:[80,400]   },  // Owens River
+  '11355010': { wadeable:[50,400],   ideal:[80,250]   },  // Fall River (spring creek)
+  '11525500': { wadeable:[200,2500], ideal:[400,1500] },  // Trinity River
+  // ── ALASKA ──────────────────────────────────────────────────────────────────
+  '15266300': { wadeable:[500,8000], ideal:[800,5000] },  // Kenai River
+  '15239900': { wadeable:[100,1500], ideal:[200,900]  },  // Anchor River
+  '15267900': { wadeable:[300,4000], ideal:[600,2500] },  // Kasilof River
+  '15294300': { wadeable:[200,3000], ideal:[400,1800] },  // Gulkana River
+  '15214000': { wadeable:[2000,50000],ideal:[5000,30000]},// Copper River (big)
+  '15300500': { wadeable:[500,8000], ideal:[800,5000] },  // Naknek River
+  '15302000': { wadeable:[500,8000], ideal:[800,5000] },  // Kvichak River
+  '15258000': { wadeable:[100,1500], ideal:[200,900]  },  // Russian River
+  '15301900': { wadeable:[300,4000], ideal:[600,2500] },  // Alagnak
+  '15212000': { wadeable:[300,4000], ideal:[600,2500] },  // Klutina River
+  // ── MINNESOTA ───────────────────────────────────────────────────────────────
+  '04024000': { wadeable:[50,600],   ideal:[80,400]   },  // Brule River
+  '04015330': { wadeable:[50,500],   ideal:[80,350]   },  // Baptism River
+  '04015438': { wadeable:[50,400],   ideal:[80,250]   },  // Temperance River
+  '04016000': { wadeable:[50,500],   ideal:[80,350]   },  // Cascade River
+  '04014500': { wadeable:[50,400],   ideal:[80,250]   },  // Knife River
+  '05124000': { wadeable:[50,500],   ideal:[80,350]   },  // Vermilion River
+  '04024430': { wadeable:[200,3000], ideal:[400,1800] },  // St. Louis River
+  '05243725': { wadeable:[100,1500], ideal:[200,900]  },  // Crow Wing River
+  // ── MICHIGAN ────────────────────────────────────────────────────────────────
+  '04137500': { wadeable:[50,600],   ideal:[80,400]   },  // Au Sable River
+  '04059000': { wadeable:[100,1200], ideal:[200,700]  },  // Pere Marquette
+  '04119000': { wadeable:[200,2500], ideal:[400,1500] },  // Muskegon River
+  '04126520': { wadeable:[100,1500], ideal:[200,900]  },  // Manistee River
+  '04057005': { wadeable:[50,400],   ideal:[80,250]   },  // Jordan River (MI)
+  '04127997': { wadeable:[50,400],   ideal:[80,250]   },  // Betsie River
+  '04001000': { wadeable:[50,600],   ideal:[80,400]   },  // Black River (MI)
+  '04062000': { wadeable:[50,500],   ideal:[80,350]   },  // Two Hearted
+  '04004000': { wadeable:[50,400],   ideal:[80,250]   },  // Pigeon River
+  '04126600': { wadeable:[50,400],   ideal:[80,250]   },  // Boardman River
+  // ── PENNSYLVANIA ────────────────────────────────────────────────────────────
+  '01555000': { wadeable:[50,600],   ideal:[80,400]   },  // Penns Creek
+  '01440000': { wadeable:[100,1200], ideal:[200,700]  },  // Brodhead Creek
+  '01569800': { wadeable:[20,200],   ideal:[30,150]   },  // Letort Spring Run
+  '01570000': { wadeable:[30,400],   ideal:[50,250]   },  // Yellow Breeches
+  '01570500': { wadeable:[20,200],   ideal:[30,150]   },  // Big Spring Creek
+  '01570893': { wadeable:[20,150],   ideal:[30,100]   },  // Falling Spring
+  '01562000': { wadeable:[100,1200], ideal:[200,700]  },  // Little Juniata
+  '01553500': { wadeable:[100,1500], ideal:[200,900]  },  // Loyalsock Creek
+  '01546500': { wadeable:[30,400],   ideal:[50,250]   },  // Spring Creek (PA)
+  '01470870': { wadeable:[30,400],   ideal:[50,250]   },  // Tulpehocken Creek
+  // ── NEW YORK ─────────────────────────────────────────────────────────────────
+  '01421000': { wadeable:[50,600],   ideal:[80,400]   },  // Beaverkill
+  '01421618': { wadeable:[50,500],   ideal:[80,350]   },  // Willowemoc Creek
+  '01423000': { wadeable:[100,1500], ideal:[200,900]  },  // Delaware (West Branch)
+  '01362500': { wadeable:[100,1500], ideal:[200,900]  },  // Esopus Creek
+  '01363000': { wadeable:[100,1200], ideal:[200,700]  },  // Catskill Creek
+  '01350000': { wadeable:[100,1500], ideal:[200,900]  },  // Schoharie Creek
+  '04275000': { wadeable:[100,1500], ideal:[200,900]  },  // Ausable River
+  '04249000': { wadeable:[200,3000], ideal:[400,1800] },  // Salmon River (NY)
+  '01329000': { wadeable:[50,600],   ideal:[80,400]   },  // Battenkill
+  '01305000': { wadeable:[20,200],   ideal:[30,150]   },  // Connetquot River
+  // ── NORTH CAROLINA ──────────────────────────────────────────────────────────
+  '03463300': { wadeable:[100,1500], ideal:[200,900]  },  // Watauga River
+  '03165000': { wadeable:[200,2500], ideal:[400,1500] },  // New River (NC)
+  '03465500': { wadeable:[100,1200], ideal:[200,700]  },  // South Holston
+  '03503000': { wadeable:[100,1200], ideal:[200,700]  },  // Nantahala River
+  '03502000': { wadeable:[100,1500], ideal:[200,900]  },  // Tuckasegee
+  '03441000': { wadeable:[50,600],   ideal:[80,400]   },  // Davidson River
+  '03451000': { wadeable:[50,500],   ideal:[80,350]   },  // Linville River
+  '03443000': { wadeable:[200,3000], ideal:[400,1800] },  // French Broad
+  '03453000': { wadeable:[50,600],   ideal:[80,400]   },  // Wilson Creek
+  '02137727': { wadeable:[200,3000], ideal:[400,1800] },  // Catawba River
+  // ── TENNESSEE ───────────────────────────────────────────────────────────────
+  '03528000': { wadeable:[100,1500], ideal:[200,900]  },  // Clinch River
+  '03597860': { wadeable:[100,1500], ideal:[200,900]  },  // Caney Fork
+  '03568000': { wadeable:[100,1500], ideal:[200,900]  },  // Hiwassee River
+  '07030392': { wadeable:[100,1200], ideal:[200,700]  },  // South Holston (TN)
+  '03465000': { wadeable:[100,1200], ideal:[200,700]  },  // Watauga (TN)
+  '03583000': { wadeable:[100,1500], ideal:[200,900]  },  // Elk River (TN)
+  '03497300': { wadeable:[50,600],   ideal:[80,400]   },  // Little River (TN)
+  '03541000': { wadeable:[50,600],   ideal:[80,400]   },  // Tellico River
+  '03567000': { wadeable:[200,2500], ideal:[400,1500] },  // Ocoee River
+  '03460000': { wadeable:[100,1500], ideal:[200,900]  },  // Pigeon River (TN)
+  // ── VERMONT ─────────────────────────────────────────────────────────────────
+  '01362000': { wadeable:[50,600],   ideal:[80,400]   },  // Batten Kill
+  '04288000': { wadeable:[100,1500], ideal:[200,900]  },  // Lamoille River
+  '04284000': { wadeable:[50,600],   ideal:[80,400]   },  // Mad River (VT)
+  '04284300': { wadeable:[30,400],   ideal:[50,250]   },  // Dog River
+  '01153550': { wadeable:[50,600],   ideal:[80,400]   },  // Black River (VT)
+  '01144000': { wadeable:[100,1500], ideal:[200,900]  },  // White River (VT)
+  '04288500': { wadeable:[200,2500], ideal:[400,1500] },  // Winooski River
+  '04282000': { wadeable:[100,1500], ideal:[200,900]  },  // Otter Creek
+  // ── WISCONSIN ───────────────────────────────────────────────────────────────
+  '05410490': { wadeable:[10,150],   ideal:[20,100]   },  // Driftless Coulee
+  '05342000': { wadeable:[10,150],   ideal:[20,100]   },  // Kinnickinnic
+  '04025500': { wadeable:[50,600],   ideal:[80,400]   },  // Bois Brule
+  '04074950': { wadeable:[100,1500], ideal:[200,900]  },  // Wolf River (WI)
+  '04073500': { wadeable:[50,600],   ideal:[80,400]   },  // Prairie River
+  '05330000': { wadeable:[100,1200], ideal:[200,700]  },  // Namekagon
+  '05408000': { wadeable:[10,150],   ideal:[20,100]   },  // Timber Coulee
+  '05344500': { wadeable:[10,150],   ideal:[20,100]   },  // Rush River
+  '04075000': { wadeable:[100,1500], ideal:[200,900]  },  // Oconto River
+  '04077000': { wadeable:[100,1500], ideal:[200,900]  },  // Peshtigo River
+  // ── UTAH ────────────────────────────────────────────────────────────────────
+  '09234500': { wadeable:[200,2000], ideal:[400,1200] },  // Green River (UT)
+  '10163000': { wadeable:[50,600],   ideal:[80,400]   },  // Provo River
+  '10109000': { wadeable:[50,500],   ideal:[80,350]   },  // Logan River
+  '10128500': { wadeable:[100,1500], ideal:[200,900]  },  // Weber River
+  '09288000': { wadeable:[50,500],   ideal:[80,350]   },  // Strawberry River
+  '09330000': { wadeable:[50,600],   ideal:[80,400]   },  // Fremont River
+  '09314500': { wadeable:[50,600],   ideal:[80,400]   },  // Price River
+  '09408150': { wadeable:[50,600],   ideal:[80,400]   },  // Sevier River
+  // ── NEW MEXICO ──────────────────────────────────────────────────────────────
+  '09355500': { wadeable:[100,1200], ideal:[200,700]  },  // San Juan River
+  '08279500': { wadeable:[200,3000], ideal:[400,1800] },  // Rio Grande
+  '08284100': { wadeable:[100,1500], ideal:[200,900]  },  // Chama River
+  '08382000': { wadeable:[50,600],   ideal:[80,400]   },  // Pecos River
+  '08329000': { wadeable:[50,500],   ideal:[80,350]   },  // Jemez River
+  '08268000': { wadeable:[50,500],   ideal:[80,350]   },  // Red River (NM)
+  // ── ARIZONA ─────────────────────────────────────────────────────────────────
+  '09380000': { wadeable:[200,3000], ideal:[400,1800] },  // Colorado (AZ)
+  '09394500': { wadeable:[100,1500], ideal:[200,900]  },  // White River (AZ)
+  '09389500': { wadeable:[100,1200], ideal:[200,700]  },  // Black River (AZ)
+  '09394000': { wadeable:[100,1500], ideal:[200,900]  },  // Little Colorado
+  '09506000': { wadeable:[100,1500], ideal:[200,900]  },  // Verde River
+  '09504500': { wadeable:[30,400],   ideal:[50,250]   },  // Oak Creek
+  // ── NEVADA ──────────────────────────────────────────────────────────────────
+  '10348000': { wadeable:[50,600],   ideal:[80,400]   },  // Truckee River (NV)
+  '10311000': { wadeable:[50,600],   ideal:[80,400]   },  // Carson River (NV)
+  '10293000': { wadeable:[50,600],   ideal:[80,400]   },  // Walker River (NV)
+  '10321000': { wadeable:[100,1500], ideal:[200,900]  },  // Humboldt River
+  '10321500': { wadeable:[10,150],   ideal:[20,100]   },  // Ruby Valley Creek
+  // ── VIRGINIA ────────────────────────────────────────────────────────────────
+  '01667500': { wadeable:[50,800],   ideal:[80,500]   },  // Rapidan River
+  '01632900': { wadeable:[100,1500], ideal:[200,900]  },  // Shenandoah (S Fork)
+  '01636500': { wadeable:[100,1500], ideal:[200,900]  },  // Shenandoah (N Fork)
+  '03171000': { wadeable:[300,4000], ideal:[600,2500] },  // New River (VA)
+  '02055000': { wadeable:[200,3000], ideal:[400,1800] },  // Roanoke River
+  '02035000': { wadeable:[500,8000], ideal:[800,5000] },  // James River (VA)
+  '02016000': { wadeable:[50,800],   ideal:[80,500]   },  // Jackson River (VA)
+  '01632082': { wadeable:[10,120],   ideal:[15,80]    },  // Mossy Creek (spring creek)
+  // ── WEST VIRGINIA ───────────────────────────────────────────────────────────
+  '03050000': { wadeable:[100,1500], ideal:[200,900]  },  // Elk River (WV)
+  '03052500': { wadeable:[50,600],   ideal:[80,400]   },  // Cranberry River
+  '03183500': { wadeable:[100,1500], ideal:[200,900]  },  // Greenbrier River
+  '03189100': { wadeable:[300,5000], ideal:[600,3000] },  // New River (WV)
+  '03053500': { wadeable:[50,600],   ideal:[80,400]   },  // Williams River
+  '03194700': { wadeable:[200,3000], ideal:[400,1800] },  // Gauley River
+  // ── MAINE ───────────────────────────────────────────────────────────────────
+  '01049500': { wadeable:[300,5000], ideal:[600,3000] },  // Kennebec River
+  '01031500': { wadeable:[200,4000], ideal:[400,2500] },  // Penobscot (W Branch)
+  '01057000': { wadeable:[300,5000], ideal:[600,3000] },  // Androscoggin
+  '01064300': { wadeable:[50,500],   ideal:[80,350]   },  // Rapid River (ME)
+  '01036000': { wadeable:[100,1500], ideal:[200,900]  },  // Union River (ME)
+  '01021000': { wadeable:[200,4000], ideal:[400,2500] },  // St. Croix River
+  // ── NEW HAMPSHIRE ───────────────────────────────────────────────────────────
+  '01054200': { wadeable:[100,1500], ideal:[200,900]  },  // Androscoggin (NH)
+  '01132500': { wadeable:[200,3000], ideal:[400,1800] },  // Connecticut (NH)
+  '01066000': { wadeable:[100,1500], ideal:[200,900]  },  // Saco River
+  '01138500': { wadeable:[100,1200], ideal:[200,700]  },  // Ammonoosuc River
+  '01053500': { wadeable:[30,400],   ideal:[50,250]   },  // Swift Diamond River
+  // ── ARKANSAS ────────────────────────────────────────────────────────────────
+  '07055646': { wadeable:[200,3000], ideal:[400,1800] },  // White River (AR)
+  '07058500': { wadeable:[100,1500], ideal:[200,900]  },  // North Fork River
+  '07075300': { wadeable:[50,800],   ideal:[80,500]   },  // Little Red River
+  '07055875': { wadeable:[50,800],   ideal:[80,500]   },  // Buffalo River
+  '07072000': { wadeable:[50,600],   ideal:[80,400]   },  // Spring River (AR)
+  '07053000': { wadeable:[50,600],   ideal:[80,400]   },  // Crooked Creek (AR)
+  // ── GEORGIA ─────────────────────────────────────────────────────────────────
+  '02337000': { wadeable:[200,3000], ideal:[400,1800] },  // Chattahoochee
+  '02387500': { wadeable:[50,800],   ideal:[80,500]   },  // Toccoa River
+  '02385170': { wadeable:[50,600],   ideal:[80,400]   },  // Conasauga River
+  '02333500': { wadeable:[50,600],   ideal:[80,400]   },  // Chestatee River
+  '02392000': { wadeable:[100,1500], ideal:[200,900]  },  // Etowah River
+  '02384500': { wadeable:[50,600],   ideal:[80,400]   },  // Coosawattee River
+  // ── KENTUCKY ────────────────────────────────────────────────────────────────
+  '03403500': { wadeable:[100,1500], ideal:[200,900]  },  // Cumberland River
+  '03308500': { wadeable:[100,1500], ideal:[200,900]  },  // Green River (KY)
+  '03288000': { wadeable:[50,600],   ideal:[80,400]   },  // Red River (KY)
+  '03401500': { wadeable:[50,600],   ideal:[80,400]   },  // Rockcastle River
+  '03316000': { wadeable:[100,1200], ideal:[200,700]  },  // Barren River
+  // ── MISSOURI ────────────────────────────────────────────────────────────────
+  '07064533': { wadeable:[50,800],   ideal:[80,500]   },  // Current River
+  '07066000': { wadeable:[50,600],   ideal:[80,400]   },  // Eleven Point River
+  '06933500': { wadeable:[100,1500], ideal:[200,900]  },  // Gasconade River
+  '06926510': { wadeable:[30,400],   ideal:[50,250]   },  // North Fork (MO)
+  '06930000': { wadeable:[30,400],   ideal:[50,250]   },  // Big Piney River
+  // ── OHIO ────────────────────────────────────────────────────────────────────
+  '03268000': { wadeable:[30,400],   ideal:[50,250]   },  // Mad River (OH)
+  '03237500': { wadeable:[100,1500], ideal:[200,900]  },  // Little Miami River
+  '03159500': { wadeable:[100,1500], ideal:[200,900]  },  // Hocking River
+  '03140000': { wadeable:[100,1200], ideal:[200,700]  },  // Olentangy River
+  '04212100': { wadeable:[100,1500], ideal:[200,900]  },  // Grand River (OH)
+  // ── SOUTH DAKOTA ────────────────────────────────────────────────────────────
+  '06430900': { wadeable:[20,250],   ideal:[30,150]   },  // Spearfish Creek
+  '06408500': { wadeable:[30,400],   ideal:[50,250]   },  // Rapid Creek
+  '06430770': { wadeable:[10,120],   ideal:[15,80]    },  // Little Spearfish
+  '06440200': { wadeable:[20,250],   ideal:[30,150]   },  // Whitewood Creek
+  '06441500': { wadeable:[50,600],   ideal:[80,400]   },  // Redwater River
+  // ── NEBRASKA ────────────────────────────────────────────────────────────────
+  '06465500': { wadeable:[100,2000], ideal:[200,1200] },  // Niobrara River
+  '06775900': { wadeable:[20,250],   ideal:[30,150]   },  // Dismal River
+  '06786000': { wadeable:[50,800],   ideal:[80,500]   },  // Middle Loup River
+  '06458500': { wadeable:[20,250],   ideal:[30,150]   },  // Snake River (NE)
+  '06787000': { wadeable:[20,250],   ideal:[30,150]   },  // Calamus River
+  // ── TEXAS ───────────────────────────────────────────────────────────────────
+  '08167500': { wadeable:[50,800],   ideal:[80,500]   },  // Guadalupe River
+  '08205500': { wadeable:[30,500],   ideal:[50,300]   },  // Frio River
+  '08150700': { wadeable:[20,300],   ideal:[30,200]   },  // South Llano River
+  '08194500': { wadeable:[50,800],   ideal:[80,500]   },  // Nueces River
+  '08374550': { wadeable:[200,4000], ideal:[400,2500] },  // Rio Grande (TX)
+  '08153500': { wadeable:[20,400],   ideal:[30,250]   },  // Pedernales River
 };
 
 function getFishabilityHatch(gaugeId, month) {
-  const yakima = ['12484500','12487000'];
-  const methow  = ['12448500'];
-  const yk = [
-    {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
-    {insects:['Skwala','BWO'],conf:'high'},{insects:['Skwala','March Brown'],conf:'high'},
-    {insects:['PMD','Caddis'],conf:'high'},{insects:['PMD','Golden Stone','Caddis'],conf:'high'},
-    {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
-    {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO','Mahogany Dun'],conf:'high'},
-    {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
-  ];
-  const mw = [
-    {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
-    {insects:['Midges','BWO'],conf:'medium'},{insects:['March Brown','BWO'],conf:'high'},
-    {insects:['PMD','Caddis'],conf:'high'},{insects:['Golden Stone','PMD'],conf:'high'},
-    {insects:['Hopper','Golden Stone'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
-    {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO','Mahogany'],conf:'high'},
-    {insects:['BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
-  ];
-  const ws = [
-    {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
-    {insects:['BWO','Caddis early'],conf:'high'},{insects:['BWO','Caddis'],conf:'high'},
-    {insects:['Caddis','PMD'],conf:'high'},{insects:['Caddis','PMD'],conf:'high'},
-    {insects:['Hopper','Caddis'],conf:'medium'},{insects:['Hopper','Caddis'],conf:'medium'},
-    {insects:['BWO','Caddis fall'],conf:'high'},{insects:['BWO','Caddis fall'],conf:'high'},
-    {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges','BWO'],conf:'low'},
-  ];
-  if (yakima.includes(gaugeId)) return yk[month];
-  if (methow.includes(gaugeId))  return mw[month];
-  return ws[month];
-}
+  // ── Region lookup table ──────────────────────────────────────────────────────
+  const regions = {
+    // Washington — Yakima system
+    yakima: ['12484500','12487000','12494400'],
+    // Washington — East Cascades / Methow
+    methow: ['12448500','12447200','14113000'],
+    // Washington — West Cascades / Puget Sound
+    pnw_west: ['12141300','14226500','14223000','12134500','12462500','12113000','12167000'],
 
+    // Oregon — Deschutes / John Day / Crooked (high desert)
+    or_deschutes: ['14092500','14086000','14046000'],
+    // Oregon — Umpqua / Rogue / Williamson / Metolius / McKenzie (SW/Cascade)
+    or_sw: ['14317500','14361500','11502500','14076500','14162500'],
+    // Oregon — Coast / Sandy / Clackamas / Wilson / Nestucca
+    or_coast: ['14142500','14211010','14301500','14303500'],
+
+    // Montana — Blue Ribbon (Madison, Gallatin, Yellowstone, Big Hole, Rock Creek, Ruby)
+    mt_blueribbon: ['06037500','06043500','06192500','06024580','12334510','06016000'],
+    // Montana — Clark Fork / Bitterroot / Blackfoot / Flathead / Missouri
+    mt_clark: ['12344000','12340000','12388400','06054500','12363000'],
+
+    // Idaho — Henry's Fork / South Fork Snake / Silver Creek / Teton / Big Wood
+    id_spring: ['13053000','13037500','13150430','13063000','13148500'],
+    // Idaho — Salmon / Clearwater / Lochsa / St. Joe / Boise / Coeur d'Alene
+    id_freestone: ['13302500','13341050','13337000','12413000','12413470','13206000'],
+
+    // Colorado — Tailwaters (Fryingpan, Taylor, South Platte)
+    co_tailwater: ['09085000','09109000','06701900'],
+    // Colorado — Freestone (Colorado R, Roaring Fork, Gunnison, Poudre, Dolores, Arkansas)
+    co_freestone: ['09058000','09085100','09128000','06752000','09166500','07091200','06620000','08220000'],
+
+    // Wyoming — Snake / Hoback / Greys / North Platte / Green / Laramie
+    wy_snake: ['13013650','13016450','13018750','06635000','09188500','06659500'],
+    // Wyoming — Bighorn / Yellowstone / Shoshone / Wind (bigger freestone)
+    wy_bighorn: ['06279500','06191500','06289000','06219500'],
+
+    // California — Spring creeks / tailwaters (Hat, Fall, McCloud, Owens, Truckee, Carson, Walker)
+    ca_spring: ['11355500','11355010','11460400','10336780','10338000','10311000','10293000','10321500'],
+    // California — Freestone (Pit, Sacramento, Feather, Trinity, Kern, Kings)
+    ca_freestone: ['11381500','11342000','11407000','11525500','11186000','11251000','10321000'],
+
+    // Alaska — Salmon / char dominated
+    alaska: ['15266300','15239900','15267900','15294300','15214000','15300500','15302000','15258000','15301900','15212000'],
+
+    // Midwest — Great Lakes / North Shore streams (MN, MI, WI north)
+    gl_northshore: ['04024000','04015330','04015438','04016000','04014500','05124000','04024430','05243725',
+                    '04062000','04004000','04025500'],
+    // Midwest — Classic freestone (Au Sable, Pere Marquette, Manistee, Jordan, Betsie, Boardman, Wolf, Namekagon, Oconto, Peshtigo, Prairie)
+    gl_freestone: ['04137500','04059000','04126520','04057005','04127997','04126600','04074950','05330000','04075000','04077000','04073500','04119000'],
+    // Midwest — Driftless spring creeks (WI/MN)
+    driftless: ['05410490','05342000','05408000','05344500'],
+
+    // Catskills / Delaware system
+    catskill: ['01421000','01421618','01423000','01362500','01363000','01350000','01329000','04275000','04249000','01305000'],
+    // Pennsylvania limestone spring creeks
+    pa_limestone: ['01555000','01440000','01569800','01570000','01570500','01570893','01562000','01553500','01546500','01470870'],
+
+    // Appalachian — NC / TN / VA / WV mountain freestone
+    appalachian: ['03463300','03165000','03465500','03503000','03502000','03441000','03451000','03443000','03453000','02137727',
+                  '01667500','01632900','01636500','03171000','02055000','02035000','02016000','01632082',
+                  '03050000','03052500','03183500','03189100','03053500','03194700',
+                  '03497300','03541000','03460000'],
+    // Southeast tailwaters — cold year-round (AR White River, TN Clinch/Caney/Hiwassee, KY Cumberland)
+    se_tailwater: ['07055646','07058500','07075300','03528000','03597860','03568000','07030392','03465000','03583000','03567000','03568000',
+                   '03403500','03308500','03288000','03401500','03316000'],
+    // Ozark spring creeks — MO / AR
+    ozark: ['07064533','07066000','06933500','06926510','06930000','07055875','07072000','07053000'],
+    // Georgia mountain streams
+    georgia: ['02337000','02387500','02385170','02333500','02392000','02384500'],
+    // New England — VT / ME / NH
+    new_england: ['01362000','04288000','04284000','04284300','01153550','01144000','04288500','04282000',
+                  '01049500','01031500','01057000','01064300','01036000','01021000',
+                  '01054200','01132500','01066000','01138500','01053500'],
+
+    // Rocky Mountain interior — UT / NM tailwaters (Green, San Juan, Provo, Taylor-style)
+    rockies_tailwater: ['09234500','10163000','09355500'],
+    // Rocky Mountain interior — UT / NM freestone
+    rockies_freestone: ['10109000','10128500','09288000','09330000','09314500','09408150',
+                        '08279500','08284100','08382000','08329000','08268000'],
+    // Desert SW — AZ / NV
+    desert_sw: ['09380000','09394500','09389500','09394000','09506000','09504500',
+                '10348000','10311000','10293000','10321000','10321500'],
+    // Ohio freestone
+    ohio: ['03268000','03237500','03159500','03140000','04212100'],
+    // Black Hills SD
+    black_hills: ['06430900','06408500','06430770','06440200','06441500'],
+    // Nebraska / Great Plains
+    plains: ['06465500','06775900','06786000','06458500','06787000'],
+    // Texas — subtropical, winter stocking
+    texas: ['08167500','08205500','08150700','08194500','08374550','08153500'],
+  };
+
+  // ── Hatch calendars (Jan=0 through Dec=11) ───────────────────────────────────
+  const H = {
+    // Yakima — detailed PNW tailwater calendar
+    yakima: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Skwala','BWO'],conf:'high'},{insects:['Skwala','March Brown'],conf:'high'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['PMD','Golden Stone','Caddis'],conf:'high'},
+      {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO','Mahogany Dun'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Methow / East Cascades
+    methow: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['BWO'],conf:'medium'},{insects:['March Brown','BWO'],conf:'high'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['Golden Stone','PMD'],conf:'high'},
+      {insects:['Hopper','Golden Stone'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO','Mahogany'],conf:'high'},
+      {insects:['BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // PNW West Cascades / coast
+    pnw_west: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['BWO','March Brown'],conf:'high'},{insects:['BWO','Caddis'],conf:'high'},
+      {insects:['Caddis','PMD'],conf:'high'},{insects:['Caddis','Golden Stone'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'medium'},{insects:['Hopper','Caddis'],conf:'medium'},
+      {insects:['BWO','Caddis fall'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges','BWO'],conf:'low'},
+    ],
+    // Oregon Deschutes / John Day — classic high desert
+    or_deschutes: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Skwala','BWO'],conf:'high'},{insects:['March Brown','Caddis'],conf:'high'},
+      {insects:['Salmonfly','PMD'],conf:'high'},{insects:['Golden Stone','PMD','Caddis'],conf:'high'},
+      {insects:['Trico','Caddis','Hopper'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Oregon SW — Umpqua / Rogue / Metolius / McKenzie
+    or_sw: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['BWO','Midges'],conf:'medium'},
+      {insects:['March Brown','BWO'],conf:'high'},{insects:['March Brown','Caddis'],conf:'high'},
+      {insects:['Salmonfly','PMD','Caddis'],conf:'high'},{insects:['Golden Stone','Caddis','PMD'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'high'},{insects:['Hopper','Ant','Beetle'],conf:'high'},
+      {insects:['BWO','October Caddis'],conf:'high'},{insects:['October Caddis','BWO'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges','BWO'],conf:'low'},
+    ],
+    // Oregon coast
+    or_coast: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['March Brown','BWO'],conf:'high'},{insects:['Caddis','BWO'],conf:'high'},
+      {insects:['Caddis','PMD'],conf:'high'},{insects:['Caddis'],conf:'medium'},
+      {insects:['Hopper','Caddis'],conf:'medium'},{insects:['Hopper','Caddis'],conf:'medium'},
+      {insects:['BWO','October Caddis'],conf:'high'},{insects:['October Caddis','BWO'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Montana Blue Ribbon — Madison / Gallatin / Yellowstone style
+    mt_blueribbon: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['March Brown','Skwala'],conf:'high'},
+      {insects:['PMD','Caddis','Golden Stone'],conf:'high'},{insects:['Salmonfly','Golden Stone','PMD'],conf:'high'},
+      {insects:['Hopper','Trico','Caddis'],conf:'high'},{insects:['Hopper','Trico'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'high'},{insects:['BWO','Mahogany Dun'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Montana Clark Fork system
+    mt_clark: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['March Brown','BWO'],conf:'high'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['Golden Stone','PMD','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis','PMD'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO','Mahogany'],conf:'high'},
+      {insects:['BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Idaho spring creeks / Henry's Fork
+    id_spring: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Callibaetis','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','Green Drake'],conf:'high'},{insects:['PMD','Green Drake','Golden Stone'],conf:'high'},
+      {insects:['Trico','Hopper','Ant'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['Hopper','Callibaetis','BWO'],conf:'high'},{insects:['BWO','Mahogany'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Idaho freestone — Salmon / Clearwater / Lochsa
+    id_freestone: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['BWO','Stonefly'],conf:'medium'},{insects:['March Brown','Caddis'],conf:'high'},
+      {insects:['Salmonfly','PMD','Caddis'],conf:'high'},{insects:['Golden Stone','Caddis','PMD'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
+      {insects:['BWO','Hopper'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'low'},{insects:['Midges'],conf:'low'},
+    ],
+    // Colorado tailwaters — Fryingpan / Taylor / South Platte
+    co_tailwater: [
+      {insects:['Midges'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'high'},{insects:['BWO','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','BWO'],conf:'high'},{insects:['PMD','Caddis'],conf:'high'},
+      {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'high'},{insects:['BWO'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges'],conf:'high'},
+    ],
+    // Colorado freestone
+    co_freestone: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['BWO','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','Golden Stone'],conf:'high'},{insects:['Golden Stone','PMD','Caddis'],conf:'high'},
+      {insects:['Hopper','Trico','Caddis'],conf:'high'},{insects:['Hopper','Trico'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'high'},{insects:['BWO'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Wyoming Snake system
+    wy_snake: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['March Brown','BWO'],conf:'high'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['Green Drake','Golden Stone','PMD'],conf:'high'},
+      {insects:['Hopper','Trico','Caddis'],conf:'high'},{insects:['Hopper','Trico'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'high'},{insects:['BWO','Mahogany'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Wyoming Bighorn / Wind / Shoshone
+    wy_bighorn: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+      {insects:['Midges','BWO'],conf:'low'},{insects:['BWO','Caddis'],conf:'medium'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['PMD','Golden Stone'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'high'},{insects:['Hopper','Caddis'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+    ],
+    // California spring creeks / tailwaters
+    ca_spring: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'high'},{insects:['PMD','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','Golden Stone'],conf:'high'},{insects:['PMD','Caddis'],conf:'high'},
+      {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['Hopper','BWO','Caddis'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'high'},{insects:['Midges','BWO'],conf:'medium'},
+    ],
+    // California freestone
+    ca_freestone: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['BWO','March Brown'],conf:'medium'},{insects:['March Brown','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','Golden Stone'],conf:'high'},{insects:['Golden Stone','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['October Caddis','BWO'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Alaska — salmon and char
+    alaska: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+      {insects:['Midges'],conf:'low'},{insects:['BWO','Stonefly'],conf:'medium'},
+      {insects:['King Salmon','Caddis'],conf:'high'},{insects:['King Salmon','Sockeye','Sculpin'],conf:'high'},
+      {insects:['Silver Salmon','Pink','Sockeye','Sculpin'],conf:'high'},{insects:['Silver Salmon','Pink','Egg Pattern'],conf:'high'},
+      {insects:['Silver Salmon','Egg Pattern','Sculpin'],conf:'high'},{insects:['Silver Salmon','Egg Pattern'],conf:'high'},
+      {insects:['BWO','Sculpin','Streamer'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Great Lakes north shore streams
+    gl_northshore: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','Steelhead Eggs'],conf:'medium'},
+      {insects:['Steelhead','BWO'],conf:'high'},{insects:['Steelhead','Caddis'],conf:'high'},
+      {insects:['Hex','Caddis','PMD'],conf:'high'},{insects:['Hex','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis'],conf:'medium'},{insects:['Caddis','Hopper'],conf:'medium'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['Coho','BWO'],conf:'high'},
+      {insects:['Steelhead','BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Great Lakes classic freestone — Au Sable / Pere Marquette style
+    gl_freestone: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['BWO','March Brown'],conf:'medium'},{insects:['Hendrickson','March Brown'],conf:'high'},
+      {insects:['Sulphur','Caddis','March Brown'],conf:'high'},{insects:['Hex','Sulphur','Caddis'],conf:'high'},
+      {insects:['Trico','Caddis','Hopper'],conf:'high'},{insects:['Trico','Hopper','Ant'],conf:'high'},
+      {insects:['BWO','Caddis','Hopper'],conf:'medium'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Driftless spring creeks — WI / MN
+    driftless: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['BWO','Caddis early'],conf:'high'},{insects:['Hendrickson','BWO'],conf:'high'},
+      {insects:['Sulphur','Caddis','PMD'],conf:'high'},{insects:['Sulphur','Caddis','Trico'],conf:'high'},
+      {insects:['Trico','Caddis','Hopper'],conf:'high'},{insects:['Trico','Ant','Beetle'],conf:'high'},
+      {insects:['Trico','BWO'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'high'},{insects:['Midges','BWO'],conf:'medium'},
+    ],
+    // Catskills — Beaverkill / Willowemoc / Delaware
+    catskill: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Hendrickson early','BWO'],conf:'medium'},{insects:['Hendrickson','March Brown'],conf:'high'},
+      {insects:['March Brown','Sulphur','Caddis'],conf:'high'},{insects:['Sulphur','Green Drake','Caddis'],conf:'high'},
+      {insects:['Trico','Caddis','Hopper'],conf:'high'},{insects:['Trico','Ant','Beetle'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Pennsylvania limestone spring creeks
+    pa_limestone: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['BWO','Hendrickson'],conf:'high'},{insects:['Hendrickson','March Brown','Sulphur'],conf:'high'},
+      {insects:['Sulphur','Caddis','Green Drake'],conf:'high'},{insects:['Sulphur','Trico','Yellow Sally'],conf:'high'},
+      {insects:['Trico','Caddis','Ant'],conf:'high'},{insects:['Trico','Ant','Beetle'],conf:'high'},
+      {insects:['Trico','BWO','October Caddis'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'high'},{insects:['Midges','BWO'],conf:'medium'},
+    ],
+    // Appalachian mountain freestone — NC / TN / VA / WV
+    appalachian: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Quill Gordon','Hendrickson'],conf:'high'},{insects:['Hendrickson','March Brown','Caddis'],conf:'high'},
+      {insects:['Sulphur','March Brown','Caddis'],conf:'high'},{insects:['Yellow Sally','Caddis','Sulphur'],conf:'high'},
+      {insects:['Hopper','Caddis','Ant'],conf:'high'},{insects:['Hopper','Ant','Beetle'],conf:'high'},
+      {insects:['BWO','October Caddis','Hopper'],conf:'high'},{insects:['October Caddis','BWO'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Southeast tailwaters — cold year-round (White River, Clinch, Caney Fork, Cumberland)
+    se_tailwater: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['Midges','BWO','Sculpin'],conf:'high'},{insects:['BWO','Sulphur','Caddis'],conf:'high'},
+      {insects:['Sulphur','Caddis','PMD'],conf:'high'},{insects:['Sulphur','Caddis'],conf:'high'},
+      {insects:['Caddis','Sulphur','Hopper'],conf:'high'},{insects:['Caddis','Hopper','Ant'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'high'},{insects:['BWO','October Caddis'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges'],conf:'high'},
+    ],
+    // Ozark spring creeks — MO / AR (Current River, Eleven Point)
+    ozark: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Hendrickson','BWO'],conf:'high'},{insects:['Hendrickson','Caddis'],conf:'high'},
+      {insects:['Sulphur','Caddis'],conf:'high'},{insects:['Yellow Sally','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis','Ant'],conf:'high'},{insects:['Hopper','Ant','Beetle'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Georgia mountain streams
+    georgia: [
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Quill Gordon','Hendrickson'],conf:'high'},{insects:['Hendrickson','Caddis'],conf:'high'},
+      {insects:['Sulphur','Caddis','Yellow Sally'],conf:'high'},{insects:['Yellow Sally','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis','Ant'],conf:'high'},{insects:['Hopper','Ant'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // New England — VT / ME / NH
+    new_england: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Hendrickson','March Brown'],conf:'high'},
+      {insects:['March Brown','Caddis','Sulphur'],conf:'high'},{insects:['Green Drake','Sulphur','Caddis'],conf:'high'},
+      {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper','Ant'],conf:'high'},
+      {insects:['BWO','October Caddis'],conf:'high'},{insects:['October Caddis','BWO'],conf:'high'},
+      {insects:['BWO','Midges'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Rocky Mountain tailwaters — Green River UT / San Juan NM / Provo
+    rockies_tailwater: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'high'},{insects:['BWO','PMD','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','BWO'],conf:'high'},{insects:['PMD','Caddis'],conf:'high'},
+      {insects:['Trico','Hopper','Caddis'],conf:'high'},{insects:['Trico','Hopper'],conf:'high'},
+      {insects:['Trico','BWO','Caddis'],conf:'high'},{insects:['BWO'],conf:'high'},
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges'],conf:'high'},
+    ],
+    // Rocky Mountain freestone — UT / NM interior
+    rockies_freestone: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'low'},
+      {insects:['BWO'],conf:'medium'},{insects:['BWO','Caddis'],conf:'medium'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['PMD','Golden Stone','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis','PMD'],conf:'high'},{insects:['Hopper','Caddis'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'low'},{insects:['Midges'],conf:'low'},
+    ],
+    // Desert SW — AZ / NV
+    desert_sw: [
+      {insects:['Midges'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['BWO','Caddis','PMD'],conf:'high'},
+      {insects:['PMD','Caddis'],conf:'high'},{insects:['Caddis','PMD'],conf:'medium'},
+      {insects:['Hopper','Caddis'],conf:'low'},{insects:['Ant','Beetle'],conf:'medium'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'medium'},
+    ],
+    // Ohio freestone
+    ohio: [
+      {insects:['Midges'],conf:'low'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['Hendrickson','BWO'],conf:'high'},{insects:['Hendrickson','March Brown','Sulphur'],conf:'high'},
+      {insects:['Sulphur','Caddis'],conf:'high'},{insects:['Yellow Sally','Caddis'],conf:'medium'},
+      {insects:['Hopper','Caddis','Ant'],conf:'medium'},{insects:['Hopper','Ant'],conf:'medium'},
+      {insects:['BWO'],conf:'medium'},{insects:['BWO','October Caddis'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Black Hills SD
+    black_hills: [
+      {insects:['Midges'],conf:'medium'},{insects:['Midges','BWO'],conf:'medium'},
+      {insects:['BWO'],conf:'medium'},{insects:['BWO','Caddis'],conf:'high'},
+      {insects:['PMD','Caddis','Golden Stone'],conf:'high'},{insects:['Golden Stone','PMD','Caddis'],conf:'high'},
+      {insects:['Hopper','Caddis','Trico'],conf:'high'},{insects:['Hopper','Trico','Ant'],conf:'high'},
+      {insects:['BWO','Hopper'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges'],conf:'low'},
+    ],
+    // Great Plains — Sandhills / Niobrara (spring-fed)
+    plains: [
+      {insects:['Midges'],conf:'medium'},{insects:['Midges'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Caddis','BWO'],conf:'medium'},
+      {insects:['Caddis','PMD'],conf:'high'},{insects:['Caddis','PMD'],conf:'high'},
+      {insects:['Hopper','Caddis','Trico'],conf:'high'},{insects:['Hopper','Trico','Ant'],conf:'high'},
+      {insects:['Hopper','BWO'],conf:'medium'},{insects:['BWO'],conf:'medium'},
+      {insects:['Midges'],conf:'low'},{insects:['Midges'],conf:'low'},
+    ],
+    // Texas — subtropical, winter stocking
+    texas: [
+      {insects:['Midges','BWO'],conf:'high'},{insects:['Midges','BWO'],conf:'high'},
+      {insects:['BWO','Caddis'],conf:'medium'},{insects:['Caddis','PMD'],conf:'medium'},
+      {insects:['Bass Poppers','Caddis'],conf:'medium'},{insects:['Bass Poppers','Hopper'],conf:'medium'},
+      {insects:['Bass Poppers','Hopper','Ant'],conf:'medium'},{insects:['Hopper','Ant','Beetle'],conf:'medium'},
+      {insects:['Bass Poppers','Hopper'],conf:'medium'},{insects:['BWO','Caddis'],conf:'medium'},
+      {insects:['Midges','BWO'],conf:'medium'},{insects:['Midges','BWO'],conf:'high'},
+    ],
+  };
+
+  // ── Region lookup ─────────────────────────────────────────────────────────────
+  for (const [region, gauges] of Object.entries(regions)) {
+    if (gauges.includes(gaugeId)) {
+      return H[region] ? H[region][month] : H.pnw_west[month];
+    }
+  }
+
+  // Generic fallback — PNW westside calendar
+  return H.pnw_west[month];
+}
 function _renderFishabilityScore() {
   try {
     const el = document.getElementById('fishability-score-container');
