@@ -1596,6 +1596,97 @@
     .forecast-row .forecast-day:nth-child(n+4) { display: none; }
   }
 
+  /* ── SAVED WATERS ────────────────────────────────────────────────────────── */
+  .saved-waters-section { margin-bottom: 20px; }
+  .saved-waters-header {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 10px;
+  }
+  .saved-waters-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .saved-waters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .saved-water-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px; cursor: pointer;
+    transition: border-color 0.2s; position: relative;
+  }
+  .saved-water-card:hover { border-color: var(--accent); }
+  .saved-water-card.active-river {
+    border-color: var(--accent);
+    background: rgba(200,68,26,0.04);
+  }
+  .saved-water-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73rem; font-weight: 500;
+    color: var(--text); margin-bottom: 3px; padding-right: 20px;
+  }
+  .saved-water-flow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; color: var(--muted); margin-bottom: 5px;
+  }
+  .saved-water-score {
+    display: inline-block; font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem; padding: 2px 7px; border-radius: 3px; font-weight: 500;
+  }
+  .saved-water-remove {
+    position: absolute; top: 7px; right: 7px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 0.72rem; padding: 2px 4px;
+    border-radius: 3px; transition: color 0.15s; line-height: 1;
+  }
+  .saved-water-remove:hover { color: var(--red); }
+  .star-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 4px; color: var(--muted);
+    cursor: pointer; padding: 5px 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.08em;
+    transition: all 0.2s; display: flex; align-items: center; gap: 5px;
+  }
+  .star-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .star-btn.saved {
+    border-color: var(--accent); color: var(--accent);
+    background: rgba(200,68,26,0.06);
+  }
+  .saved-waters-empty {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem; color: var(--muted);
+    padding: 10px 0 2px;
+  }
+  /* ── MOBILE LAYOUT FIXES ─────────────────────────────────────────────────── */
+  @media (max-width: 480px) {
+    .saved-waters-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .saved-water-card { padding: 10px 11px; }
+    .saved-water-name { font-size: 0.67rem; }
+    .ds-score-header { flex-direction: column; gap: 6px; }
+    .ds-score-badge { text-align: left; }
+    .ds-score-num { font-size: 34px; }
+    .ds-signals { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .ds-signal { padding: 8px 10px; }
+    .ds-signal-val { font-size: 12px; }
+    .ds-rec-row { flex-direction: column; gap: 8px; }
+    .stat-value { font-size: 1.25rem; }
+    .condition-status { font-size: 1.1rem; }
+    .condition-summary { font-size: 0.78rem; }
+    .hatch-card { padding: 11px 12px; }
+    .hatch-detail { font-size: 0.72rem; }
+    footer { display: none; }
+    #site-results { max-height: 200px; }
+    .site-result-item { padding: 10px 12px; }
+  }
+  @media (max-width: 380px) {
+    .saved-waters-grid { grid-template-columns: 1fr; }
+    .ds-signals { grid-template-columns: 1fr; }
+    .stat-value { font-size: 1.05rem; }
+  }
+
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -1635,6 +1726,17 @@
   <!-- RIVER DASHBOARD -->
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="river-dashboard">
+
+  <!-- ── SAVED WATERS ──────────────────────────────────────────────────────── -->
+  <div class="saved-waters-section" id="saved-waters-section" style="display:none">
+    <div class="saved-waters-header">
+      <div class="saved-waters-title">⭐ My Waters</div>
+      <button class="star-btn" id="star-current-btn" onclick="toggleSaveRiver()">
+        <span id="star-icon">☆</span><span id="star-label">Save this river</span>
+      </button>
+    </div>
+    <div class="saved-waters-grid" id="saved-waters-grid"></div>
+  </div>
 
   <!-- Nationwide River Search -->
   <div class="river-search-box">
@@ -2632,6 +2734,8 @@ function switchRiver(riverId) {
   const wb = document.getElementById('wtemp-est-wrap');
   if (wb) wb.style.display = 'none';
   document.title = activeRiver.label + ' — DriftScout';
+  updateStarBtn();
+  renderSavedWaters();
   // Reset rig box
   document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
 
@@ -4202,6 +4306,7 @@ function _renderFishabilityScore() {
     const result = calcFishabilityScore(parsed, activeRiver.usgs, weather);
     el.innerHTML = renderFishabilityScoreHTML(result);
     animateFishabilityBar(el);
+    setTimeout(_updateSavedWatersCache, 150);
   } catch(e) { console.error('Score render error:', e); }
 }
 
@@ -4418,8 +4523,159 @@ function animateFishabilityBar(container) {
 
 // ── End Fishability Score Module ───────────────────────────
 
+
+// ═══════════════════════════════════════════════════════════
+// SAVED WATERS
+// ═══════════════════════════════════════════════════════════
+var _savedWatersCache = {};
+
+function getSavedWaters() {
+  try { var r = localStorage.getItem('driftscout_saved_waters'); return r ? JSON.parse(r) : []; }
+  catch(e) { return []; }
+}
+function _persistSavedWaters(list) {
+  try { localStorage.setItem('driftscout_saved_waters', JSON.stringify(list)); }
+  catch(e) { console.warn('Save failed:', e); }
+}
+function isRiverSaved(usgs) {
+  return getSavedWaters().some(function(w) { return w.usgs === usgs; });
+}
+function toggleSaveRiver() {
+  var list = getSavedWaters();
+  var usgs = activeRiver.usgs;
+  var idx  = list.findIndex(function(w) { return w.usgs === usgs; });
+  if (idx >= 0) { list.splice(idx, 1); }
+  else {
+    list.unshift({
+      usgs: usgs, label: activeRiver.label,
+      sublabel: activeRiver.sublabel || '',
+      stateCode: (document.getElementById('state-picker')||{}).value || 'WA',
+      savedAt: Date.now()
+    });
+  }
+  _persistSavedWaters(list);
+  renderSavedWaters();
+  updateStarBtn();
+}
+function updateStarBtn() {
+  var saved = isRiverSaved(activeRiver.usgs);
+  var btn   = document.getElementById('star-current-btn');
+  var icon  = document.getElementById('star-icon');
+  var lbl   = document.getElementById('star-label');
+  if (!btn) return;
+  if (saved) { btn.classList.add('saved'); icon.textContent='★'; lbl.textContent='Saved'; }
+  else { btn.classList.remove('saved'); icon.textContent='☆'; lbl.textContent='Save this river'; }
+}
+function removeSavedWater(usgs) {
+  _persistSavedWaters(getSavedWaters().filter(function(w) { return w.usgs !== usgs; }));
+  delete _savedWatersCache[usgs];
+  renderSavedWaters();
+  if (activeRiver.usgs === usgs) updateStarBtn();
+}
+function loadSavedWater(usgs) {
+  var preset = Object.values(RIVERS).find(function(r) { return r.usgs === usgs; });
+  if (preset) { switchRiver(preset.id); return; }
+  var saved = getSavedWaters().find(function(w) { return w.usgs === usgs; });
+  if (!saved) return;
+  var stateRivers = STATE_RIVERS[saved.stateCode] || [];
+  var sr = stateRivers.find(function(r) { return r.usgs === usgs; });
+  if (sr) {
+    document.getElementById('state-picker').value = saved.stateCode;
+    renderStateTabs(saved.stateCode);
+    loadStateRiver(stateRivers.indexOf(sr), saved.stateCode);
+    return;
+  }
+  loadCustomRiver(usgs, saved.label, 0, 0);
+}
+function renderSavedWaters() {
+  var list    = getSavedWaters();
+  var section = document.getElementById('saved-waters-section');
+  var grid    = document.getElementById('saved-waters-grid');
+  if (!section || !grid) return;
+  section.style.display = 'block';
+  if (!list.length) {
+    grid.innerHTML = '<div class="saved-waters-empty">Star any river to save it here for quick access.</div>';
+    return;
+  }
+  // Build cards using createElement to avoid all quote issues
+  grid.innerHTML = '';
+  var tierBg    = { excellent:'#EAF3DE',good:'#EAF3DE',fair:'#FAEEDA',tough:'#FCEBEB',bad:'#FCEBEB' };
+  var tierColor = { excellent:'#3B6D11',good:'#3B6D11',fair:'#854F0B',tough:'#A32D2D',bad:'#A32D2D' };
+  list.forEach(function(w) {
+    var cached   = _savedWatersCache[w.usgs] || {};
+    var flow     = cached.flow != null ? Math.round(cached.flow).toLocaleString() + ' cfs' : '— cfs';
+    var score    = cached.score != null ? cached.score : null;
+    var tier     = cached.tier || 'fair';
+    var word     = cached.scoreWord || '';
+    var isActive = activeRiver.usgs === w.usgs;
+
+    var card = document.createElement('div');
+    card.className = 'saved-water-card' + (isActive ? ' active-river' : '');
+    card.dataset.usgs = w.usgs;
+
+    var removeBtn = document.createElement('button');
+    removeBtn.className = 'saved-water-remove';
+    removeBtn.dataset.usgs = w.usgs;
+    removeBtn.title = 'Remove';
+    removeBtn.textContent = '✕';
+
+    var nameDiv  = document.createElement('div');
+    nameDiv.className = 'saved-water-name';
+    nameDiv.textContent = w.label;
+
+    var flowDiv  = document.createElement('div');
+    flowDiv.className = 'saved-water-flow';
+    flowDiv.textContent = flow;
+
+    var scoreSpan = document.createElement('span');
+    scoreSpan.className = 'saved-water-score';
+    if (score != null) {
+      scoreSpan.style.background = tierBg[tier] || '#f0ede8';
+      scoreSpan.style.color      = tierColor[tier] || '#6b6659';
+      scoreSpan.textContent      = score + ' · ' + word;
+    } else {
+      scoreSpan.style.background = 'var(--surface2)';
+      scoreSpan.style.color      = 'var(--muted)';
+      scoreSpan.textContent      = 'Loading…';
+    }
+
+    card.appendChild(removeBtn);
+    card.appendChild(nameDiv);
+    card.appendChild(flowDiv);
+    card.appendChild(scoreSpan);
+    grid.appendChild(card);
+  });
+}
+// Delegated click handler for saved waters grid
+document.addEventListener('DOMContentLoaded', function() {
+  var grid = document.getElementById('saved-waters-grid');
+  if (!grid) return;
+  grid.addEventListener('click', function(e) {
+    var removeBtn = e.target.closest('.saved-water-remove');
+    if (removeBtn) { e.stopPropagation(); removeSavedWater(removeBtn.dataset.usgs); return; }
+    var card = e.target.closest('.saved-water-card');
+    if (card) loadSavedWater(card.dataset.usgs);
+  });
+});
+function _updateSavedWatersCache() {
+  var usgs = activeRiver.usgs;
+  if (!isRiverSaved(usgs) || currentFlow == null) return;
+  var scoreEl = document.getElementById('fishability-score-container');
+  var numEl   = scoreEl ? scoreEl.querySelector('.ds-score-num')  : null;
+  var wordEl  = scoreEl ? scoreEl.querySelector('.ds-score-word') : null;
+  var sc      = numEl ? parseInt(numEl.textContent) : null;
+  _savedWatersCache[usgs] = {
+    flow: currentFlow, score: sc,
+    scoreWord: wordEl ? wordEl.textContent : '',
+    tier: sc != null ? (sc >= 75 ? 'good' : sc >= 50 ? 'fair' : 'tough') : 'fair'
+  };
+  renderSavedWaters();
+}
+
 async function loadAll() {
   const riverSnapshot = activeRiver.id;
+  renderSavedWaters();
+  updateStarBtn();
   renderHatches();
   renderAccessPoints();
   renderMoonPhase();
