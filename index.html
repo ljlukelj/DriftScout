@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DriftScout">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f5f2ed">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -2262,11 +2267,15 @@
       <div style="font-size:3rem;margin-bottom:12px">&#128247;</div>
       <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:8px">Drop a bug photo here</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:16px">or click to browse &middot; JPG, PNG, HEIC</div>
-      <div style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 20px;border-radius:2px">Choose Photo</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <div onclick="document.getElementById('hatch-file-input').click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 18px;border-radius:2px;cursor:pointer">📁 Choose Photo</div>
+        <div onclick="document.getElementById('hatch-camera-input').click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 18px;border-radius:2px;cursor:pointer">📷 Take Photo</div>
+      </div>
     </div>
     <input type="file" id="hatch-file-input" accept="image/*" style="display:none" onchange="handleHatchFile(event)">
+    <input type="file" id="hatch-camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleHatchFile(event)">
 
-    <div id="hatch-preview-wrap" style="display:none;margin-bottom:24px">
+    <div id="hatch-preview-wrap" style="display:none;margin-bottom:24px"><div id="hatch-retry-wrap" style="text-align:right;margin-bottom:8px;display:none"><button onclick="resetHatchUpload()" style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:3px;cursor:pointer">↺ Try Another Photo</button></div>
       <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
         <div style="flex-shrink:0">
           <img id="hatch-preview-img" style="width:200px;height:200px;object-fit:cover;border-radius:4px;border:1px solid var(--border)" alt="Bug photo">
@@ -6303,6 +6312,16 @@ function handleHatchDrop(event) {
   if (file && file.type.startsWith('image/')) processHatchImage(file);
 }
 
+function resetHatchUpload() {
+  document.getElementById('hatch-upload-area').style.display = 'block';
+  document.getElementById('hatch-preview-wrap').style.display = 'none';
+  document.getElementById('hatch-retry-wrap').style.display = 'none';
+  document.getElementById('hatch-result').innerHTML = '';
+  document.getElementById('hatch-file-input').value = '';
+  var cam = document.getElementById('hatch-camera-input');
+  if (cam) cam.value = '';
+}
+
 function handleHatchFile(event) {
   const file = event.target.files[0];
   if (file) processHatchImage(file);
@@ -6329,6 +6348,8 @@ function processHatchImage(file) {
     var base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
     URL.revokeObjectURL(objectUrl);
     identifyHatch(base64, 'image/jpeg');
+    var rw = document.getElementById('hatch-retry-wrap');
+    if (rw) rw.style.display = 'block';
   };
   img.onerror = function() {
     document.getElementById('hatch-result').innerHTML =
@@ -6711,6 +6732,15 @@ function locateUser() {
   );
 }
 
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg) { console.log('SW registered:', reg.scope); })
+      .catch(function(err) { console.log('SW registration failed:', err); });
+  });
+}
 </script>
 </body>
 </html>
