@@ -1692,6 +1692,26 @@
     .stat-value { font-size: 1.05rem; }
   }
 
+  .rig-card{border-bottom:1px solid rgba(255,255,255,0.06);padding:10px 0;cursor:pointer}
+  .rig-card:last-child{border-bottom:none;padding-bottom:0}
+  .rig-card-header{display:flex;gap:10px;align-items:flex-start}
+  .rig-card-emoji{font-size:1.3rem;line-height:1;margin-top:2px;flex-shrink:0}
+  .rig-card-main{flex:1;min-width:0}
+  .rig-card-top{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+  .rig-card-name{font-size:0.78rem;font-weight:600}
+  .rig-card-flies{font-size:0.72rem;color:var(--muted);margin-bottom:2px}
+  .rig-card-leader{font-size:0.65rem;color:var(--muted);font-style:italic}
+  .rig-chevron{font-size:0.6rem;color:var(--muted);transition:transform 0.2s;flex-shrink:0;margin-top:3px}
+  .rig-card.open .rig-chevron{transform:rotate(180deg);color:var(--accent)}
+  .rig-detail{display:none;margin-top:10px;padding:12px 14px;background:rgba(0,0,0,0.15);border-radius:4px;border-left:2px solid var(--accent)}
+  .rig-card.open .rig-detail{display:block}
+  .rig-row{display:flex;gap:8px;margin-bottom:8px;font-size:0.75rem;line-height:1.5}
+  .rig-row:last-child{margin-bottom:0}
+  .rig-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.57rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);flex-shrink:0;width:68px;margin-top:1px}
+  .rig-val{color:var(--muted);flex:1}
+  .rig-switch{margin-top:10px;padding:7px 10px;background:rgba(245,158,11,0.06);border-left:2px solid var(--amber);border-radius:0 3px 3px 0;font-size:0.7rem;color:var(--muted);font-style:italic}
+  @media(max-width:480px){.rig-lbl{width:56px;font-size:0.53rem}.rig-row{font-size:0.7rem}}
+
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -1912,6 +1932,17 @@
         <div id="temp-val" style="color:var(--muted);font-size:0.8rem;font-family:'IBM Plex Mono',monospace">asking Claude…</div>
       </div>
       <div id="temp-note" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Tactics Box -->
+  <div class="insights-box" id="tactics-box" style="margin-bottom:28px">
+    <div class="insights-header">
+      <div class="insights-title">🎯 Presentation Tactics</div>
+      <div class="ai-badge">Claude · Live Conditions</div>
+    </div>
+    <div id="tactics-content">
+      <div class="insights-loading"><div class="spinner"></div><span>Building tactics guide…</span></div>
     </div>
   </div>
 
@@ -2750,6 +2781,7 @@ function switchRiver(riverId) {
 
   // Reset insights
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
+  var _tc=document.getElementById('tactics-content');if(_tc)_tc.innerHTML='<div class="insights-loading"><div class="spinner"></div><span>Building tactics guide…</span></div>';
   // Reset baro
   const bEl = document.getElementById('baro-val'); if(bEl){bEl.textContent='--';bEl.classList.add('skeleton');}
   const bNt = document.getElementById('baro-note'); if(bNt) bNt.textContent='Loading…';
@@ -3127,6 +3159,26 @@ function getHatches() {
 }
 
 function renderHatches() {
+  const HATCH_PATTERNS = {
+    'Skwala Stonefly':   ['Skwala Dry #10','Chubby Chernobyl #10','Skwala Nymph #8','Girdle Bug #8'],
+    'Blue-Wing Olive':   ['Parachute Adams #20','CDC Emerger #20','BWO Sparkle Dun #20','Baetis Nymph #20'],
+    'Caddis (Mother\'s Day)': ['Elk Hair Caddis #14','X-Caddis #16','LaFontaine Pupa #14','Soft Hackle #14'],
+    'Golden Stonefly':   ['Stimulator #8','Yellow Chernobyl #8','Golden Stone Nymph #8','Rubber Legs #6'],
+    'Salmonfly':         ['Chernobyl Ant #6','Foam Salmonfly #4','Kaufmann Stone #6','Stimulator #6'],
+    'Terrestrials':      ["Dave's Hopper #10",'Parachute Hopper #10','Chubby Chernobyl #8','Foam Ant #14'],
+    'October Caddis':    ['Orange Stimulator #8','October Caddis Dry #8','Buckskin #10','Oct Caddis Pupa #10'],
+    'Midges':            ['Zebra Midge #22','Mercury Midge #22','Griffiths Gnat #22','RS2 #24'],
+    'PMD':               ['PMD Sparkle Dun #16','PMD Comparadun #16','Pale Morning Nymph #16','Cripple #18'],
+    'Caddis':            ['Elk Hair Caddis #14','X-Caddis #16','Soft Hackle #14','LaFontaine Pupa #14'],
+    'Pale Morning Dun':  ['PMD Sparkle Dun #16','PMD Comparadun #16','CDC Emerger #18','Pheasant Tail #16'],
+    'March Brown':       ['March Brown Parachute #12','March Brown Soft Hackle #12','Hare\'s Ear #12'],
+    'Hendrickson':       ['Hendrickson Dry #12','Red Quill #12','Hendrickson Emerger #14','Soft Hackle #14'],
+    'Sulphur':           ['Sulphur Parachute #16','Sulphur Comparadun #16','CDC Sulphur Emerger #16'],
+    'Green Drake':       ['Parachute Green Drake #10','Wulff Green Drake #10','Green Drake Emerger #12'],
+    'Trico':             ['Trico Spinner #22','Parachute Trico #22','CDC Trico #22','Poly Wing Spinner #22'],
+    'October Caddis':    ['Orange Stimulator #8','October Caddis Dry #8','Buckskin #10'],
+    'Steelhead Flies':   ['Intruder #2','Egg Sucking Leech #4','Trout Bead','Alaskabou #2'],
+  };
   const hatches = getHatches();
   const m = new Date().getMonth() + 1;
   document.getElementById('hatch-grid').innerHTML = hatches.map(h => {
@@ -3136,15 +3188,17 @@ function renderHatches() {
       : upcoming
         ? `<span class="hatch-soon">Coming Soon</span>`
         : '';
-    return `
-      <div class="hatch-card">
-        <div class="hatch-icon">${h.icon}</div>
-        <div>
-          <div class="hatch-name">${h.name}</div>
-          <div class="hatch-detail">${h.detail}</div>
-          ${badge}
-        </div>
-      </div>`;
+    var pats = h.active ? (h.patterns || HATCH_PATTERNS[h.name] || []) : [];
+    var patHtml = pats.length ? '<div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:5px">' +
+      pats.map(function(p){return '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:0.55rem;letter-spacing:0.08em;background:rgba(125,211,252,0.1);color:var(--accent);border:1px solid rgba(125,211,252,0.25);padding:2px 7px;border-radius:2px">' + p + '</span>';}).join('') +
+      '</div>' : '';
+    return '<div class="hatch-card">' +
+      '<div class="hatch-icon">' + h.icon + '</div>' +
+      '<div style="flex:1">' +
+        '<div class="hatch-name">' + h.name + '</div>' +
+        '<div class="hatch-detail">' + h.detail + '</div>' +
+        patHtml + badge +
+      '</div></div>';
   }).join('');
 }
 
@@ -3213,6 +3267,41 @@ Write in a confident, direct guide voice. Be specific — mention actual fly pat
   } catch(e) {
     if (checkRiver && activeRiver.id !== riverId) return;
     box.innerHTML = `<div class="insights-text">Could not load AI insights. Error: ${e.message}<br><br><button class="generate-btn" onclick="generateInsights()">↺ Try Again</button></div>`;
+  }
+}
+
+
+// ─── TACTICS GUIDE ──────────────────────────────────────────────────────────
+async function generateTactics(riverId) {
+  var box = document.getElementById('tactics-content');
+  if (!box) return;
+  var flow  = currentFlow ? Math.round(currentFlow) + ' cfs' : 'unknown';
+  var wTemp = currentWaterTemp ? currentWaterTemp + '°F' : 'unknown';
+  var month = new Date().toLocaleString('en-US', {month:'long'});
+  var hour  = new Date().getHours();
+  var tod   = hour<6?'pre-dawn':hour<10?'morning':hour<14?'midday':hour<18?'afternoon':'evening';
+  var hatches = (function() {
+    var p = getHatches().filter(function(h){return h.active;}).map(function(h){return h.name;});
+    if (p.length) return p.join(', ');
+    var fh = getFishabilityHatch(activeRiver.usgs, new Date().getMonth());
+    return fh && fh.insects ? fh.insects.join(', ') : 'none strongly active';
+  })();
+  var prompt = 'You are a fly fishing guide on ' + activeRiver.aiContext + '. Conditions: ' + flow + ', ' + wTemp + ', ' + tod + ' in ' + month + '. Hatches: ' + hatches + '. Write a 3-section tactics guide (bold **headers**): 1) Best presentation technique right now with rod angle, mend, drift length. 2) Where to stand and which water features to target at this flow. 3) The one signal that makes you switch approach. Under 200 words. No fluff.';
+  try {
+    var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:400, messages:[{role:'user',content:prompt}]})
+    });
+    var data = await res.json();
+    var text = (data.content&&data.content[0]&&data.content[0].text)||'';
+    if (activeRiver.id !== riverId) return;
+    var html = text.split('\n\n').map(function(p){return p.trim();}).filter(Boolean).map(function(p){
+      return '<p style="margin-bottom:12px" class="insights-text">' + p.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>') + '</p>';
+    }).join('');
+    box.innerHTML = html + '<button class="generate-btn" onclick="generateTactics()">&#8635; Refresh</button>';
+  } catch(e) {
+    if (activeRiver.id !== riverId) return;
+    box.innerHTML = '<p class="insights-text" style="color:var(--muted)">Unavailable <button class="generate-btn" onclick="generateTactics()">&#8635; Retry</button></p>';
   }
 }
 
@@ -3318,11 +3407,14 @@ Respond with ONLY a JSON array — no markdown, no explanation — in this exact
     "rig": "<setup name, max 4 words>",
     "emoji": "<single emoji>",
     "flies": "<specific pattern names with hook sizes>",
-    "tip": "<one key tactical tip driven by today's specific conditions, max 14 words>"
+    "leader": "<leader+tippet e.g. 9ft 5X to 18in 6X>",
+    "technique": "<2 sentences: exactly how to fish this right now — where to cast, mend, drift, strike>",
+    "depth": "<indicator depth or N/A for dry fly>",
+    "switchSignal": "<one sentence: the sign to abandon this rig>"
   }
 ]
 
-Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the tip WHY these conditions call for this approach.`;
+Be specific. Use real fly patterns for ${activeRiver.label} at ${flow}. technique must be actionable for an angler at the river right now.`;
 
   try {
     const res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
@@ -3330,7 +3422,7 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 400,
+        max_tokens: 900,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -3341,25 +3433,28 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the
 
     if (activeRiver.id !== riverId) return;
 
-    container.innerHTML = setups.map((s, i) => `
-      <div style="
-        display:flex;gap:10px;align-items:flex-start;
-        padding:${i < setups.length - 1 ? '0 0 8px 0' : '0'};
-        ${i < setups.length - 1 ? 'border-bottom:1px solid rgba(255,255,255,0.06)' : ''}
-      ">
-        <div style="font-size:1.3rem;line-height:1;margin-top:2px">${s.emoji}</div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
-            <span style=";font-size:0.75rem;font-weight:600;color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
-              ${s.rig}
-            </span>
-            ${i === 0 ? '<span style=";font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>' : ''}
-          </div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">${s.flies}</div>
-          <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic">${s.tip}</div>
-        </div>
-      </div>
-    `).join('');
+    container.innerHTML = setups.map(function(s, i) {
+      var hasDetail = s.technique || s.leader || s.depth;
+      return '<div class="rig-card' + (i===0?' open':'') + '" onclick="this.classList.toggle(\'open\')">' +
+        '<div class="rig-card-header">' +
+          '<div class="rig-card-emoji">' + s.emoji + '</div>' +
+          '<div class="rig-card-main">' +
+            '<div class="rig-card-top">' +
+              '<span class="rig-card-name" style="color:' + (i===0?'var(--accent)':'var(--text)') + '">' + s.rig + '</span>' +
+              (i===0?'<span style="font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>':'') +
+            '</div>' +
+            '<div class="rig-card-flies">' + s.flies + '</div>' +
+            (s.leader?'<div class="rig-card-leader">' + s.leader + '</div>':'') +
+          '</div>' +
+          (hasDetail?'<div class="rig-chevron">▾</div>':'') +
+        '</div>' +
+        (hasDetail?'<div class="rig-detail">' +
+          (s.technique?'<div class="rig-row"><div class="rig-lbl">Technique</div><div class="rig-val">' + s.technique + '</div></div>':'') +
+          (s.depth&&s.depth!=='N/A'?'<div class="rig-row"><div class="rig-lbl">Depth</div><div class="rig-val">' + s.depth + '</div></div>':'') +
+          (s.switchSignal?'<div class="rig-switch">⚡ Switch when: ' + s.switchSignal + '</div>':'') +
+        '</div>':'') +
+      '</div>';
+    }).join('');
 
   } catch(e) {
     if (activeRiver.id !== riverId) return;
@@ -3550,6 +3645,7 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
     if (activeRiver.id !== snap) return;
     fetchWaterTemp(snap);
     generateInsights(snap);
+    generateTactics(snap);
     _renderFishabilityScore();
   });
 }
@@ -4703,6 +4799,7 @@ async function loadAll() {
     if (activeRiver.id === riverSnapshot) {
       fetchWaterTemp(riverSnapshot);
       generateInsights(riverSnapshot);
+      generateTactics(riverSnapshot);
       // Refresh map gauge colors — isolated try/catch so map errors never block score render
       try {
         if (mapInitialized && mapLayerGroups.gauges) {
@@ -5730,6 +5827,7 @@ function loadStateRiver(idx, stateCode) {
     if (activeRiver.id !== snap) return;
     fetchWaterTemp(snap);
     generateInsights(snap);
+    generateTactics(snap);
     _renderFishabilityScore();
   });
 }
