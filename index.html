@@ -1170,53 +1170,75 @@
   .shop-link:hover { background: rgba(125,211,252,0.1); }
 
   /* ── RIVER TABS ── */
+  .river-tabs-wrap {
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .river-tabs-wrap::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 32px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+    border-radius: 0 4px 4px 0;
+  }
+
   .river-tabs {
     display: flex;
-    gap: 4px;
-    margin-bottom: 28px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0;
-    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+
+  .river-tabs::-webkit-scrollbar { display: none; }
 
   .river-tab {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--muted);
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 10px 16px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
     cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
     white-space: nowrap;
-    margin-bottom: -1px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
   }
 
-  .river-tab:hover { color: var(--text); }
+  .river-tab:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
 
   .river-tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
   }
 
   .river-tab .tab-sub {
     display: block;
-    font-size: 0.55rem;
-    color: var(--muted);
-    margin-top: 1px;
-    letter-spacing: 0.05em;
+    font-size: 0.5rem;
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
   }
 
-  .river-tab.active .tab-sub { color: rgba(125,211,252,0.6); }
+  .river-tab.active .tab-sub { opacity: 0.8; }
 
   @media (max-width: 640px) {
     .forecast-row { grid-template-columns: repeat(4, 1fr); }
     .forecast-row .forecast-day:nth-child(n+5) { display: none; }
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
-    .river-tab { padding: 8px 10px 10px; font-size: 0.65rem; }
   }
 
   /* ── RIVER SEARCH ── */
@@ -1254,6 +1276,37 @@
 
   /* ── WATER TEMP ESTIMATED BADGE ── */
   .wtemp-est-badge{font-family:'IBM Plex Mono',monospace;font-size:0.52rem;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.25);padding:1px 6px;border-radius:2px;display:inline-block;margin-top:4px}
+
+  /* ── MY WATERS ── */
+  .my-waters-section{margin-bottom:24px}
+  .my-waters-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .my-waters-title{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .saved-river-row{display:flex;gap:8px;flex-wrap:wrap}
+  .saved-river-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:10px 14px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;align-items:center;gap:10px;min-width:0}
+  .saved-river-card:hover{border-color:var(--accent);background:rgba(125,211,252,0.04)}
+  .saved-river-card.active-river{border-color:var(--accent);background:rgba(125,211,252,0.06)}
+  .saved-river-name{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+  .saved-river-meta{display:flex;gap:5px;align-items:center;flex-shrink:0}
+  .saved-flow-badge{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:2px 6px;border-radius:2px;background:rgba(59,130,246,0.15);color:var(--accent);border:1px solid rgba(59,130,246,0.2);white-space:nowrap}
+  .saved-score-badge{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;padding:2px 6px;border-radius:2px;white-space:nowrap}
+  .saved-score-badge.excellent{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+  .saved-score-badge.good{background:rgba(134,239,172,0.12);color:#86efac;border:1px solid rgba(134,239,172,0.2)}
+  .saved-score-badge.fair{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+  .saved-score-badge.poor{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.15)}
+  .unsave-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:0 0 0 4px;line-height:1;transition:color 0.15s;flex-shrink:0}
+  .unsave-btn:hover{color:var(--amber)}
+  .save-river-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:5px 12px;border-radius:2px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+  .save-river-btn:hover{border-color:var(--amber);color:var(--amber)}
+  .save-river-btn.saved{border-color:var(--amber);color:var(--amber)}
+  .my-waters-empty{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);padding:10px 0}
+
+  /* ── FISHABILITY SCORE ── */
+  .fish-factor{font-family:'IBM Plex Mono',monospace;font-size:0.5rem;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:2px;white-space:nowrap}
+  .fish-factor.good{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2)}
+  .fish-factor.ok{background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+  .fish-factor.bad{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.15)}
+  #card-fishability::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.4,0,.2,1)}
+  #card-fishability.loaded::before{transform:scaleX(1)}
 </style>
 </head>
 <body>
@@ -1288,6 +1341,16 @@
   <!-- RIVER DASHBOARD -->
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="river-dashboard">
+
+  <!-- ⭐ My Waters -->
+  <div class="my-waters-section" id="my-waters-section">
+    <div class="my-waters-header">
+      <span class="my-waters-title">⭐ My Waters</span>
+    </div>
+    <div class="saved-river-row" id="saved-river-row">
+      <div class="my-waters-empty" id="my-waters-empty">No saved rivers yet — tap ⭐ on any river to save it here.</div>
+    </div>
+  </div>
 
   <!-- Nationwide River Search -->
   <div class="river-search-box">
@@ -1353,7 +1416,8 @@
   </div>
 
   <!-- River Tabs -->
-  <nav class="river-tabs">
+  <div class="river-tabs-wrap">
+  <nav class="river-tabs" id="river-tabs-nav">
     <button class="river-tab active" onclick="switchRiver('upperYakima')">
       Upper Yakima
       <span class="tab-sub">Easton → Thorpe</span>
@@ -1407,6 +1471,7 @@
       <span class="tab-sub">North Fork → Arlington</span>
     </button>
   </nav>
+  </div>
 
   <!-- Condition Banner -->
   <div class="condition-banner loading" id="condition-banner">
@@ -1415,6 +1480,7 @@
       <div class="condition-status" id="condition-status">Fetching…</div>
     </div>
     <div class="condition-summary" id="condition-summary">Loading river data from USGS…</div>
+    <button class="save-river-btn" id="save-river-btn" onclick="toggleSaveRiver()">⭐ Save</button>
     <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
   </div>
 
@@ -1424,6 +1490,10 @@
       <div class="stat-label">River Flow</div>
       <div class="stat-value"><span class="skeleton" id="flow-val">000</span><span class="stat-unit">cfs</span></div>
       <div class="stat-delta" id="flow-delta">—</div>
+      <div id="flow-trend-bar" style="margin-top:8px;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;display:none">
+        <div id="flow-trend-fill" style="height:100%;border-radius:2px;transition:width 0.8s ease,background 0.5s"></div>
+      </div>
+      <div id="flow-trend-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;color:var(--muted);margin-top:4px;display:none"></div>
     </div>
     <div class="stat-card" id="card-gage">
       <div class="stat-label">Gauge Height</div>
@@ -1445,6 +1515,18 @@
       <div class="stat-label">Barometric Pressure</div>
       <div class="stat-value"><span class="skeleton" id="baro-val">--</span><span class="stat-unit">inHg</span></div>
       <div class="stat-delta" id="baro-note">Loading…</div>
+    </div>
+    <div class="stat-card" id="card-fishability" style="position:relative;overflow:hidden">
+      <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        Fishability Score
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.5rem;background:rgba(125,211,252,0.1);color:var(--accent);border:1px solid rgba(125,211,252,0.3);padding:1px 6px;border-radius:2px;letter-spacing:0.1em">LIVE</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <div class="stat-value"><span class="skeleton" id="fish-score">--</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--muted)">/100</div>
+      </div>
+      <div class="stat-delta" id="fish-grade" style="font-size:0.75rem;margin-top:6px">Calculating…</div>
+      <div id="fish-factors" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px"></div>
     </div>
     <div class="stat-card" id="card-temp" style="grid-column:1/-1">
       <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -1553,7 +1635,10 @@
         <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Trip Log & Fly Box</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">What worked, where, when — saved locally in your browser</div>
       </div>
-      <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="exportTripCSV()" style="font-size:0.6rem;padding:7px 14px">↓ CSV</button>
+        <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      </div>
     </div>
     <div class="trip-form">
       <div class="trip-form-row">
@@ -1803,6 +1888,7 @@ const RIVERS = {
     label: 'Yakima Canyon',
     sublabel: 'Roza Dam → Ellensburg',
     usgs: '12487000',
+    usgs_fallback: '12484000',
     gaugeName: 'Selah Gap gauge (canyon exit)',
     lat: 46.8701, lon: -120.4816,
     wadingThresholds: { easy: 800, moderate: 1500, difficult: 2500, floatOnly: 3500 },
@@ -1833,6 +1919,7 @@ const RIVERS = {
     label: 'Naches River',
     sublabel: 'Upper Naches → Confluence',
     usgs: '12494400',
+    usgs_fallback: '12492500',
     gaugeName: 'Naches at Naches gauge',
     lat: 46.9787, lon: -120.8284,
     wadingThresholds: { easy: 400, moderate: 700, difficult: 1100, floatOnly: 1600 },
@@ -1861,6 +1948,7 @@ const RIVERS = {
     label: 'Snoqualmie',
     sublabel: 'Middle Fork → Tanner',
     usgs: '12141300',
+    usgs_fallback: '12143400',
     gaugeName: 'Middle Fork near Tanner',
     lat: 47.5651, lon: -121.6476,
     wadingThresholds: { easy: 1000, moderate: 2500, difficult: 5000, floatOnly: 8000 },
@@ -2026,7 +2114,7 @@ const RIVERS = {
     insightTip: 'One or two tips specific to the Kalama (coastal rain-driven flows, wild vs hatchery fish regulations, winter steelhead timing, SW Washington weather)',
   },  greenRiver: {
     id:'greenRiver', label:'Green River', sublabel:'Howard Hanson → Auburn',
-    usgs:'12113000', gaugeName:'Auburn gauge', lat:47.3298, lon:-122.2298,
+    usgs:'12113000', usgs_fallback:'12106700', gaugeName:'Auburn gauge', lat:47.3298, lon:-122.2298,
     wadingThresholds:{easy:400,moderate:900,difficult:1800,floatOnly:3000},
     hatches:[
       {name:'Blue-Wing Olive',icon:'🪰',when:[1,2,3,4,10,11,12],detail:'Year-round Baetis on overcast days. #18-22.'},
@@ -2121,9 +2209,13 @@ let weatherData = null;
 function switchRiver(riverId) {
   activeRiver = RIVERS[riverId];
 
-  // Update tabs
+  // Update tabs and scroll active into view
   document.querySelectorAll('.river-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', Object.keys(RIVERS)[i] === riverId);
+    const isActive = Object.keys(RIVERS)[i] === riverId;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      setTimeout(() => btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }), 50);
+    }
   });
 
   // Update header
@@ -2211,16 +2303,69 @@ function _applyUSGSToUI(parsed, riverId, isFullHistory) {
   const deltaEl = document.getElementById('flow-delta');
   if (dischargeVals.length) {
     const latest = dischargeVals[dischargeVals.length - 1];
-    const prev   = dischargeVals[Math.max(0, dischargeVals.length - 5)];
     currentFlow  = parseFloat(latest.value);
-    const delta  = currentFlow - parseFloat(prev.value);
     flowEl.textContent = Math.round(currentFlow).toLocaleString();
     flowEl.classList.remove('skeleton');
-    const sign = delta > 0 ? '↑' : delta < 0 ? '↓' : '—';
-    deltaEl.textContent = `${sign} ${Math.abs(Math.round(delta))} cfs vs ~1hr ago`;
-    deltaEl.className = 'stat-delta ' + (delta > 50 ? 'up' : delta < -50 ? 'down' : 'neutral');
+
+    // 24hr trend: compare now vs ~96 readings ago (15min intervals × 96 = 24hr)
+    // Fall back to shorter window if not enough data
+    const n = dischargeVals.length;
+    const lookback24 = Math.min(n - 1, 96);  // 96 × 15min = 24hr
+    const lookback1  = Math.min(n - 1, 4);   // 4 × 15min = 1hr
+    const prev24 = dischargeVals[Math.max(0, n - 1 - lookback24)];
+    const prev1  = dischargeVals[Math.max(0, n - 1 - lookback1)];
+    const delta24 = currentFlow - parseFloat(prev24.value);
+    const delta1  = currentFlow - parseFloat(prev1.value);
+    const hasFullDay = n > 80;
+
+    let trendIcon, trendLabel, trendClass;
+    if (hasFullDay) {
+      const pct = Math.abs(delta24) / (parseFloat(prev24.value) || 1) * 100;
+      if (delta24 > 100)       { trendIcon = '↑↑'; trendLabel = `+${Math.round(delta24).toLocaleString()} cfs rising fast`; trendClass = 'up'; }
+      else if (delta24 > 30)   { trendIcon = '↑';  trendLabel = `+${Math.round(delta24).toLocaleString()} cfs rising`;     trendClass = 'up'; }
+      else if (delta24 < -100) { trendIcon = '↓↓'; trendLabel = `${Math.round(delta24).toLocaleString()} cfs dropping`;   trendClass = 'down'; }
+      else if (delta24 < -30)  { trendIcon = '↓';  trendLabel = `${Math.round(delta24).toLocaleString()} cfs falling`;    trendClass = 'down'; }
+      else                      { trendIcon = '→';  trendLabel = 'Stable (24hr)';                                           trendClass = 'neutral'; }
+    } else {
+      // Short window fallback
+      const sign = delta1 > 0 ? '↑' : delta1 < 0 ? '↓' : '→';
+      trendIcon = sign;
+      trendLabel = `${sign} ${Math.abs(Math.round(delta1))} cfs (1hr)`;
+      trendClass = delta1 > 50 ? 'up' : delta1 < -50 ? 'down' : 'neutral';
+    }
+
+    deltaEl.textContent = trendLabel;
+    deltaEl.className = 'stat-delta ' + trendClass;
     document.getElementById('card-flow').classList.add('loaded');
     document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}`;
+
+    // Render flow position bar vs wading thresholds
+    const trendBar = document.getElementById('flow-trend-bar');
+    const trendFill = document.getElementById('flow-trend-fill');
+    const trendLbl = document.getElementById('flow-trend-label');
+    if (trendBar && trendFill) {
+      const thresh = activeRiver.wadingThresholds;
+      const pct = Math.min(100, (currentFlow / thresh.floatOnly) * 100);
+      let barColor;
+      if (currentFlow < thresh.easy)       barColor = 'var(--green)';
+      else if (currentFlow < thresh.moderate) barColor = '#86efac';
+      else if (currentFlow < thresh.difficult) barColor = 'var(--amber)';
+      else                                   barColor = 'var(--red)';
+      trendFill.style.width  = pct + '%';
+      trendFill.style.background = barColor;
+      trendBar.style.display = 'block';
+      if (trendLbl) {
+        const zones = [
+          [thresh.easy, 'Low'],
+          [thresh.moderate, 'Moderate'],
+          [thresh.difficult, 'High'],
+          [thresh.floatOnly, 'Very High']
+        ];
+        const zone = zones.find(([max]) => currentFlow < max);
+        trendLbl.textContent = (zone ? zone[1] : 'Extreme') + ' — ' + Math.round(pct) + '% of float-only threshold';
+        trendLbl.style.display = 'block';
+      }
+    }
 
     if (isFullHistory) {
       const step = Math.max(1, Math.floor(dischargeVals.length / 84));
@@ -2274,6 +2419,8 @@ function _applyUSGSToUI(parsed, riverId, isFullHistory) {
 
   updateWading();
   updateConditionBanner();
+  // Recalc score whenever USGS data updates
+  if (typeof calcFishabilityScore === 'function') calcFishabilityScore();
 }
 
 async function fetchUSGS(riverId) {
@@ -2293,15 +2440,32 @@ async function fetchUSGS(riverId) {
   }
 
   // Phase 2: Full 48hr history for chart + accurate delta
-  try {
-    const res = await fetch(`${base}/usgs?site=${site}`);
+  // If primary gauge returns empty, try fallback gauge
+  const tryGauge = async (gaugeId) => {
+    const res = await fetch(`${base}/usgs?site=${gaugeId}`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    const parsed = _parseUSGSSeries(json);
+    return await res.json();
+  };
+
+  try {
+    let json = await tryGauge(site);
+    let parsed = _parseUSGSSeries(json);
+
+    // Try fallback if primary came back empty
+    if (!parsed.discharge.length && activeRiver.usgs_fallback) {
+      const fbNote = document.getElementById('last-updated');
+      if (fbNote) fbNote.textContent = 'Trying backup gauge…';
+      json = await tryGauge(activeRiver.usgs_fallback);
+      parsed = _parseUSGSSeries(json);
+      if (parsed.discharge.length) {
+        const gaugeNote = document.getElementById('gauge-label');
+        if (gaugeNote) gaugeNote.textContent += ' (backup gauge)';
+      }
+    }
+
     _applyUSGSToUI(parsed, riverId, true);
   } catch(err) {
     if (activeRiver.id !== riverId) return;
-    // Show error state if Phase 1 also didn't get data
     if (!currentFlow) {
       ['flow-val','gage-val'].forEach(id => {
         const el = document.getElementById(id);
@@ -2352,6 +2516,117 @@ async function fetchWeather(riverId) {
 
   renderForecast(json.daily);
   updateConditionBanner();
+  if (typeof calcFishabilityScore === 'function') calcFishabilityScore();
+}
+
+// ─── FISHABILITY SCORE ───────────────────────────────────
+function calcFishabilityScore() {
+  let score = 50; // baseline
+  const factors = [];
+
+  // ── Flow component (0-30 pts) ──
+  if (currentFlow !== null) {
+    const t = activeRiver.wadingThresholds;
+    if (currentFlow < t.easy) {
+      score += 30; factors.push({label:'Flow ideal', cls:'good'});
+    } else if (currentFlow < t.moderate) {
+      score += 22; factors.push({label:'Flow good', cls:'good'});
+    } else if (currentFlow < t.difficult) {
+      score += 10; factors.push({label:'Flow elevated', cls:'ok'});
+    } else if (currentFlow < t.floatOnly) {
+      score += 0; factors.push({label:'Flow high', cls:'bad'});
+    } else {
+      score -= 15; factors.push({label:'Unfishable flow', cls:'bad'});
+    }
+  }
+
+  // ── Water temp component (0-20 pts) ──
+  if (currentWaterTemp !== null) {
+    const t = currentWaterTemp;
+    if (t >= 52 && t <= 62) {
+      score += 20; factors.push({label:'Temp prime', cls:'good'});
+    } else if ((t >= 45 && t < 52) || (t > 62 && t <= 67)) {
+      score += 12; factors.push({label:'Temp good', cls:'good'});
+    } else if ((t >= 40 && t < 45) || (t > 67 && t <= 72)) {
+      score += 4; factors.push({label:'Temp marginal', cls:'ok'});
+    } else if (t < 40) {
+      score -= 5; factors.push({label:'Temp cold', cls:'bad'});
+    } else {
+      score -= 10; factors.push({label:'Temp warm', cls:'bad'});
+    }
+  }
+
+  // ── Barometric pressure component (0-10 pts) ──
+  const baroNote = document.getElementById('baro-note');
+  if (baroNote) {
+    const bn = baroNote.textContent || '';
+    if (bn.includes('Rising')) { score += 10; factors.push({label:'Pressure rising', cls:'good'}); }
+    else if (bn.includes('Steady')) { score += 6; factors.push({label:'Pressure steady', cls:'good'}); }
+    else if (bn.includes('Falling')) { score += 2; factors.push({label:'Pressure falling', cls:'ok'}); }
+  }
+
+  // ── Active hatches component (0-10 pts) ──
+  const activeHatches = getHatches().filter(h => h.active);
+  if (activeHatches.length >= 2) {
+    score += 10; factors.push({label:'Multi-hatch', cls:'good'});
+  } else if (activeHatches.length === 1) {
+    score += 6; factors.push({label:'Hatch active', cls:'good'});
+  } else {
+    factors.push({label:'No hatch', cls:'ok'});
+  }
+
+  // ── Time of day component (0-5 pts) ──
+  const hr = new Date().getHours();
+  if ((hr >= 6 && hr <= 10) || (hr >= 16 && hr <= 19)) {
+    score += 5; factors.push({label:'Peak hours', cls:'good'});
+  } else if (hr >= 10 && hr <= 16) {
+    score += 3; factors.push({label:'Midday', cls:'ok'});
+  } else {
+    factors.push({label:'Off hours', cls:'ok'});
+  }
+
+  // ── Weather from forecast ──
+  if (weatherData) {
+    const code = weatherData.current_weather?.weathercode;
+    const wind = weatherData.current_weather?.windspeed || 0;
+    if ([0,1].includes(code) && wind < 10) { score += 5; factors.push({label:'Perfect wx', cls:'good'}); }
+    else if ([95,96,99].includes(code)) { score -= 10; factors.push({label:'Storm', cls:'bad'}); }
+    else if (wind > 20) { factors.push({label:'Windy', cls:'ok'}); }
+  }
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+
+  // Render
+  const scoreEl = document.getElementById('fish-score');
+  const gradeEl = document.getElementById('fish-grade');
+  const factorsEl = document.getElementById('fish-factors');
+  const card = document.getElementById('card-fishability');
+
+  if (!scoreEl) return score;
+
+  scoreEl.textContent = score;
+  scoreEl.classList.remove('skeleton');
+
+  let grade, color;
+  if (score >= 80)      { grade = 'Excellent'; color = 'var(--green)'; }
+  else if (score >= 65) { grade = 'Good';      color = '#86efac'; }
+  else if (score >= 45) { grade = 'Fair';      color = 'var(--amber)'; }
+  else if (score >= 25) { grade = 'Poor';      color = '#f97316'; }
+  else                  { grade = 'Stay Home'; color = 'var(--red)'; }
+
+  gradeEl.textContent = grade + ' day to fish';
+  gradeEl.style.color = color;
+  scoreEl.style.color = color;
+
+  if (factorsEl) {
+    factorsEl.innerHTML = factors.slice(0,5).map(f =>
+      `<span class="fish-factor ${f.cls}">${f.label}</span>`
+    ).join('');
+  }
+
+  if (card) { card.classList.add('loaded'); card.style.setProperty('--score-color', color); }
+
+  return score;
 }
 
 // ─── WADING INDEX ─────────────────────────────────────────
@@ -2857,12 +3132,147 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   });
 }
 
+// ─── SAVED WATERS ────────────────────────────────────────
+const SAVED_KEY = 'driftscout_saved_waters';
+
+function getSavedWaters() {
+  try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function isSavedRiver(riverId) {
+  return getSavedWaters().some(r => r.id === riverId);
+}
+
+function toggleSaveRiver() {
+  const saved = getSavedWaters();
+  const idx = saved.findIndex(r => r.id === activeRiver.id);
+  if (idx >= 0) {
+    saved.splice(idx, 1);
+  } else {
+    saved.push({
+      id: activeRiver.id,
+      label: activeRiver.label,
+      sublabel: activeRiver.sublabel,
+      usgs: activeRiver.usgs,
+      lat: activeRiver.lat,
+      lon: activeRiver.lon
+    });
+  }
+  localStorage.setItem(SAVED_KEY, JSON.stringify(saved));
+  updateSaveButton();
+  renderSavedWaters();
+}
+
+function updateSaveButton() {
+  const btn = document.getElementById('save-river-btn');
+  if (!btn) return;
+  const saved = isSavedRiver(activeRiver.id);
+  btn.textContent = saved ? '★ Saved' : '⭐ Save';
+  btn.classList.toggle('saved', saved);
+}
+
+function renderSavedWaters() {
+  const saved = getSavedWaters();
+  const row = document.getElementById('saved-river-row');
+  const empty = document.getElementById('my-waters-empty');
+  const section = document.getElementById('my-waters-section');
+  if (!row) return;
+
+  if (!saved.length) {
+    row.innerHTML = '';
+    row.appendChild(document.getElementById('my-waters-empty') || Object.assign(document.createElement('div'), {
+      className: 'my-waters-empty', id: 'my-waters-empty',
+      textContent: 'No saved rivers yet — tap ⭐ on any river to save it here.'
+    }));
+    return;
+  }
+
+  row.innerHTML = saved.map(r => {
+    const isActive = activeRiver.id === r.id;
+    return `<div class="saved-river-card ${isActive ? 'active-river' : ''}" data-river-id="${r.id}" data-usgs="${r.usgs}">
+      <div>
+        <div class="saved-river-name">${r.label}</div>
+        <div class="saved-river-meta" id="sw-meta-${r.usgs}">
+          <span class="saved-flow-badge" id="sw-flow-${r.usgs}">...</span>
+          <span class="saved-score-badge" id="sw-score-${r.usgs}">—</span>
+        </div>
+      </div>
+      <button class="unsave-btn" data-unsave="${r.id}" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+
+  // Delegated click: card loads river, ✕ unsaves
+  row.onclick = function(e) {
+    const unsaveBtn = e.target.closest('[data-unsave]');
+    if (unsaveBtn) {
+      e.stopPropagation();
+      const idToRemove = unsaveBtn.dataset.unsave;
+      const saved2 = getSavedWaters().filter(r => r.id !== idToRemove);
+      localStorage.setItem(SAVED_KEY, JSON.stringify(saved2));
+      renderSavedWaters();
+      updateSaveButton();
+      return;
+    }
+    const card = e.target.closest('[data-river-id]');
+    if (card) {
+      const rid = card.dataset.riverId;
+      if (RIVERS[rid]) switchRiver(rid);
+    }
+  };
+
+  // Fetch live flow for each saved river in background
+  fetchSavedWatersData(saved);
+}
+
+async function fetchSavedWatersData(saved) {
+  for (const r of saved) {
+    try {
+      const res = await fetch(`https://yakima-proxy.ljlukelj.workers.dev/usgs/current?site=${r.usgs}`);
+      if (!res.ok) continue;
+      const json = await res.json();
+      const series = json?.value?.timeSeries || [];
+      let flow = null;
+      for (const s of series) {
+        const code = s.variable?.variableCode?.[0]?.value;
+        if (code === '00060') {
+          const vals = (s.values?.[0]?.value || []).filter(v => v.value !== '-999999');
+          if (vals.length) flow = parseFloat(vals[vals.length-1].value);
+        }
+      }
+      const flowEl = document.getElementById('sw-flow-' + r.usgs);
+      const scoreEl = document.getElementById('sw-score-' + r.usgs);
+      if (flowEl && flow !== null) {
+        flowEl.textContent = Math.round(flow).toLocaleString() + ' cfs';
+      } else if (flowEl) {
+        flowEl.textContent = 'N/A';
+      }
+      // Simple fishability for saved card (flow-only)
+      if (scoreEl && flow !== null && RIVERS[r.id]) {
+        const t = RIVERS[r.id].wadingThresholds;
+        let grade, cls;
+        if (flow < t.easy)         { grade = 'Prime';    cls = 'excellent'; }
+        else if (flow < t.moderate){ grade = 'Good';     cls = 'good'; }
+        else if (flow < t.difficult){ grade = 'Fair';    cls = 'fair'; }
+        else                        { grade = 'High';    cls = 'poor'; }
+        scoreEl.textContent = grade;
+        scoreEl.className = 'saved-score-badge ' + cls;
+      } else if (scoreEl) {
+        scoreEl.textContent = '—';
+      }
+    } catch(e) { /* silent */ }
+    await new Promise(r => setTimeout(r, 400)); // stagger requests
+  }
+}
+
 // ─── BOOT ─────────────────────────────────────────────────
 async function loadAll() {
   const riverSnapshot = activeRiver.id;
   renderHatches();
   renderAccessPoints();
   renderMoonPhase();
+  renderSavedWaters();
+  updateSaveButton();
   document.title = activeRiver.label + ' — DriftScout';
   ['flow-val','gage-val','wtemp-val','airtemp-val'].forEach(id => {
     const el = document.getElementById(id);
@@ -2878,6 +3288,129 @@ async function loadAll() {
 }
 
 loadAll();
+
+// ═══════════════════════════════════════════════════════════
+// TRIP LOG
+// ═══════════════════════════════════════════════════════════
+const TRIP_KEY = 'driftscout_triplog';
+
+function getTripEntries() {
+  try { return JSON.parse(localStorage.getItem(TRIP_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function setDefaultDate() {
+  const d = document.getElementById('log-date');
+  if (d && !d.value) d.value = new Date().toISOString().split('T')[0];
+  // Auto-fill current river and flow
+  const riverSel = document.getElementById('log-river');
+  if (riverSel) {
+    const label = activeRiver.label;
+    let found = false;
+    for (const opt of riverSel.options) {
+      if (opt.value === label) { riverSel.value = label; found = true; break; }
+    }
+    if (!found) {
+      const opt = document.createElement('option');
+      opt.value = label; opt.textContent = label;
+      riverSel.appendChild(opt);
+      riverSel.value = label;
+    }
+  }
+  const flowEl = document.getElementById('log-flow');
+  if (flowEl && currentFlow && !flowEl.value) flowEl.value = Math.round(currentFlow);
+}
+
+function saveTripEntry() {
+  const date  = document.getElementById('log-date').value;
+  const river = document.getElementById('log-river').value;
+  const flow  = document.getElementById('log-flow').value;
+  const fly   = document.getElementById('log-fly').value.trim();
+  const method= document.getElementById('log-method').value;
+  const fish  = document.getElementById('log-fish').value;
+  const notes = document.getElementById('log-notes').value.trim();
+
+  if (!date || !fly) {
+    alert('Please fill in at least a date and fly pattern.');
+    return;
+  }
+
+  const entries = getTripEntries();
+  entries.unshift({ id: Date.now(), date, river, flow, fly, method, fish: fish || '0', notes });
+  localStorage.setItem(TRIP_KEY, JSON.stringify(entries));
+
+  // Clear form fields (keep date/river/flow for quick multi-entry)
+  document.getElementById('log-fly').value = '';
+  document.getElementById('log-fish').value = '';
+  document.getElementById('log-notes').value = '';
+
+  renderTripLog();
+}
+
+function deleteTripEntry(id) {
+  const entries = getTripEntries().filter(e => e.id !== id);
+  localStorage.setItem(TRIP_KEY, JSON.stringify(entries));
+  renderTripLog();
+}
+
+function clearTripLog() {
+  if (!confirm('Delete all trip log entries? This cannot be undone.')) return;
+  localStorage.removeItem(TRIP_KEY);
+  renderTripLog();
+}
+
+function exportTripCSV() {
+  const entries = getTripEntries();
+  if (!entries.length) { alert('No entries to export.'); return; }
+  const header = 'Date,River,Flow (cfs),Fly Pattern,Method,Fish Count,Notes';
+  const rows = entries.map(e =>
+    [e.date, e.river, e.flow, e.fly, e.method, e.fish,
+     (e.notes || '').replace(/,/g, ';').replace(/[\r\n]+/g, ' ')
+    ].join(',')
+  );
+  const csv = [header, ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'driftscout-triplog.csv';
+  a.click();
+}
+
+function renderTripLog() {
+  const entries = getTripEntries();
+  const container = document.getElementById('trip-entries');
+  if (!container) return;
+
+  if (!entries.length) {
+    container.innerHTML = '<div class="trip-empty">No trips logged yet.<br>Fill in the form above and tap + Log Trip.</div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(e => `
+    <div class="trip-entry">
+      <div>
+        <div class="trip-entry-top">
+          <span class="trip-entry-river">${e.river}</span>
+          <span class="trip-entry-date">${e.date}</span>
+          ${e.flow ? `<span class="trip-tag">${Number(e.flow).toLocaleString()} cfs</span>` : ''}
+        </div>
+        <div class="trip-entry-fly">${e.fly}</div>
+        ${e.notes ? `<div class="trip-entry-note">${e.notes}</div>` : ''}
+        <div class="trip-entry-tags">
+          <span class="trip-tag">${e.method}</span>
+          <span class="trip-tag">${e.fish} fish</span>
+        </div>
+      </div>
+      <button class="btn-danger" data-delete="${e.id}" title="Delete entry">✕</button>
+    </div>
+  `).join('');
+
+  // Delegated delete
+  container.onclick = function(ev) {
+    const btn = ev.target.closest('[data-delete]');
+    if (btn) deleteTripEntry(Number(btn.dataset.delete));
+  };
+}
 
 // ═══════════════════════════════════════════════════════════
 // MODE SWITCHER
