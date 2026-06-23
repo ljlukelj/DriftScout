@@ -1759,6 +1759,31 @@
       <div class="stat-value"><span class="skeleton" id="baro-val">--</span><span class="stat-unit">inHg</span></div>
       <div class="stat-delta" id="baro-note">Loading…</div>
     </div>
+    <div class="stat-card" id="card-fishability" style="grid-column:1/-1">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="stat-label" style="margin-bottom:0">Fishability Score</div>
+        <span style="font-family:IBM Plex Mono,monospace;font-size:0.5rem;background:rgba(200,68,26,0.08);color:var(--accent);border:1px solid rgba(200,68,26,0.2);padding:1px 6px;border-radius:2px;letter-spacing:0.1em">LIVE CONDITIONS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div id="fish-score-ring" style="position:relative;width:72px;height:72px;flex-shrink:0">
+          <svg viewBox="0 0 72 72" style="width:72px;height:72px;transform:rotate(-90deg)">
+            <circle cx="36" cy="36" r="30" fill="none" stroke="var(--surface2)" stroke-width="7"/>
+            <circle id="fish-score-arc" cx="36" cy="36" r="30" fill="none" stroke="var(--green)" stroke-width="7"
+              stroke-dasharray="188.5" stroke-dashoffset="188.5" stroke-linecap="round"
+              style="transition:stroke-dashoffset 0.8s ease,stroke 0.4s ease"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column">
+            <span id="fish-score-val" style="font-family:IBM Plex Mono,monospace;font-size:1.3rem;font-weight:700;color:var(--text);line-height:1">—</span>
+            <span style="font-family:IBM Plex Mono,monospace;font-size:0.45rem;color:var(--muted);letter-spacing:0.05em">/100</span>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div id="fish-score-label" style="font-family:IBM Plex Mono,monospace;font-size:0.8rem;font-weight:600;color:var(--green);margin-bottom:6px">Loading conditions…</div>
+          <div id="fish-score-factors" style="display:flex;flex-direction:column;gap:3px"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="stat-card" id="card-temp" style="grid-column:1/-1">
       <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         Recommended Setups
@@ -2831,6 +2856,119 @@ async function fetchUSGS(riverId) {
   updateWading();
   updateConditionBanner();
   renderChart();
+  calcFishabilityScore();
+}
+
+// ─── FISHABILITY SCORE ─────────────────────
+function calcFishabilityScore() {
+  var t = activeRiver.wadingThresholds;
+  var score = 0;
+  var factors = [];
+
+  // Flow (0-40 pts)
+  if (currentFlow !== null && t) {
+    if (currentFlow < t.easy) {
+      score += 40;
+      factors.push({ label: "Flow", note: "Low & clear", color: "var(--green)" });
+    } else if (currentFlow < t.moderate) {
+      score += 33;
+      factors.push({ label: "Flow", note: "Good wading", color: "var(--green)" });
+    } else if (currentFlow < t.difficult) {
+      score += 20;
+      factors.push({ label: "Flow", note: "Elevated — edges only", color: "var(--amber)" });
+    } else if (currentFlow < t.floatOnly) {
+      score += 8;
+      factors.push({ label: "Flow", note: "Difficult — boat preferred", color: "var(--amber)" });
+    } else {
+      factors.push({ label: "Flow", note: "Float only", color: "var(--red)" });
+    }
+  }
+
+  // Water temp (0-30 pts)
+  if (currentWaterTemp !== null) {
+    var wt = currentWaterTemp;
+    if (wt >= 50 && wt <= 65) {
+      score += 30;
+      factors.push({ label: "Water Temp", note: wt.toFixed(1) + "°F — prime", color: "var(--green)" });
+    } else if (wt >= 45 && wt < 50) {
+      score += 20;
+      factors.push({ label: "Water Temp", note: wt.toFixed(1) + "°F — cool, fish slow", color: "var(--amber)" });
+    } else if (wt > 65 && wt <= 70) {
+      score += 18;
+      factors.push({ label: "Water Temp", note: wt.toFixed(1) + "°F — warm, fish early", color: "var(--amber)" });
+    } else if (wt < 45) {
+      score += 8;
+      factors.push({ label: "Water Temp", note: wt.toFixed(1) + "°F — cold, midges only", color: "var(--red)" });
+    } else {
+      factors.push({ label: "Water Temp", note: wt.toFixed(1) + "°F — stress temps", color: "var(--red)" });
+    }
+  }
+
+  // Hatches (0-20 pts)
+  var m = new Date().getMonth() + 1;
+  var activeHatches = (activeRiver.hatches || []).filter(function(h) { return h.when && h.when.includes(m); });
+  if (activeHatches.length >= 2) {
+    score += 20;
+    factors.push({ label: "Hatches", note: activeHatches.length + " active hatches", color: "var(--green)" });
+  } else if (activeHatches.length === 1) {
+    score += 12;
+    factors.push({ label: "Hatches", note: "1 active hatch", color: "var(--amber)" });
+  } else {
+    score += 4;
+    factors.push({ label: "Hatches", note: "No active hatches", color: "var(--muted)" });
+  }
+
+  // Barometric pressure (0-10 pts)
+  if (weatherData && weatherData.hourly && weatherData.hourly.surface_pressure) {
+    var pArr = weatherData.hourly.surface_pressure;
+    var hIdx = Math.min(new Date().getHours(), pArr.length - 1);
+    var diff = pArr[hIdx] - (pArr[Math.max(0, hIdx - 3)] || pArr[hIdx]);
+    if (Math.abs(diff) <= 2) {
+      score += 10;
+      factors.push({ label: "Pressure", note: "Steady — fish feeding", color: "var(--green)" });
+    } else if (diff > 2) {
+      score += 7;
+      factors.push({ label: "Pressure", note: "Rising — fish active", color: "var(--green)" });
+    } else {
+      score += 2;
+      factors.push({ label: "Pressure", note: "Falling — fish deep", color: "var(--amber)" });
+    }
+  }
+
+  // Render
+  var val = document.getElementById("fish-score-val");
+  var arc = document.getElementById("fish-score-arc");
+  var lbl = document.getElementById("fish-score-label");
+  var fct = document.getElementById("fish-score-factors");
+  if (!val) return;
+
+  var pct = Math.min(100, Math.round(score));
+  val.textContent = pct;
+
+  var offset = 188.5 - (188.5 * pct / 100);
+  if (arc) {
+    arc.style.strokeDashoffset = offset;
+    arc.style.stroke = pct >= 70 ? "var(--green)" : pct >= 40 ? "var(--amber)" : "var(--red)";
+  }
+
+  var scoreColor = pct >= 70 ? "var(--green)" : pct >= 40 ? "var(--amber)" : "var(--red)";
+  if (lbl) {
+    lbl.style.color = scoreColor;
+    lbl.textContent = pct >= 80 ? "Exceptional Day" : pct >= 65 ? "Good Fishing" :
+      pct >= 50 ? "Decent — Worth a Try" : pct >= 35 ? "Marginal Conditions" : "Tough Day";
+  }
+
+  if (fct) {
+    fct.innerHTML = factors.map(function(f) {
+      return "<div style=\"display:flex;align-items:center;gap:6px;font-size:0.62rem\">" +
+        "<span style=\"color:" + f.color + ";font-weight:600;min-width:70px;font-family:IBM Plex Mono,monospace\">" + f.label + "</span>" +
+        "<span style=\"color:var(--muted);font-family:IBM Plex Mono,monospace\">" + f.note + "</span>" +
+        "</div>";
+    }).join("");
+  }
+
+  var card = document.getElementById("card-fishability");
+  if (card) card.classList.add("loaded");
 }
 
 // ─── WEATHER ──────────────────────────────────────────────
@@ -2876,6 +3014,7 @@ async function fetchWeather(riverId) {
 
   renderForecast(json.daily);
   updateConditionBanner();
+  calcFishabilityScore();
 }
 
 // ─── WADING INDEX ─────────────────────────────────────────
