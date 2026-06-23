@@ -2,26 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f2ed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DriftScout">
+<meta name="description" content="Fly fishing dashboard with live USGS river data, AI rig recommendations, hatch calendar, and bug identification.">
 <title>DriftScout — Fishing Dashboard</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="DriftScout — Fly Fishing Dashboard">
+<meta property="og:description" content="Live USGS river flow, AI rig recommendations, hatch calendar, bug identification, and access point maps for fly fishing across the US.">
+<meta property="og:url" content="https://ljlukelj.github.io/DriftScout/">
+<meta property="og:site_name" content="DriftScout">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DriftScout — Fly Fishing Dashboard">
+<meta name="twitter:description" content="Live USGS river data, AI rig recommendations, hatch calendar, and bug ID for fly fishing.">
+<link rel="canonical" href="https://ljlukelj.github.io/DriftScout/">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f5f2ed'/%3E%3Cpath d='M10 12 L10 52 L26 52 C40 52 50 43 50 32 C50 21 40 12 26 12 Z' fill='%234e6b2e'/%3E%3Cpath d='M18 22 L18 42 L25 42 C34 42 40 37 40 32 C40 27 34 22 25 22 Z' fill='%23f5f2ed'/%3E%3Cpath d='M20 32 Q25 29 30 32 Q35 35 40 32' stroke='%23c8441a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M26 16 Q44 8 56 20' stroke='%23c8441a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='57' cy='20' r='3' fill='%23c8441a'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f5f2ed'/%3E%3Cpath d='M10 12 L10 52 L26 52 C40 52 50 43 50 32 C50 21 40 12 26 12 Z' fill='%234e6b2e'/%3E%3Cpath d='M18 22 L18 42 L25 42 C34 42 40 37 40 32 C40 27 34 22 25 22 Z' fill='%23f5f2ed'/%3E%3Cpath d='M20 32 Q25 29 30 32 Q35 35 40 32' stroke='%23c8441a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M26 16 Q44 8 56 20' stroke='%23c8441a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='57' cy='20' r='3' fill='%23c8441a'/%3E%3C/svg%3E" sizes="any">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f5f2ed'/%3E%3Cpath d='M10 12 L10 52 L26 52 C40 52 50 43 50 32 C50 21 40 12 26 12 Z' fill='%234e6b2e'/%3E%3Cpath d='M18 22 L18 42 L25 42 C34 42 40 37 40 32 C40 27 34 22 25 22 Z' fill='%23f5f2ed'/%3E%3Cpath d='M20 32 Q25 29 30 32 Q35 35 40 32' stroke='%23c8441a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M26 16 Q44 8 56 20' stroke='%23c8441a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='57' cy='20' r='3' fill='%23c8441a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2430;
-    --border: #2d3748;
-    --river: #3b82f6;
-    --river-dim: #1e3a5f;
-    --green: #22c55e;
-    --amber: #f59e0b;
-    --red: #ef4444;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --accent: #7dd3fc;
-    --gold: #d4a853;
+    --bg: #f5f2ed;
+    --surface: #ffffff;
+    --surface2: #ede9e2;
+    --border: #d4cfc6;
+    --river: #c8441a;
+    --river-dim: #f0ddd6;
+    --green: #3a6b35;
+    --amber: #c07a1a;
+    --red: #b83232;
+    --text: #1a1a17;
+    --muted: #6b6659;
+    --accent: #c8441a;
+    --gold: #4e6b2e;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,8 +63,8 @@
         -45deg,
         transparent,
         transparent 2px,
-        rgba(59,130,246,0.015) 2px,
-        rgba(59,130,246,0.015) 4px
+        rgba(200,68,26,0.025) 2px,
+        rgba(200,68,26,0.025) 4px
       );
     pointer-events: none;
     z-index: 0;
@@ -62,14 +80,14 @@
 
   /* ── HEADER ── */
   header {
-    padding: 48px 0 32px;
+    padding: 16px 0 16px;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .header-top {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 20px;
     flex-wrap: wrap;
@@ -1242,7 +1260,7 @@
   .knot-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;user-select:none}
   .knot-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
   .knot-card.open .knot-body{display:block}
-  .knot-diagram{background:#080c10;border-radius:3px;margin:14px 0 16px;padding:16px;display:flex;align-items:center;justify-content:center;min-height:90px}
+  .knot-diagram{background:#f0ece4;border-radius:3px;margin:14px 0 16px;padding:16px;display:flex;align-items:center;justify-content:center;min-height:90px}
   .knot-diagram svg{width:100%;max-height:80px;overflow:visible}
   .knot-step-row{display:flex;gap:12px;margin-bottom:10px;font-size:0.82rem;color:var(--muted);line-height:1.55}
   .knot-step-n{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);background:rgba(125,211,252,0.08);border:1px solid rgba(125,211,252,0.2);border-radius:2px;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
@@ -1254,7 +1272,332 @@
 
   /* ── WATER TEMP ESTIMATED BADGE ── */
   .wtemp-est-badge{font-family:'IBM Plex Mono',monospace;font-size:0.52rem;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.25);padding:1px 6px;border-radius:2px;display:inline-block;margin-top:4px}
+
+  /* ── DRIFTSCOUT LOGO ── */
+  .driftscout-logo-img {
+    display: block;
+    width: clamp(320px, 42vw, 560px);
+    height: auto;
+    margin-bottom: -8px;
+    margin-left: -12px;
+  }
+
+  /* ── LIGHT MODE SURFACE TWEAKS ── */
+  .stat-card {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+
+  .chart-section,
+  .insights-box,
+  .wading-bar,
+  .condition-banner,
+  .hatch-card,
+  .access-card,
+  .shop-card,
+  .knot-card,
+  .reg-card,
+  .calc-card,
+  .trip-form,
+  .trip-entry {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .condition-banner {
+    border-left-color: var(--green);
+  }
+  .condition-banner.caution { border-left-color: var(--amber); }
+  .condition-banner.poor    { border-left-color: var(--red); }
+
+  .condition-status { color: var(--green); }
+  .condition-banner.caution .condition-status { color: var(--amber); }
+  .condition-banner.poor    .condition-status { color: var(--red); }
+
+  /* River tab underline accent */
+  .river-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Skeleton in light mode */
+  .skeleton {
+    background: linear-gradient(90deg, #e8e4dc 25%, #d4cfc6 50%, #e8e4dc 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Mode switcher active */
+  .mode-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* Stat card bottom line */
+  .stat-card::after { background: var(--accent); }
+
+  /* Wading fill colors stay as-is (green/amber/red) since vars are updated */
+
+  /* AI badge in light mode */
+  .ai-badge {
+    background: rgba(200,68,26,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(200,68,26,0.25);
+  }
+
+  /* Hatch badges */
+  .hatch-active {
+    background: rgba(58,107,53,0.12);
+    color: var(--green);
+  }
+
+  .hatch-soon {
+    background: rgba(192,122,26,0.12);
+    color: var(--amber);
+  }
+
+  /* Flow chart - update gradient */
+  /* (handled in JS renderChart) */
+
+  /* Regs strip */
+  .regs-strip {
+    background: rgba(78,107,46,0.06);
+    border: 1px solid rgba(78,107,46,0.2);
+  }
+  .regs-strip strong { color: var(--gold); }
+
+  /* River search box */
+  #site-search-input:focus, .search-select:focus,
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--accent);
+  }
+
+  /* Tool nav active */
+  .tool-nav-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(200,68,26,0.06); }
+
+  /* Shop card hover */
+  .shop-card:hover { border-color: var(--accent); }
+
+  /* Knot card open */
+  .knot-card.open { border-color: var(--accent); }
+  .knot-chevron { color: var(--muted); }
+  .knot-card.open .knot-chevron { color: var(--accent); }
+
+  /* Water temp est badge */
+  .wtemp-est-badge {
+    background: rgba(192,122,26,0.1);
+    color: var(--amber);
+    border: 1px solid rgba(192,122,26,0.25);
+  }
+
+  /* Reg warning */
+  .reg-warning {
+    background: rgba(192,122,26,0.07);
+    border: 1px solid rgba(192,122,26,0.22);
+  }
+  .reg-warning strong { color: var(--amber); }
+
+  /* Generate btn */
+  .generate-btn {
+    border-color: var(--river-dim);
+    color: var(--accent);
+  }
+  .generate-btn:hover { background: var(--river-dim); }
+
+  /* Knot diagram dark bg → lighter */
+  .knot-diagram { background: #f0ece4; }
+
+  /* Trip log btn danger */
+  /* .btn-danger stays default */
+
+  /* Leader result in calc */
+  .leader-result { background: var(--surface2); border-color: var(--border); }
+  .leader-result-row .val { color: var(--accent); }
+
+  /* Footer */
+  footer { border-top-color: var(--border); color: var(--muted); }
+
+  /* Mode switcher border */
+  .mode-switcher { border-bottom-color: var(--border); }
+
+  /* River tabs border */
+  .river-tabs { border-bottom-color: var(--border); }
+
+  /* Header border */
+  header { border-bottom-color: var(--border); }
+
+  /* Knot step number */
+  .knot-step-n {
+    color: var(--accent);
+    background: rgba(200,68,26,0.08);
+    border-color: rgba(200,68,26,0.2);
+  }
+
+  /* Knot pro tip */
+  .knot-pro-tip {
+    background: rgba(200,68,26,0.05);
+    border-left-color: var(--accent);
+  }
+
+  /* Shop link */
+  .shop-link {
+    color: var(--accent);
+    border-color: rgba(200,68,26,0.3);
+  }
+  .shop-link:hover { background: rgba(200,68,26,0.08); }
+
+  /* Refresh btn */
+  .refresh-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* River search result hover */
+  .site-result-item:hover { background: rgba(200,68,26,0.06); }
+
+  /* Wading bar track */
+  .track { background: var(--surface2); }
+
+
+  /* ═══════════════════════════════════════════════════════════
+     MOBILE RESPONSIVE — max-width 768px
+  ════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    .wrapper { padding: 0 12px 40px; }
+
+    /* ── HEADER ── */
+    header { padding: 12px 0 12px; margin-bottom: 16px; }
+    .header-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .driftscout-logo-img { width: clamp(200px, 72vw, 320px) !important; margin-left: -6px !important; margin-bottom: 0 !important; }
+    #river-title { font-size: 1rem !important; margin-top: 2px !important; }
+    .header-meta { text-align: left; font-size: 0.65rem; line-height: 1.6; }
+
+    /* ── MAIN NAV TABS — single scrollable row, no wrap ── */
+    .mode-switcher {
+      gap: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+      margin-bottom: 16px;
+    }
+    .mode-switcher::-webkit-scrollbar { display: none; }
+    .mode-btn {
+      font-size: 0.58rem;
+      padding: 10px 9px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: max-content;
+    }
+
+    /* ── RIVER TABS — single scrollable row, no wrap ── */
+    .river-tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+      margin-bottom: 16px;
+      padding-bottom: 0;
+    }
+    .river-tabs::-webkit-scrollbar { display: none; }
+    .river-tab {
+      font-size: 0.6rem;
+      padding: 8px 10px 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: max-content;
+    }
+    .river-tab .tab-sub { font-size: 0.5rem; }
+
+    /* ── RIVER SEARCH ── */
+    .river-search-box { padding: 12px 14px; margin-bottom: 14px; }
+    .river-search-row { flex-direction: column; }
+    .search-select { width: 100%; }
+    #site-search-input { width: 100%; min-width: unset; }
+
+    /* ── CONDITION BANNER ── */
+    .condition-banner { flex-direction: column; gap: 8px; padding: 14px 16px; }
+    .condition-status { font-size: 1.2rem; }
+    .refresh-btn { margin-left: 0; width: 100%; text-align: center; padding: 8px; }
+
+    /* ── STAT GRID ── */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .stat-card { padding: 14px 12px; }
+    .stat-value { font-size: 1.4rem; }
+    #card-temp { grid-column: 1 / -1; }
+
+    /* ── WADING BAR ── */
+    .wading-bar { padding: 14px 16px; margin-bottom: 16px; }
+    .track-zones { font-size: 0.55rem; }
+
+    /* ── CHART ── */
+    .chart-section { padding: 14px 12px; margin-bottom: 16px; }
+    .chart-wrap { height: 140px; }
+
+    /* ── FORECAST ── */
+    .forecast-row { grid-template-columns: repeat(4, 1fr) !important; gap: 6px; margin-bottom: 16px; }
+    .forecast-row .forecast-day:nth-child(n+5) { display: none; }
+    .forecast-day { padding: 10px 4px; }
+    .fc-icon { font-size: 1.1rem; }
+    .fc-rating { font-size: 0.75rem; }
+    .fc-temp { font-size: 0.58rem; }
+
+    /* ── HATCHES ── */
+    .hatch-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+    .hatch-card { padding: 14px; }
+
+    /* ── AI INSIGHTS ── */
+    .insights-box { padding: 16px; margin-bottom: 16px; }
+    .insights-header { flex-direction: column; gap: 6px; align-items: flex-start; }
+
+    /* ── ACCESS POINTS ── */
+    .access-list { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+
+    /* ── KNOTS ── */
+    .knot-grid { grid-template-columns: 1fr; gap: 12px; }
+    .knot-header { padding: 14px 14px 10px; }
+
+    /* ── TRIP LOG ── */
+    .trip-form { grid-template-columns: 1fr; gap: 12px; padding: 16px; }
+    .trip-form-row.full { grid-column: 1; }
+    .trip-entry { grid-template-columns: 1fr auto; }
+
+    /* ── REGULATIONS ── */
+    .regs-content { grid-template-columns: 1fr; }
+    .reg-warning { padding: 12px 14px; font-size: 0.78rem; }
+
+    /* ── CALCULATOR ── */
+    .calc-grid { grid-template-columns: 1fr !important; gap: 14px; }
+    .calc-card { padding: 16px; }
+    .tippet-table { font-size: 0.68rem; }
+    .tippet-table th { font-size: 0.55rem; }
+
+    /* ── SHOPS ── */
+    .shop-grid { grid-template-columns: 1fr; }
+    .shop-card { padding: 14px 16px; }
+
+    /* ── MATCH THE HATCH ── */
+    #hatch-upload-area { padding: 32px 16px; }
+    #hatch-preview-wrap > div { flex-direction: column; }
+    #hatch-preview-img { width: 100% !important; height: 220px !important; }
+
+    /* ── MAP ── */
+    #map-container { height: 55vh; min-height: 320px; }
+    .map-toolbar { gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+    .map-btn { font-size: 0.58rem; padding: 6px 10px; }
+    .map-legend { gap: 10px; font-size: 0.58rem; }
+    .map-legend > div:last-child { display: none; }
+
+    /* ── FOOTER ── */
+    footer { flex-direction: column; gap: 4px; font-size: 0.58rem; padding-top: 16px; }
+  }
+
+  /* ── Very small screens (< 380px) ── */
+  @media (max-width: 380px) {
+    .mode-btn { font-size: 0.52rem; padding: 9px 7px 11px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-value { font-size: 1.2rem; }
+    .driftscout-logo-img { width: 200px !important; }
+    .forecast-row { grid-template-columns: repeat(3, 1fr) !important; }
+    .forecast-row .forecast-day:nth-child(n+4) { display: none; }
+  }
+
 </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -1262,7 +1605,8 @@
   <header>
     <div class="header-top">
       <div class="title-block">
-        <h1 id="river-title">Upper <em>Yakima</em></h1>
+        <img src="logo.svg" class="driftscout-logo-img" alt="DriftScout">
+        <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
       </div>
       <div class="header-meta">
@@ -1277,11 +1621,14 @@
   <!-- Mode Switcher -->
   <nav class="mode-switcher">
     <button class="mode-btn active" onclick="switchMode('rivers')"><span class="mode-icon">🎣</span> Rivers</button>
+    <button class="mode-btn" onclick="switchMode('lakes')"><span class="mode-icon">🏔️</span> Lakes</button>
     <button class="mode-btn" onclick="switchMode('knots')"><span class="mode-icon">🪢</span> Knots</button>
     <button class="mode-btn" onclick="switchMode('triplog')"><span class="mode-icon">📓</span> Trip Log</button>
     <button class="mode-btn" onclick="switchMode('regs')"><span class="mode-icon">⚖️</span> Regulations</button>
     <button class="mode-btn" onclick="switchMode('calc')"><span class="mode-icon">📐</span> Calculator</button>
     <button class="mode-btn" onclick="switchMode('shops')"><span class="mode-icon">🏪</span> Fly Shops</button>
+    <button class="mode-btn" onclick="switchMode('hatch')"><span class="mode-icon">🔍</span> Match the Hatch</button>
+    <button class="mode-btn" onclick="switchMode('map')"><span class="mode-icon">🗺️</span> Map</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -1295,56 +1642,22 @@
     <div class="river-search-row">
       <select class="search-select" id="state-picker" onchange="onStatePick()">
         <option value="">— State —</option>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-        <option value="IA">Iowa</option>
-        <option value="KS">Kansas</option>
-        <option value="KY">Kentucky</option>
-        <option value="LA">Louisiana</option>
-        <option value="ME">Maine</option>
-        <option value="MD">Maryland</option>
-        <option value="MA">Massachusetts</option>
-        <option value="MI">Michigan</option>
-        <option value="MN">Minnesota</option>
-        <option value="MS">Mississippi</option>
-        <option value="MO">Missouri</option>
+        <option value="WA" selected>Washington</option>
+        <option value="OR">Oregon</option>
         <option value="MT">Montana</option>
-        <option value="NE">Nebraska</option>
-        <option value="NV">Nevada</option>
-        <option value="NH">New Hampshire</option>
-        <option value="NJ">New Jersey</option>
-        <option value="NM">New Mexico</option>
+        <option value="ID">Idaho</option>
+        <option value="CO">Colorado</option>
+        <option value="WY">Wyoming</option>
+        <option value="CA">California</option>
+        <option value="AK">Alaska</option>
+        <option value="MN">Minnesota</option>
+        <option value="MI">Michigan</option>
+        <option value="PA">Pennsylvania</option>
         <option value="NY">New York</option>
         <option value="NC">North Carolina</option>
-        <option value="ND">North Dakota</option>
-        <option value="OH">Ohio</option>
-        <option value="OK">Oklahoma</option>
-        <option value="OR">Oregon</option>
-        <option value="PA">Pennsylvania</option>
-        <option value="RI">Rhode Island</option>
-        <option value="SC">South Carolina</option>
-        <option value="SD">South Dakota</option>
         <option value="TN">Tennessee</option>
-        <option value="TX">Texas</option>
-        <option value="UT">Utah</option>
         <option value="VT">Vermont</option>
-        <option value="VA">Virginia</option>
-        <option value="WA" selected>Washington</option>
-        <option value="WV">West Virginia</option>
         <option value="WI">Wisconsin</option>
-        <option value="WY">Wyoming</option>
       </select>
       <input type="text" id="site-search-input" placeholder="Type river name to filter…" oninput="filterSites()" autocomplete="off">
     </div>
@@ -1415,7 +1728,7 @@
       <div class="condition-status" id="condition-status">Fetching…</div>
     </div>
     <div class="condition-summary" id="condition-summary">Loading river data from USGS…</div>
-    <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
+    <button class="refresh-btn" onclick="loadAll()" aria-label="Refresh river data">↺ Refresh</button>
   </div>
 
   <!-- Stat Grid -->
@@ -1477,6 +1790,7 @@
   </div>
 
   <!-- Flow Chart -->
+  <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)">48hr Flow History</span></div>
   <div class="chart-section">
     <div class="section-header">
       <div class="section-title">River Flow — 7-Day History + Trend</div>
@@ -1488,17 +1802,13 @@
   </div>
 
   <!-- 7-Day Fishing Forecast -->
-  <div style="margin-bottom:12px">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">7-Day Fishing Forecast</span>
-  </div>
+  <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)">7-Day Fishing Forecast</span></div>
   <div class="forecast-row" id="forecast-row">
     <!-- filled by JS -->
   </div>
 
   <!-- Current Hatches -->
-  <div style="margin-bottom:12px">
-    <span id="hatch-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Current & Upcoming Hatches — Upper River</span>
-  </div>
+  <div class="section-divider"><span id="hatch-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Current & Upcoming Hatches — Upper River</span></div>
   <div class="hatch-grid" id="hatch-grid">
     <!-- filled by JS -->
   </div>
@@ -1518,9 +1828,7 @@
   </div>
 
   <!-- Access Points -->
-  <div style="margin-bottom:12px">
-    <span id="access-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Access Points — Easton to Thorpe</span>
-  </div>
+  <div class="section-divider"><span id="access-label" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Access Points — Easton to Thorpe</span></div>
   <div class="access-list" id="access-list">
   </div>
 
@@ -1553,7 +1861,10 @@
         <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Trip Log & Fly Box</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">What worked, where, when — saved locally in your browser</div>
       </div>
-      <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="exportTripLog()" style="font-size:0.6rem;padding:7px 14px">&#8595; Export CSV</button>
+        <button class="btn-primary" onclick="clearTripLog()" style="font-size:0.6rem;padding:7px 14px;border-color:var(--red);color:var(--red)">Clear All</button>
+      </div>
     </div>
     <div class="trip-form">
       <div class="trip-form-row">
@@ -1618,11 +1929,11 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-regs" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Washington Fishing Regulations</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Quick reference — always verify with WDFW before fishing</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="regs-title">Washington Fishing Regulations</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="regs-subtitle">Quick reference — always verify with WDFW before fishing</div>
     </div>
-    <div class="reg-warning">
-      <strong>⚠️ Important:</strong> This is a quick reference only. Regulations change annually. Always check the current <a href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold)">WDFW Fishing Regulations</a> before fishing. Tribal waters have separate rules.
+    <div class="reg-warning" id="regs-warning">
+      <strong>⚠️ Important:</strong> This is a quick reference only. Regulations change annually. Always check the current <a id="regs-warning-link" href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold)">WDFW Fishing Regulations</a> before fishing. Tribal waters have separate rules.
     </div>
     <div style="margin-bottom:16px">
       <label class="form-label" style="display:block;margin-bottom:8px">Select River</label>
@@ -1738,6 +2049,43 @@
           <div class="leader-result" id="weight-result"></div>
         </div>
       </div>
+      <div class="calc-card" style="grid-column:1/-1">
+        <div class="calc-title">Indicator Depth Calculator</div>
+        <div class="leader-calc">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;flex-wrap:wrap">
+            <div>
+              <label>Water Depth</label>
+              <select id="ind-depth" onchange="calcIndicator()">
+                <option value="1">1 ft — very shallow</option>
+                <option value="2" selected>2 ft — shallow</option>
+                <option value="3">3 ft — medium</option>
+                <option value="4">4 ft — medium-deep</option>
+                <option value="5">5 ft — deep</option>
+                <option value="6">6 ft — very deep</option>
+                <option value="8">8 ft — pool</option>
+              </select>
+            </div>
+            <div>
+              <label>Current Speed</label>
+              <select id="ind-speed" onchange="calcIndicator()">
+                <option value="slow">Slow / Flat</option>
+                <option value="medium" selected>Medium / Riffle</option>
+                <option value="fast">Fast / Pocket Water</option>
+              </select>
+            </div>
+            <div>
+              <label>Fly Type</label>
+              <select id="ind-fly" onchange="calcIndicator()">
+                <option value="nymph">Nymph (weighted)</option>
+                <option value="soft" selected>Soft Hackle / Wet</option>
+                <option value="midge">Midge / Small nymph</option>
+                <option value="heavy">Heavy Stonefly nymph</option>
+              </select>
+            </div>
+          </div>
+          <div class="leader-result" id="indicator-result" style="margin-top:14px"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1746,14 +2094,199 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-shops" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Washington Fly Shops</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Local shops near the rivers you fish — best sources for current intel</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="shops-title">Washington Fly Shops</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="shops-subtitle">Local shops near the rivers you fish — best sources for current intel</div>
     </div>
     <div class="shop-grid" id="shop-grid"></div>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:8px">
       Know a shop we're missing? Support local shops — they keep these rivers fishing.
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MATCH THE HATCH PANEL -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="panel-hatch" class="tools-panel">
+    <div style="margin-bottom:24px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Match the Hatch</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Photo-identify any aquatic insect &middot; Get exact fly pattern matches</div>
+    </div>
+
+    <div id="hatch-upload-area" style="border:2px dashed var(--border);border-radius:6px;padding:48px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;margin-bottom:24px;background:var(--surface)"
+      onclick="document.getElementById('hatch-file-input').click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+      ondragleave="this.style.borderColor='var(--border)'"
+      ondrop="handleHatchDrop(event)">
+      <div style="font-size:3rem;margin-bottom:12px">&#128247;</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:8px">Drop a bug photo here</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:16px">or click to browse &middot; JPG, PNG, HEIC</div>
+      <div style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 20px;border-radius:2px">Choose Photo</div>
+    </div>
+    <input type="file" id="hatch-file-input" accept="image/*" style="display:none" onchange="handleHatchFile(event)">
+
+    <div id="hatch-preview-wrap" style="display:none;margin-bottom:24px">
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex-shrink:0">
+          <img id="hatch-preview-img" style="width:200px;height:200px;object-fit:cover;border-radius:4px;border:1px solid var(--border)" alt="Bug photo">
+          <div style="margin-top:8px">
+            <button onclick="document.getElementById('hatch-file-input').click()" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:5px 12px;border-radius:2px;cursor:pointer;width:100%">New Photo</button>
+          </div>
+        </div>
+        <div id="hatch-result" style="flex:1;min-width:220px">
+          <div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem">
+            <div class="spinner"></div>Identifying insect&hellip;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:18px 20px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Photo Tips for Best Results</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">01</span>Place bug on a light surface (rock, paper)</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">02</span>Get close &mdash; wings, body, and tails visible</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">03</span>Natural light works best, avoid flash</div>
+        <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--muted)"><span style="color:var(--accent)">04</span>Include something for scale if possible</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MAP PANEL -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="panel-map" class="tools-panel">
+    <div style="margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">River Map</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Explore water, access points &amp; public land &middot; Powered by OpenStreetMap</div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="map-toolbar">
+      <button class="map-btn active" id="btn-topo" onclick="setMapLayer('topo')" aria-label="Switch to topographic map">&#127956; Topo</button>
+      <button class="map-btn" id="btn-satellite" onclick="setMapLayer('satellite')" aria-label="Switch to satellite imagery">&#128640; Satellite</button>
+      <div style="width:1px;height:28px;background:var(--border);margin:0 4px"></div>
+      <button class="map-btn active" id="btn-access" onclick="toggleMapLayer('access')">&#128663; Access Points</button>
+      <button class="map-btn active" id="btn-gauges" onclick="toggleMapLayer('gauges')">&#128200; Gauges</button>
+      <button class="map-btn" id="btn-public" onclick="toggleMapLayer('public')">&#127807; Public Land</button>
+      <div style="margin-left:auto"><button class="map-btn" onclick="locateUser()" id="btn-locate" aria-label="Find my GPS location">&#127757; My Location</button>
+      </div>
+    </div>
+
+    <!-- Map container -->
+    <div id="map-container" class="map-container" style="height:520px;min-height:520px;width:100%;display:block;border-radius:6px;overflow:hidden;border:1px solid var(--border)">
+      <div id="ds-map" style="height:100%;width:100%;min-height:520px;display:block"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="map-legend-item"><div class="legend-dot" style="background:#c8441a"></div>USGS Gauge</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:#3a6b35"></div>Access Point</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:#4a7fb5"></div>Your Location</div>
+      <div class="map-legend-item"><div class="legend-dot" style="background:rgba(78,107,46,0.4);border:1px solid #4e6b2e"></div>Public / BLM Land</div>
+      <div style="margin-left:auto;font-size:0.58rem;color:var(--muted)">Public land boundaries are approximate &mdash; always verify before accessing</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- LAKES DASHBOARD -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="panel-lakes" class="tools-panel">
+
+    <div style="margin-bottom:20px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Stillwater Dashboard</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Lake fly fishing — conditions, rigs & access nationwide</div>
+    </div>
+
+    <!-- State picker + lake tabs -->
+    <div class="river-search-box" style="margin-bottom:16px">
+      <span class="river-search-label">Select State</span>
+      <div class="river-search-row">
+        <select class="search-select" id="lake-state-picker" onchange="onLakeStatePick()">
+        <option value="WA" selected>Washington</option>
+        <option value="OR">Oregon</option>
+        <option value="MT">Montana</option>
+        <option value="ID">Idaho</option>
+        <option value="CO">Colorado</option>
+        <option value="CA">California</option>
+        <option value="AK">Alaska</option>
+        <option value="MN">Minnesota</option>
+        <option value="WI">Wisconsin</option>
+        <option value="NY">New York</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Lake tabs -->
+    <nav class="river-tabs" id="lake-tabs" style="margin-bottom:20px"></nav>
+
+    <!-- Condition Banner -->
+    <div class="condition-banner loading" id="lake-condition-banner">
+      <div>
+        <div class="condition-label">Lake Conditions</div>
+        <div class="condition-status" id="lake-condition-status">Select a lake above</div>
+      </div>
+      <div class="condition-summary" id="lake-condition-summary">Choose a state and lake to load conditions</div>
+      <button class="refresh-btn" onclick="loadLake(activeLake)" aria-label="Refresh lake data">&#8634; Refresh</button>
+    </div>
+
+    <!-- Stat Grid -->
+    <div class="stat-grid" style="margin-bottom:24px">
+      <div class="stat-card" id="lake-card-wtemp">
+        <div class="stat-label">Surface Temp</div>
+        <div class="stat-value"><span class="skeleton" id="lake-wtemp-val">--</span><span class="stat-unit">&#176;F</span></div>
+        <div class="stat-delta" id="lake-wtemp-note">Loading&#8230;</div>
+      </div>
+      <div class="stat-card" id="lake-card-air">
+        <div class="stat-label">Air Temp</div>
+        <div class="stat-value"><span class="skeleton" id="lake-air-val">--</span><span class="stat-unit">&#176;F</span></div>
+        <div class="stat-delta" id="lake-air-note">Loading&#8230;</div>
+      </div>
+      <div class="stat-card" id="lake-card-wind">
+        <div class="stat-label">Wind</div>
+        <div class="stat-value"><span class="skeleton" id="lake-wind-val">--</span><span class="stat-unit">mph</span></div>
+        <div class="stat-delta" id="lake-wind-note">Loading&#8230;</div>
+      </div>
+      <div class="stat-card" id="lake-card-baro">
+        <div class="stat-label">Barometric</div>
+        <div class="stat-value"><span class="skeleton" id="lake-baro-val">--</span><span class="stat-unit">inHg</span></div>
+        <div class="stat-delta" id="lake-baro-note">Loading&#8230;</div>
+      </div>
+      <div class="stat-card" style="grid-column:1/-1" id="lake-card-rigs">
+        <div class="stat-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          AI Stillwater Rig Recommendations
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.5rem;background:rgba(200,68,26,0.1);color:var(--accent);border:1px solid rgba(200,68,26,0.3);padding:1px 6px;border-radius:2px;letter-spacing:0.1em">AI &#183; Live Conditions</span>
+        </div>
+        <div id="lake-rig-setups" style="color:var(--muted);font-size:0.8rem">Select a lake to get rig recommendations&#8230;</div>
+      </div>
+    </div>
+
+    <!-- 7-Day Forecast -->
+    <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)">7-Day Fishing Forecast</span></div>
+    <div class="forecast-row" id="lake-forecast-row" style="margin-bottom:24px"></div>
+
+    <!-- AI Insights -->
+    <div class="insights-box" style="margin-bottom:24px">
+      <div class="insights-header">
+        <div class="insights-title">&#128203; AI Lake Fishing Insights</div>
+        <div class="ai-badge">Claude &#183; Powered</div>
+      </div>
+      <div id="lake-insights-content">
+        <div class="insights-loading"><div class="spinner"></div><span>Select a lake to generate report&#8230;</span></div>
+      </div>
+    </div>
+
+    <!-- Lake Info -->
+    <div class="section-divider"><span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)" id="lake-access-label">Access &amp; Info</span></div>
+    <div class="access-list" id="lake-access-list" style="margin-bottom:24px"></div>
+
+    <!-- Regulations strip -->
+    <div class="regs-strip" id="lake-regs-strip">
+      Select a lake to view regulations.
+    </div>
+
+  </div>
+
+
 
   <footer>
     <div id="footer-gauge">Flow data: USGS Water Services · USGS #12484500 (Yakima at Umtanum)</div>
@@ -1786,12 +2319,12 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Year-round, most important Dec–Feb. Small patterns (#20–26). Cold water refuge fishing.' },
     ],
     accessPoints: [
-      { name:'Lake Easton State Park', detail:'Below Easton Dam. Good wade access. Day-use parking. Popular put-in for float trips through upper braids.', tags:['Wading','Launch','Parking'] },
-      { name:'Yakima River Trailhead (SR-903)', detail:'Off Bullfrog Rd near Cle Elum. Upstream walk-in access to braided upper section.', tags:['Wading','Walk-in'] },
-      { name:'Cle Elum River Confluence', detail:'River gains volume here. Good holding water for larger rainbows, especially in fall. Road accessible.', tags:['Wading','Drive-to'] },
-      { name:'Thorp State Boat Launch', detail:'Lower end of the upper stretch. Improved launch ramp. Take-out point for Easton–Thorp float (~12 mi).', tags:['Launch','Take-out','Parking'] },
-      { name:'Brick Road / Bullfrog Rd Pullouts', detail:'Multiple informal pullouts with river access. Best explored in low water (< 800 cfs).', tags:['Wading','Informal'] },
-      { name:'Hovans Rd Bridge', detail:'Mid-stretch access between Cle Elum and Thorp. Less pressure. Small pullout on east side.', tags:['Wading','Low pressure'] },
+      { name:'Lake Easton State Park', lat:47.2463, lon:-121.1856, detail:'Below Easton Dam. Good wade access. Day-use parking. Popular put-in for float trips through upper braids.', tags:['Wading','Launch','Parking'] },
+      { name:'Yakima River Trailhead (SR-903)', lat:47.1932, lon:-121.0234, detail:'Off Bullfrog Rd near Cle Elum. Upstream walk-in access to braided upper section.', tags:['Wading','Walk-in'] },
+      { name:'Cle Elum River Confluence', lat:47.1876, lon:-120.9543, detail:'River gains volume here. Good holding water for larger rainbows, especially in fall. Road accessible.', tags:['Wading','Drive-to'] },
+      { name:'Thorp State Boat Launch', lat:47.0698, lon:-120.6789, detail:'Lower end of the upper stretch. Improved launch ramp. Take-out point for Easton–Thorp float (~12 mi).', tags:['Launch','Take-out','Parking'] },
+      { name:'Brick Road / Bullfrog Rd Pullouts', lat:47.1543, lon:-121.0876, detail:'Multiple informal pullouts with river access. Best explored in low water (< 800 cfs).', tags:['Wading','Informal'] },
+      { name:'Hovans Rd Bridge', lat:47.1123, lon:-120.8234, detail:'Mid-stretch access between Cle Elum and Thorp. Less pressure. Small pullout on east side.', tags:['Wading','Low pressure'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Upper River',
     accessLabel: 'Access Points — Easton to Thorpe',
@@ -1817,11 +2350,11 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in the canyon pools. #20–24 Zebra Midge or Mercury Midge.' },
     ],
     accessPoints: [
-      { name:'Roza Dam Boat Launch', detail:'Top of the canyon. Drift boat put-in. Managed by Bureau of Reclamation. Popular starting point for canyon floats.', tags:['Launch','Parking'] },
-      { name:'Umtanum Recreation Area', detail:'BLM site with wade access and camping. Classic canyon stretch with good riffle-to-pool structure.', tags:['Wading','Camping','BLM'] },
-      { name:'Squaw Creek Bridge', detail:'Mid-canyon access. Roadside pullout on Yakima Canyon Rd. Good wade fishing on either side.', tags:['Wading','Drive-to'] },
-      { name:'Big Pines / Ringer Loop', detail:'Multiple BLM pullouts with wade access. Less pressure than Umtanum. Good pocket water.', tags:['Wading','BLM','Low pressure'] },
-      { name:'Ellensburg Boat Launch', detail:'Lower end of the canyon. Take-out for full canyon floats. City park with parking.', tags:['Take-out','Launch','Parking'] },
+      { name:'Roza Dam Boat Launch', lat:46.9234, lon:-120.4321, detail:'Top of the canyon. Drift boat put-in. Managed by Bureau of Reclamation. Popular starting point for canyon floats.', tags:['Launch','Parking'] },
+      { name:'Umtanum Recreation Area', lat:46.8654, lon:-120.4512, detail:'BLM site with wade access and camping. Classic canyon stretch with good riffle-to-pool structure.', tags:['Wading','Camping','BLM'] },
+      { name:'Squaw Creek Bridge', lat:46.8432, lon:-120.4234, detail:'Mid-canyon access. Roadside pullout on Yakima Canyon Rd. Good wade fishing on either side.', tags:['Wading','Drive-to'] },
+      { name:'Big Pines / Ringer Loop', lat:46.8123, lon:-120.4098, detail:'Multiple BLM pullouts with wade access. Less pressure than Umtanum. Good pocket water.', tags:['Wading','BLM','Low pressure'] },
+      { name:'Ellensburg Boat Launch', lat:46.9965, lon:-120.5432, detail:'Lower end of the canyon. Take-out for full canyon floats. City park with parking.', tags:['Take-out','Launch','Parking'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Yakima Canyon',
     accessLabel: 'Access Points — Roza Dam to Ellensburg',
@@ -1846,10 +2379,10 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in slower pools. #20–24 patterns.' },
     ],
     accessPoints: [
-      { name:'Naches River Trailhead', detail:'Upper access near the confluence with Little Naches. Walk-in access to less-pressured water.', tags:['Wading','Walk-in'] },
-      { name:'Nile Road Pullouts', detail:'Multiple informal pullouts along SR-410. Good wade access to the upper river.', tags:['Wading','Informal'] },
-      { name:'Above Diversion Dam', detail:'Gauge site. Good holding water above and below the dam structure. Watch for irrigation flow changes.', tags:['Wading','Drive-to'] },
-      { name:'Naches Town Bridge', detail:'Lower river access near the town of Naches. Transition zone with Yakima confluence. Bigger fish possible.', tags:['Wading','Drive-to'] },
+      { name:'Naches River Trailhead', lat:46.9876, lon:-120.9234, detail:'Upper access near the confluence with Little Naches. Walk-in access to less-pressured water.', tags:['Wading','Walk-in'] },
+      { name:'Nile Road Pullouts', lat:46.9543, lon:-121.0987, detail:'Multiple informal pullouts along SR-410. Good wade access to the upper river.', tags:['Wading','Informal'] },
+      { name:'Above Diversion Dam', lat:46.9765, lon:-120.8543, detail:'Gauge site. Good holding water above and below the dam structure. Watch for irrigation flow changes.', tags:['Wading','Drive-to'] },
+      { name:'Naches Town Bridge', lat:46.7298, lon:-120.7012, detail:'Lower river access near the town of Naches. Transition zone with Yakima confluence. Bigger fish possible.', tags:['Wading','Drive-to'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Naches River',
     accessLabel: 'Access Points — Upper Naches to Confluence',
@@ -1874,11 +2407,11 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in the slower pools. Important when flows are too high for other methods.' },
     ],
     accessPoints: [
-      { name:'Middle Fork Trailhead', detail:'Access to the Middle Fork — best summer fly fishing on the Snoqualmie system. Hike-in access required for upper stretches.', tags:['Wading','Walk-in','Hike-in'] },
-      { name:'North Fork (below the falls)', detail:'Below Snoqualmie Falls. Heavily regulated section. Check WDFW regs carefully. Some wild steelhead water.', tags:['Wading','Regulated'] },
-      { name:'Tokul Creek Confluence', detail:'Popular access point near Fall City. Good holding water where Tokul meets the mainstem.', tags:['Wading','Drive-to'] },
-      { name:'Carnation Farm Road', detail:'Near the USGS gauge. Good mainstem access. Watch for private property — use designated pullouts.', tags:['Wading','Drive-to'] },
-      { name:'Duvall Town Park', detail:'Lower mainstem access. Mostly suited for float fishing at higher flows. City park with parking.', tags:['Launch','Parking'] },
+      { name:'Middle Fork Trailhead', lat:47.5543, lon:-121.6234, detail:'Access to the Middle Fork — best summer fly fishing on the Snoqualmie system. Hike-in access required for upper stretches.', tags:['Wading','Walk-in','Hike-in'] },
+      { name:'North Fork (below the falls)', lat:47.5432, lon:-121.8543, detail:'Below Snoqualmie Falls. Heavily regulated section. Check WDFW regs carefully. Some wild steelhead water.', tags:['Wading','Regulated'] },
+      { name:'Tokul Creek Confluence', lat:47.5123, lon:-121.9876, detail:'Popular access point near Fall City. Good holding water where Tokul meets the mainstem.', tags:['Wading','Drive-to'] },
+      { name:'Carnation Farm Road', lat:47.6543, lon:-121.9234, detail:'Near the USGS gauge. Good mainstem access. Watch for private property — use designated pullouts.', tags:['Wading','Drive-to'] },
+      { name:'Duvall Town Park', lat:47.7432, lon:-121.9854, detail:'Lower mainstem access. Mostly suited for float fishing at higher flows. City park with parking.', tags:['Launch','Parking'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Middle Fork Snoqualmie',
     accessLabel: 'Access Points — Middle Fork (Above Falls)',
@@ -1904,10 +2437,10 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in slower pools when flows are low and clear.' },
     ],
     accessPoints: [
-      { name:'Winthrop Town Access', detail:'Good wade access near downtown Winthrop. Popular and easy to reach. Fish upstream and downstream of town.', tags:['Wading','Drive-to','Parking'] },
-      { name:'Methow Valley Road Pullouts', detail:'Multiple pullouts along Hwy 20 between Winthrop and Twisp. Less pressure than town stretches.', tags:['Wading','Informal'] },
-      { name:'Twisp River Confluence', detail:'Twisp River adds volume here. Good holding water for larger fish in fall.', tags:['Wading','Drive-to'] },
-      { name:'Mazama / Upper River', detail:'Above Winthrop toward Mazama. Smaller, technical water. Best in summer at lower flows.', tags:['Wading','Walk-in','Upper River'] },
+      { name:'Winthrop Town Access', lat:48.4721, lon:-120.1776, detail:'Good wade access near downtown Winthrop. Popular and easy to reach. Fish upstream and downstream of town.', tags:['Wading','Drive-to','Parking'] },
+      { name:'Methow Valley Road Pullouts', lat:48.3543, lon:-120.1234, detail:'Multiple pullouts along Hwy 20 between Winthrop and Twisp. Less pressure than town stretches.', tags:['Wading','Informal'] },
+      { name:'Twisp River Confluence', lat:48.3654, lon:-120.1176, detail:'Twisp River adds volume here. Good holding water for larger fish in fall.', tags:['Wading','Drive-to'] },
+      { name:'Mazama / Upper River', lat:48.5876, lon:-120.4012, detail:'Above Winthrop toward Mazama. Smaller, technical water. Best in summer at lower flows.', tags:['Wading','Walk-in','Upper River'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Methow River',
     accessLabel: 'Access Points — Winthrop to Pateros',
@@ -1931,10 +2464,10 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in slower runs. #20–24 patterns.' },
     ],
     accessPoints: [
-      { name:'Malott Bridge', detail:'Access near the gauge site. Good wade fishing above and below the bridge. Less pressure than Omak.', tags:['Wading','Drive-to'] },
-      { name:'Omak City Area', detail:'Multiple access points near Omak. Popular stretch. Fish early or late to avoid pressure.', tags:['Wading','Drive-to','Parking'] },
-      { name:'Tonasket Stretch', detail:'Upper river near Tonasket. Productive in spring and fall. Verify tribal and state regs for this section.', tags:['Wading','Regulations'] },
-      { name:'Okanogan Town Access', detail:'Lower river near the town of Okanogan. Near Columbia confluence. Good fall steelhead staging water.', tags:['Wading','Drive-to','Steelhead'] },
+      { name:'Malott Bridge', lat:48.2765, lon:-119.6987, detail:'Access near the gauge site. Good wade fishing above and below the bridge. Less pressure than Omak.', tags:['Wading','Drive-to'] },
+      { name:'Omak City Area', lat:48.4121, lon:-119.5265, detail:'Multiple access points near Omak. Popular stretch. Fish early or late to avoid pressure.', tags:['Wading','Drive-to','Parking'] },
+      { name:'Tonasket Stretch', lat:48.7054, lon:-119.4387, detail:'Upper river near Tonasket. Productive in spring and fall. Verify tribal and state regs for this section.', tags:['Wading','Regulations'] },
+      { name:'Okanogan Town Access', lat:48.3598, lon:-119.5721, detail:'Lower river near the town of Okanogan. Near Columbia confluence. Good fall steelhead staging water.', tags:['Wading','Drive-to','Steelhead'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Okanogan River',
     accessLabel: 'Access Points — Tonasket to Omak',
@@ -1959,10 +2492,10 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing. #20–24 patterns in slower pools.' },
     ],
     accessPoints: [
-      { name:'Pitt / Lower Canyon', detail:'Near the gauge site. Good lower canyon access. Technical wading — felt soles or cleats required.', tags:['Wading','Canyon','Technical'] },
-      { name:'Lyle / Columbia Confluence', detail:'Lower river near Lyle. Wide access. Steelhead staging water in fall and winter.', tags:['Wading','Drive-to','Steelhead'] },
-      { name:'Klickitat Canyon Road', detail:'Road follows the river through the canyon. Multiple pulloffs. Scenic but technical wading.', tags:['Wading','Canyon','Drive-to'] },
-      { name:'Upper River above Goldendale', detail:'Smaller water above the canyon. Better for trout, significantly less pressure.', tags:['Wading','Trout','Upper River'] },
+      { name:'Pitt / Lower Canyon', lat:45.8207, lon:-121.1543, detail:'Near the gauge site. Good lower canyon access. Technical wading — felt soles or cleats required.', tags:['Wading','Canyon','Technical'] },
+      { name:'Lyle / Columbia Confluence', lat:45.6943, lon:-121.2876, detail:'Lower river near Lyle. Wide access. Steelhead staging water in fall and winter.', tags:['Wading','Drive-to','Steelhead'] },
+      { name:'Klickitat Canyon Road', lat:45.8543, lon:-121.1234, detail:'Road follows the river through the canyon. Multiple pulloffs. Scenic but technical wading.', tags:['Wading','Canyon','Drive-to'] },
+      { name:'Upper River above Goldendale', lat:45.9876, lon:-120.8234, detail:'Smaller water above the canyon. Better for trout, significantly less pressure.', tags:['Wading','Trout','Upper River'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Klickitat River',
     accessLabel: 'Access Points — Canyon to Columbia',
@@ -1987,10 +2520,10 @@ const RIVERS = {
       { name:'Midges', icon:'🦟', when:[1,2,12], detail:'Winter midge fishing in slower water. Important winter trout pattern.' },
     ],
     accessPoints: [
-      { name:'Packwood Town Access', detail:'Upper river near Packwood. Best dry fly water on the Cowlitz. Walk-in stretches above town.', tags:['Wading','Walk-in','Trout'] },
-      { name:'Skate Creek Confluence', detail:'Above Packwood. Less pressure. Good cutthroat water where Skate Creek enters.', tags:['Wading','Walk-in','Cutthroat'] },
-      { name:'La Wis Wis Campground', detail:'USFS campground with river access. Good spring and fall fishing above Cowlitz Falls Dam.', tags:['Wading','Camping','Drive-to'] },
-      { name:'Randle Area', detail:'Below Cowlitz Falls Dam. Steelhead and salmon water. Check WDFW regulations carefully.', tags:['Wading','Steelhead','Regulations'] },
+      { name:'Packwood Town Access', lat:46.6073, lon:-121.6791, detail:'Upper river near Packwood. Best dry fly water on the Cowlitz. Walk-in stretches above town.', tags:['Wading','Walk-in','Trout'] },
+      { name:'Skate Creek Confluence', lat:46.6432, lon:-121.7234, detail:'Above Packwood. Less pressure. Good cutthroat water where Skate Creek enters.', tags:['Wading','Walk-in','Cutthroat'] },
+      { name:'La Wis Wis Campground', lat:46.6543, lon:-121.5876, detail:'USFS campground with river access. Good spring and fall fishing above Cowlitz Falls Dam.', tags:['Wading','Camping','Drive-to'] },
+      { name:'Randle Area', lat:46.5298, lon:-121.6543, detail:'Below Cowlitz Falls Dam. Steelhead and salmon water. Check WDFW regulations carefully.', tags:['Wading','Steelhead','Regulations'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Upper Cowlitz',
     accessLabel: 'Access Points — Packwood to Riffe Lake',
@@ -2015,10 +2548,10 @@ const RIVERS = {
       { name:'Steelhead Flies', icon:'🎣', when:[10,11,12,1,2,3], detail:'Winter steelhead Oct–March. Intruder-style, egg flies, Skagit heads. Some summer steelhead Aug–Sept.' },
     ],
     accessPoints: [
-      { name:'Kalama Falls Hatchery', detail:'Popular access point mid-river. Hatchery steelhead water. Crowded on weekends in winter.', tags:['Wading','Steelhead','Drive-to'] },
-      { name:'Summers Creek Bridge', detail:'Good mid-river access. Walk upstream for better wild trout stretches with less pressure.', tags:['Wading','Drive-to','Trout'] },
-      { name:'Lower Kalama', detail:'Near Columbia confluence. Steelhead staging water in fall and winter. Both fly and gear anglers.', tags:['Wading','Steelhead','Drive-to'] },
-      { name:'Upper Kalama / Spencer Creek', detail:'Upper river. Smaller water. Better for wild trout. Significantly less pressure than lower sections.', tags:['Wading','Walk-in','Trout'] },
+      { name:'Kalama Falls Hatchery', lat:46.0432, lon:-122.6543, detail:'Popular access point mid-river. Hatchery steelhead water. Crowded on weekends in winter.', tags:['Wading','Steelhead','Drive-to'] },
+      { name:'Summers Creek Bridge', lat:46.0234, lon:-122.6876, detail:'Good mid-river access. Walk upstream for better wild trout stretches with less pressure.', tags:['Wading','Drive-to','Trout'] },
+      { name:'Lower Kalama', lat:45.9876, lon:-122.7234, detail:'Near Columbia confluence. Steelhead staging water in fall and winter. Both fly and gear anglers.', tags:['Wading','Steelhead','Drive-to'] },
+      { name:'Upper Kalama / Spencer Creek', lat:46.0765, lon:-122.6012, detail:'Upper river. Smaller water. Better for wild trout. Significantly less pressure than lower sections.', tags:['Wading','Walk-in','Trout'] },
     ],
     hatchLabel: 'Current & Upcoming Hatches — Kalama River',
     accessLabel: 'Access Points — Kalama River',
@@ -2160,7 +2693,7 @@ function switchRiver(riverId) {
   if (wb) wb.style.display = 'none';
   document.title = activeRiver.label + ' — DriftScout';
   // Reset rig box
-  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:\'IBM Plex Mono\',monospace">asking Claude…</div>';
+  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
 
   // Reset insights
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
@@ -2169,6 +2702,14 @@ function switchRiver(riverId) {
   const bNt = document.getElementById('baro-note'); if(bNt) bNt.textContent='Loading…';
 
   loadAll();
+  if (mapInitialized) centerMapOnRiver();
+  // Silently sync regs dropdown to new river
+  var rs = document.getElementById('regs-river-select');
+  if (rs) {
+    for (var i = 0; i < rs.options.length; i++) {
+      if (rs.options[i].value === riverId) { rs.selectedIndex = i; break; }
+    }
+  }
 }
 
 // ─── DATE/TIME ────────────────────────────────────────────
@@ -2188,21 +2729,26 @@ document.getElementById('current-date').textContent = formatDate();
 
 // ─── USGS DATA ────────────────────────────────────────────
 async function fetchUSGS(riverId) {
-  const url = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${activeRiver.usgs}`;
+  const siteId = activeRiver.usgs;
+  const url = `https://yakima-proxy.ljlukelj.workers.dev/usgs?site=${siteId}`;
 
-  let json;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Proxy returned ' + res.status);
-    json = await res.json();
-  } catch(err) {
-    ['flow-val','gage-val'].forEach(id => {
-      const el = document.getElementById(id);
-      el.textContent = 'ERR';
-      el.classList.remove('skeleton');
-    });
-    document.getElementById('last-updated').textContent = 'Flow fetch failed — ' + err.message;
-    throw err;
+  // Check session cache first
+  let json = _cacheGet(_usgsCache, siteId);
+  if (!json) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Proxy returned ' + res.status);
+      json = await res.json();
+      _cacheSet(_usgsCache, siteId, json);
+    } catch(err) {
+      ['flow-val','gage-val'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = 'ERR';
+        el.classList.remove('skeleton');
+      });
+      document.getElementById('last-updated').textContent = 'Flow fetch failed — ' + err.message;
+      throw err;
+    }
   }
 
   // Parse legacy USGS waterservices format
@@ -2243,7 +2789,8 @@ async function fetchUSGS(riverId) {
       v: parseFloat(v.value)
     }));
 
-    document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}`;
+    const fromCache = !!_cacheGet(_usgsCache, siteId);
+    document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}${fromCache ? ' · cached' : ''}`;
   }
 
   if (gageVals.length) {
@@ -2288,9 +2835,15 @@ async function fetchUSGS(riverId) {
 
 // ─── WEATHER ──────────────────────────────────────────────
 async function fetchWeather(riverId) {
+  const wxKey = activeRiver.lat.toFixed(3) + ',' + activeRiver.lon.toFixed(3);
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${activeRiver.lat}&longitude=${activeRiver.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=surface_pressure&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=7`;
-  const res = await fetch(url);
-  const json = await res.json();
+
+  let json = _cacheGet(_wxCache, wxKey);
+  if (!json) {
+    const res = await fetch(url);
+    json = await res.json();
+    _cacheSet(_wxCache, wxKey, json);
+  }
 
   if (activeRiver.id !== riverId) return;
 
@@ -2398,8 +2951,8 @@ function renderChart() {
 
   // Color segments by flow level
   const gradient = ctx.createLinearGradient(0, 0, 0, 180);
-  gradient.addColorStop(0, 'rgba(59,130,246,0.4)');
-  gradient.addColorStop(1, 'rgba(59,130,246,0.0)');
+  gradient.addColorStop(0, 'rgba(200,68,26,0.25)');
+  gradient.addColorStop(1, 'rgba(200,68,26,0.0)');
 
   chartInstance = new Chart(ctx, {
     type: 'line',
@@ -2407,7 +2960,7 @@ function renderChart() {
       labels,
       datasets: [{
         data: values,
-        borderColor: '#3b82f6',
+        borderColor: '#c8441a',
         borderWidth: 2,
         backgroundColor: gradient,
         fill: true,
@@ -2596,7 +3149,7 @@ Write in a confident, direct guide voice. Be specific — mention actual fly pat
       `<p style="margin-bottom:14px" class="insights-text">${p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`
     ).join('');
 
-    box.innerHTML = html + `<button class="generate-btn" onclick="generateInsights()">↺ Regenerate Insights</button>`;
+    box.innerHTML = html + `<button class="generate-btn" onclick="generateInsights()" aria-label="Regenerate AI fishing insights">↺ Regenerate Insights</button>`;
 
   } catch(e) {
     if (checkRiver && activeRiver.id !== riverId) return;
@@ -2612,23 +3165,69 @@ async function fetchWaterTemp(riverId) {
   const gage    = currentGage  ? `${currentGage.toFixed(2)} ft`    : 'unknown';
   const wTemp   = currentWaterTemp ? `${currentWaterTemp}°F`        : 'unavailable';
   const aTemp   = airTemp      ? `${Math.round(airTemp)}°F`         : 'unknown';
-  const hour    = new Date().getHours();
-  const timeOfDay = hour < 6 ? 'pre-dawn' : hour < 10 ? 'morning' : hour < 14 ? 'midday' : hour < 18 ? 'afternoon' : 'evening';
-  const month   = new Date().toLocaleString('en-US', { month: 'long' });
+
+  // ── Finer time-of-day buckets ──
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 6  ? 'pre-dawn (dark, fish near bottom)'
+    : hour < 9  ? 'early morning (low light, fish becoming active)'
+    : hour < 11 ? 'mid-morning (prime hatch window opening)'
+    : hour < 13 ? 'late morning (peak hatch window)'
+    : hour < 15 ? 'early afternoon (midday lull, fish deep or in shade)'
+    : hour < 17 ? 'mid-afternoon (activity picking up again)'
+    : hour < 19 ? 'evening (prime evening hatch and spinner fall)'
+    : 'dusk/dark (surface activity fading, streamers and big nymphs)';
+
+  const month = new Date().toLocaleString('en-US', { month: 'long' });
   const hatches = getHatches().filter(h => h.active).map(h => h.name).join(', ') || 'none strongly active';
+
+  // ── Flow trend (rising / falling / stable) ──
+  let flowTrend = 'stable';
+  const flowDeltaEl = document.getElementById('flow-delta');
+  if (flowDeltaEl) {
+    const txt = flowDeltaEl.textContent || '';
+    if (txt.includes('↑') && !txt.includes('↑ 0')) flowTrend = 'rising (' + txt.trim() + ')';
+    else if (txt.includes('↓') && !txt.includes('↓ 0')) flowTrend = 'falling (' + txt.trim() + ')';
+  }
+
+  // ── Barometric pressure trend ──
+  let baroTrend = 'unknown';
+  const baroNoteEl = document.getElementById('baro-note');
+  if (baroNoteEl) baroTrend = baroNoteEl.textContent.trim() || 'unknown';
+  const baroValEl = document.getElementById('baro-val');
+  const baroVal = baroValEl ? baroValEl.textContent.trim() + ' inHg' : 'unknown';
+
+  // ── Sky / weather condition from Open-Meteo weathercode ──
+  let skyCondition = 'unknown';
+  if (weatherData && weatherData.current_weather) {
+    const code = weatherData.current_weather.weathercode;
+    const wind = Math.round(weatherData.current_weather.windspeed || 0);
+    const isDay = weatherData.current_weather.is_day;
+    if ([0,1].includes(code)) skyCondition = 'clear and sunny';
+    else if ([2].includes(code)) skyCondition = 'partly cloudy';
+    else if ([3].includes(code)) skyCondition = 'overcast (ideal hatch conditions)';
+    else if ([45,48].includes(code)) skyCondition = 'foggy';
+    else if ([51,53,55,61,63,80,81].includes(code)) skyCondition = 'light to moderate rain';
+    else if ([65,82].includes(code)) skyCondition = 'heavy rain';
+    else if ([71,73,75,77,85,86].includes(code)) skyCondition = 'snow/wintry mix';
+    else if ([95,96,99].includes(code)) skyCondition = 'thunderstorms';
+    if (wind > 15) skyCondition += `, windy (${wind} mph — dries difficult`;
+    if (!isDay) skyCondition += ', nighttime';
+  }
 
   const prompt = `You are an expert fly fishing guide on ${activeRiver.aiContext}.
 
-Current conditions right now:
-- Flow: ${flow} (USGS #${activeRiver.usgs})
+Current live conditions (${new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}):
+- Flow: ${flow} and ${flowTrend}
 - Gauge height: ${gage}
 - Water temp: ${wTemp}
 - Air temp: ${aTemp}
+- Sky: ${skyCondition}
+- Barometric pressure: ${baroVal} — ${baroTrend}
 - Time of day: ${timeOfDay}
 - Month: ${month}
 - Active hatches: ${hatches}
 
-Give 2-3 distinct setup options ranked best to worst for these exact conditions. Each should be a genuinely different approach (e.g. nymph rig vs dry fly vs streamer — not two nymph rigs).
+Give 2-3 distinct setup options ranked best to worst for these exact conditions. Each must be a genuinely different approach (dry fly vs nymph vs streamer — not two nymph rigs). Let the baro trend, flow trend, sky, water temp, and time of day meaningfully drive your recommendations — not just the month.
 
 Respond with ONLY a JSON array — no markdown, no explanation — in this exact shape:
 [
@@ -2637,11 +3236,11 @@ Respond with ONLY a JSON array — no markdown, no explanation — in this exact
     "rig": "<setup name, max 4 words>",
     "emoji": "<single emoji>",
     "flies": "<specific pattern names with hook sizes>",
-    "tip": "<one key tactical tip for these conditions, max 12 words>"
+    "tip": "<one key tactical tip driven by today's specific conditions, max 14 words>"
   }
 ]
 
-Be specific. Use real patterns that work on ${activeRiver.label}. Base everything on the live conditions.`;
+Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the tip WHY these conditions call for this approach.`;
 
   try {
     const res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
@@ -2669,10 +3268,10 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Base everythin
         <div style="font-size:1.3rem;line-height:1;margin-top:2px">${s.emoji}</div>
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
-            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
+            <span style=";font-size:0.75rem;font-weight:600;color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
               ${s.rig}
             </span>
-            ${i === 0 ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>' : ''}
+            ${i === 0 ? '<span style=";font-size:0.5rem;background:rgba(125,211,252,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>' : ''}
           </div>
           <div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">${s.flies}</div>
           <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic">${s.tip}</div>
@@ -2703,7 +3302,7 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Base everythin
       <div style="display:flex;gap:10px;align-items:flex-start;padding:${i < setups.length-1?'0 0 8px 0':'0'};${i < setups.length-1?'border-bottom:1px solid rgba(255,255,255,0.06)':''}">
         <div style="font-size:1.3rem;line-height:1;margin-top:2px">${s.emoji}</div>
         <div style="flex:1">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:600;color:${i===0?'var(--accent)':'var(--text)'};margin-bottom:2px">${s.rig}</div>
+          <div style=";font-size:0.75rem;font-weight:600;color:${i===0?'var(--accent)':'var(--text)'};margin-bottom:2px">${s.rig}</div>
           <div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">${s.flies}</div>
           <div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic">${s.tip}</div>
         </div>
@@ -2748,10 +3347,16 @@ async function onStatePick() {
   const results = document.getElementById('site-results');
   const input = document.getElementById('site-search-input');
   if (!state) return;
+
   allSites = []; results.innerHTML = ''; input.value = '';
-  input.placeholder = 'Loading gauges\u2026';
+
+  // ── Render curated river tabs IMMEDIATELY — no waiting on network ──
+  renderStateTabs(state);
+
+  // ── Load USGS gauge list in background for the search box ──
+  input.placeholder = 'Loading gauges…';
   input.disabled = true;
-  status.textContent = '\u23f3 Loading gauges for ' + state + '\u2026';
+  status.textContent = '⏳ Loading search index for ' + state + '…';
   try {
     const url = `https://yakima-proxy.ljlukelj.workers.dev/sites?state=${state}`;
     const res = await fetch(url);
@@ -2760,11 +3365,13 @@ async function onStatePick() {
       .filter(l => l && !l.startsWith('#') && !l.startsWith('agency') && !l.startsWith('5s') && l.includes('\t'))
       .map(l => { const c = l.split('\t'); return { id: c[1], name: c[2], lat: c[4], lon: c[5] }; })
       .filter(s => s.id && s.name && s.id.length >= 8);
+    input.disabled = false;
+    input.placeholder = 'Type river name to filter…';
     status.textContent = allSites.length + ' active gauges — type to filter';
   } catch(e) {
     input.disabled = false;
-    input.placeholder = 'Type river name to filter\u2026';
-    status.textContent = '\u274c Error loading gauges. Check connection and try again.';
+    input.placeholder = 'Type river name to filter…';
+    status.textContent = '❌ Could not load search index.';
     console.error('Sites fetch error:', e);
   }
 }
@@ -2828,6 +3435,22 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   });
 }
 
+// ── SESSION CACHE (5-min TTL) ─────────────────────────────────────────────────
+const _usgsCache = new Map();   // siteId -> { json, ts }
+const _wxCache   = new Map();   // "lat,lon" -> { json, ts }
+const CACHE_TTL  = 5 * 60 * 1000; // 5 minutes
+
+function _cacheGet(map, key) {
+  const entry = map.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > CACHE_TTL) { map.delete(key); return null; }
+  return entry.json;
+}
+function _cacheSet(map, key, json) {
+  map.set(key, { json, ts: Date.now() });
+}
+
+
 // ─── BOOT ─────────────────────────────────────────────────
 async function loadAll() {
   const riverSnapshot = activeRiver.id;
@@ -2844,30 +3467,101 @@ async function loadAll() {
     if (activeRiver.id === riverSnapshot) {
       fetchWaterTemp(riverSnapshot);
       generateInsights(riverSnapshot);
+      // Refresh map gauge colors now that flow data is loaded
+      if (mapInitialized && mapLayerGroups.gauges) {
+        mapLayerGroups.gauges.clearLayers();
+        addGaugeMarkers();
+      }
     }
   } catch(e) { console.error('Data load error:', e); }
 }
 
 loadAll();
 
+// ── Background prefetch all preset WA rivers after initial load ───────────────
+// Staggered 800ms apart so they don't compete with the active river fetch
+setTimeout(function() {
+  var presets = Object.values(RIVERS);
+  presets.forEach(function(river, i) {
+    if (river.usgs === activeRiver.usgs) return; // already loaded
+    setTimeout(function() {
+      var siteId = river.usgs;
+      if (_cacheGet(_usgsCache, siteId)) return; // already cached
+      fetch('https://yakima-proxy.ljlukelj.workers.dev/usgs?site=' + siteId)
+        .then(function(r) { return r.json(); })
+        .then(function(json) { _cacheSet(_usgsCache, siteId, json); })
+        .catch(function() {}); // silent fail — prefetch only
+      var wxKey = river.lat.toFixed(3) + ',' + river.lon.toFixed(3);
+      if (!_cacheGet(_wxCache, wxKey)) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + river.lat + '&longitude=' + river.lon + '&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=surface_pressure&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=7')
+          .then(function(r) { return r.json(); })
+          .then(function(json) { _cacheSet(_wxCache, wxKey, json); })
+          .catch(function() {});
+      }
+    }, (i + 1) * 800);
+  });
+}, 3000); // wait 3s after page load before prefetching
+
 // ═══════════════════════════════════════════════════════════
 // MODE SWITCHER
 // ═══════════════════════════════════════════════════════════
 function switchMode(mode) {
   document.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    const modes = ['rivers','knots','triplog','regs','calc','shops'];
+    const modes = ['rivers','lakes','knots','triplog','regs','calc','shops','hatch','map'];
     btn.classList.toggle('active', modes[i] === mode);
   });
   document.getElementById('river-dashboard').style.display = mode === 'rivers' ? 'block' : 'none';
-  ['knots','triplog','regs','calc','shops'].forEach(m => {
+  ['knots','triplog','regs','calc','shops','hatch','map','lakes'].forEach(m => {
     const el = document.getElementById('panel-' + m);
     if (el) el.style.display = m === mode ? 'block' : 'none';
   });
   if (mode === 'knots') renderKnots();
-  if (mode === 'triplog') { setDefaultDate(); renderTripLog(); }
-  if (mode === 'regs') renderRegs();
-  if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); }
+  if (mode === 'triplog') {
+    setDefaultDate();
+    renderTripLog();
+    // Auto-fill active river and current flow
+    var logRiver = document.getElementById('log-river');
+    var logFlow  = document.getElementById('log-flow');
+    if (logRiver && activeRiver) {
+      // Match by label — find closest option
+      var label = activeRiver.label;
+      for (var i = 0; i < logRiver.options.length; i++) {
+        if (logRiver.options[i].value === label || logRiver.options[i].text === label) {
+          logRiver.selectedIndex = i; break;
+        }
+      }
+    }
+    if (logFlow && currentFlow && !logFlow.value) {
+      logFlow.value = Math.round(currentFlow);
+    }
+  }
+  if (mode === 'regs') {
+    // Sync dropdown to active river if it's a WA preset
+    var regsSelect = document.getElementById('regs-river-select');
+    if (regsSelect && activeRiver && activeRiver.id && !activeRiver.id.startsWith('custom_')) {
+      var waId = activeRiver.id.replace(/^WA_\d+$/, '');
+      // Only sync if it's a known WA river key
+      for (var i = 0; i < regsSelect.options.length; i++) {
+        if (regsSelect.options[i].value === activeRiver.id) {
+          regsSelect.selectedIndex = i; break;
+        }
+      }
+    }
+    renderRegs();
+  }
+  if (mode === 'calc') { calcLeader(); calcHook(); calcWeight(); calcIndicator(); }
   if (mode === 'shops') renderShops();
+  if (mode === 'lakes') initLakes();
+  if (mode === 'map') {
+    var mc = document.getElementById('map-container');
+    if (mc) mc.style.height = Math.max(480, window.innerHeight - 260) + 'px';
+    // Use requestAnimationFrame to ensure panel is visible before Leaflet init
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        initMap();
+      });
+    });
+  }
 }
 
 // ═════════════════════════════════════════════════════════
@@ -2922,7 +3616,7 @@ function renderKnots() {
         </div>
         <div class="knot-pro-tip" style="margin-bottom:10px">&#128161; ${k.tip}</div>
         <a href="${k.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
-           style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);text-decoration:none;letter-spacing:0.08em">
+           style=";font-size:0.65rem;color:var(--accent);text-decoration:none;letter-spacing:0.08em">
           Step-by-step guide at AnimatedKnots.com &#8599;
         </a>
       </div>
@@ -3061,6 +3755,7 @@ function circlePts(cx,cy,rx,ry, n, zFn) {
 
 function renderShops() {
   const grid = document.getElementById('shop-grid');
+  if (!grid) return;
   if (grid.children.length > 0) return;
   grid.innerHTML = SHOPS.map(s => `
     <div class="shop-card">
@@ -3094,6 +3789,7 @@ const SHOPS = [
 
 function renderShops() {
   const grid = document.getElementById('shop-grid');
+  if (!grid) return;
   if (grid.children.length > 0) return;
   grid.innerHTML = SHOPS.map(s => `
     <div class="shop-card">
@@ -3224,6 +3920,49 @@ function renderRegs() {
 // ═════════════════════════════════════════════════════════
 // CALCULATOR
 // ═════════════════════════════════════════════════════════
+function calcIndicator() {
+  var depth  = parseFloat(document.getElementById('ind-depth').value  || 2);
+  var speed  = document.getElementById('ind-speed').value  || 'medium';
+  var fly    = document.getElementById('ind-fly').value    || 'nymph';
+
+  // Base: indicator placement = 1.5x water depth
+  var base = depth * 1.5;
+
+  // Speed adjustment — faster water, fish deeper in column
+  var speedAdj = speed === 'slow' ? -0.3 : speed === 'fast' ? 0.5 : 0;
+
+  // Fly sink rate adjustment
+  var flyAdj = fly === 'heavy' ? -0.4 : fly === 'midge' ? 0.3 : fly === 'soft' ? 0.1 : 0;
+
+  var placement = Math.max(0.5, base + speedAdj + flyAdj);
+  var low  = Math.max(0.5, (placement - 0.3)).toFixed(1);
+  var high = (placement + 0.3).toFixed(1);
+
+  // Leader below indicator
+  var tippetLen = (placement * 0.4).toFixed(1);
+
+  // Indicator size recommendation
+  var indSize = depth <= 2 ? 'Small (yarn or small Thingamabobber)'
+    : depth <= 4 ? 'Medium Thingamabobber or Air-Lock'
+    : 'Large Thingamabobber or foam indicator';
+
+  // Tactical tip
+  var tip = speed === 'fast'
+    ? 'Mend upstream immediately after cast. High-stick to keep indicator drag-free.'
+    : speed === 'slow'
+    ? 'Use a lighter indicator — less splash, less drag. Watch for subtle dips.'
+    : 'Standard across-and-down mend. Strike on any hesitation or upstream movement.';
+
+  var el = document.getElementById('indicator-result');
+  if (!el) return;
+  el.innerHTML =
+    '<div class="leader-result-row"><span class="lbl">Indicator Placement</span><span class="val">' + low + ' – ' + high + ' ft above fly</span></div>' +
+    '<div class="leader-result-row"><span class="lbl">Tippet Below Indicator</span><span class="val">' + tippetLen + ' ft</span></div>' +
+    '<div class="leader-result-row"><span class="lbl">Indicator Size</span><span class="val" style="font-size:0.65rem;text-align:right;max-width:180px">' + indSize + '</span></div>' +
+    '<div class="leader-result-row" style="border:none"><span class="lbl">Tip</span><span class="val" style="font-size:0.62rem;text-align:right;max-width:200px;color:var(--muted)">' + tip + '</span></div>';
+}
+
+
 function calcLeader() {
   const len = parseFloat(document.getElementById('leader-length').value);
   const tippet = document.getElementById('leader-tippet').value;
@@ -3263,6 +4002,1595 @@ function calcWeight() {
     <div class="leader-result-row"><span class="lbl">Diameter</span><span class="val">${w.diameter}</span></div>
     <div class="leader-result-row"><span class="lbl">Best For</span><span class="val" style="font-size:0.65rem">${w.note}</span></div>
     <div class="leader-result-row"><span class="lbl">Depth Tip</span><span class="val" style="font-size:0.6rem;max-width:160px;text-align:right">${di[depth]}</span></div>`;
+}
+
+// ── STATE FLY FISHING RIVERS DATABASE ────────────────────────────────────────
+// Top fly fishing rivers by state with verified USGS gauge IDs
+// Format: { label, sub, usgs, lat, lon }
+const STATE_RIVERS = {
+  WA: [
+    { label:'Upper Yakima',    sub:'Easton → Thorpe',        usgs:'12484500', lat:47.2437, lon:-121.1848 },
+    { label:'Yakima Canyon',   sub:'Roza Dam → Ellensburg',  usgs:'12487000', lat:46.8701, lon:-120.4816 },
+    { label:'Methow River',    sub:'Winthrop → Pateros',     usgs:'12448500', lat:48.4726, lon:-120.1769 },
+    { label:'Skykomish',       sub:'Index → Monroe',         usgs:'12134500', lat:47.8526, lon:-121.6915 },
+    { label:'Snoqualmie MF',   sub:'Middle Fork',            usgs:'12141300', lat:47.5651, lon:-121.6476 },
+    { label:'Wenatchee',       sub:'Leavenworth → Columbia', usgs:'12462500', lat:47.5898, lon:-120.6199 },
+    { label:'Klickitat',       sub:'Canyon → Columbia',      usgs:'14113000', lat:45.8207, lon:-121.1543 },
+    { label:'Cowlitz',         sub:'Packwood → Riffe Lake',  usgs:'14226500', lat:46.6073, lon:-121.6791 },
+    { label:'Kalama',          sub:'Headwaters → Columbia',  usgs:'14223000', lat:46.0146, lon:-122.7001 },
+    { label:'Stillaguamish',   sub:'North Fork → Arlington', usgs:'12167000', lat:48.1898, lon:-121.9543 },
+    { label:'Naches River',    sub:'Upper → Confluence',     usgs:'12494400', lat:46.9787, lon:-120.8284 },
+    { label:'Green River',     sub:'Hanson Dam → Auburn',    usgs:'12113000', lat:47.3298, lon:-122.2298 },
+    { label:'Okanogan',        sub:'Tonasket → Omak',        usgs:'12447200', lat:48.2976, lon:-119.7093 },
+  ],
+  OR: [
+    { label:'Deschutes',       sub:'Maupin → Columbia',      usgs:'14092500', lat:45.2829, lon:-120.9075 },
+    { label:'North Umpqua',    sub:'Steamboat → Roseburg',   usgs:'14317500', lat:43.3468, lon:-123.1715 },
+    { label:'Metolius',        sub:'Camp Sherman → Billy Chinook', usgs:'14076500', lat:44.5132, lon:-121.6332 },
+    { label:'McKenzie',        sub:'Blue River → Springfield',usgs:'14162500', lat:44.2376, lon:-122.4765 },
+    { label:'Sandy River',     sub:'Zigzag → Columbia',      usgs:'14142500', lat:45.3969, lon:-122.2598 },
+    { label:'Rogue River',     sub:'Grants Pass → Gold Hill', usgs:'14361500', lat:42.4432, lon:-123.3268 },
+    { label:'Williamson',      sub:'Klamath Marsh → Agency', usgs:'11502500', lat:42.6168, lon:-121.8671 },
+    { label:'Crooked River',   sub:'Prineville → Ochoco Res',usgs:'14086000', lat:44.2968, lon:-120.8348 },
+    { label:'John Day',        sub:'Service Creek → Fossil', usgs:'14046000', lat:44.8032, lon:-120.0629 },
+    { label:'Clackamas',       sub:'Estacada → Oregon City', usgs:'14211010', lat:45.3012, lon:-122.3265 },
+    { label:'Wilson River',    sub:'Tillamook Forest',        usgs:'14301500', lat:45.4843, lon:-123.5798 },
+    { label:'Nestucca',        sub:'Upper → Pacific City',   usgs:'14303500', lat:45.1254, lon:-123.7123 },
+  ],
+  MT: [
+    { label:'Madison River',   sub:'Ennis → Three Forks',    usgs:'06037500', lat:45.6382, lon:-111.5354 },
+    { label:'Gallatin River',  sub:'Big Sky → Manhattan',    usgs:'06043500', lat:45.6641, lon:-111.1543 },
+    { label:'Yellowstone',     sub:'Livingston → Billings',  usgs:'06192500', lat:45.6657, lon:-110.5612 },
+    { label:'Big Hole',        sub:'Wisdom → Twin Bridges',  usgs:'06024580', lat:45.5432, lon:-112.9876 },
+    { label:'Bitterroot',      sub:'Darby → Missoula',       usgs:'12344000', lat:46.5012, lon:-114.0834 },
+    { label:'Clark Fork',      sub:'Missoula → Plains',      usgs:'12340000', lat:46.8721, lon:-114.0176 },
+    { label:'Blackfoot',       sub:'Lincoln → Bonner',       usgs:'12388400', lat:46.8654, lon:-113.0987 },
+    { label:'Missouri (MT)',   sub:'Holter Dam → Cascade',   usgs:'06054500', lat:47.0154, lon:-111.6543 },
+    { label:'Flathead',        sub:'Columbia Falls → Plains', usgs:'12363000', lat:48.3732, lon:-114.1876 },
+    { label:'Rock Creek (MT)', sub:'Clinton → Clark Fork',   usgs:'12334510', lat:46.6787, lon:-113.4312 },
+    { label:'Ruby River',      sub:'Alder → Twin Bridges',   usgs:'06016000', lat:45.5243, lon:-112.0987 },
+  ],
+  ID: [
+    { label:'Henrys Fork',   sub:'Island Park → Rexburg',  usgs:'13053000', lat:44.0832, lon:-111.4598 },
+    { label:'South Fork Snake',sub:'Palisades → Heise',      usgs:'13037500', lat:43.4176, lon:-111.3254 },
+    { label:'Silver Creek',    sub:'Picabo → Magic Res',     usgs:'13150430', lat:43.2854, lon:-114.1432 },
+    { label:'Boise River',     sub:'Lucky Peak → Garden City',usgs:'13206000', lat:43.5698, lon:-116.1543 },
+    { label:'Salmon River',    sub:'Stanley → Challis',      usgs:'13302500', lat:44.7132, lon:-114.9234 },
+    { label:'Clearwater',      sub:'Kooskia → Lewiston',     usgs:'13341050', lat:46.1432, lon:-115.9876 },
+    { label:'Teton River (ID)',sub:'Driggs → Rexburg',       usgs:'13063000', lat:43.8254, lon:-111.4123 },
+    { label:'Big Wood River',  sub:'Ketchum → Bellevue',     usgs:'13148500', lat:43.6543, lon:-114.3612 },
+    { label:'St. Joe River',   sub:'Avery → St. Maries',     usgs:'12413000', lat:47.2154, lon:-115.9432 },
+    { label:'N Fork Coeur dAlene', sub:'Murray to Kingston', usgs:'12413470', lat:47.5487, lon:-116.1765 },
+    { label:'Lochsa River',    sub:'Powell → Lowell',        usgs:'13337000', lat:46.5034, lon:-115.5612 },
+  ],
+  CO: [
+    { label:'South Platte',    sub:'Deckers → Cheesman',     usgs:'06701900', lat:39.2154, lon:-105.2987 },
+    { label:'Colorado River',  sub:'Kremmling → Dotsero',    usgs:'09058000', lat:40.0587, lon:-106.3876 },
+    { label:'Fryingpan',       sub:'Ruedi Res → Basalt',     usgs:'09085000', lat:39.3654, lon:-107.0543 },
+    { label:'Arkansas River',  sub:'Salida → Cañon City',    usgs:'07091200', lat:38.5343, lon:-106.0012 },
+    { label:'Roaring Fork',    sub:'Aspen → Glenwood Springs',usgs:'09085100', lat:39.5432, lon:-107.3234 },
+    { label:'Gunnison',        sub:'Blue Mesa → Gunnison',   usgs:'09128000', lat:38.5465, lon:-107.6543 },
+    { label:'North Platte (CO)',sub:'Northgate Canyon',      usgs:'06620000', lat:40.8932, lon:-106.5876 },
+    { label:'Cache la Poudre', sub:'Fort Collins → Greeley', usgs:'06752000', lat:40.5943, lon:-105.0765 },
+    { label:'Taylor River',    sub:'Taylor Park → Gunnison', usgs:'09109000', lat:38.7654, lon:-106.7212 },
+    { label:'Dolores River',   sub:'McPhee → Gateway',       usgs:'09166500', lat:37.8743, lon:-108.4876 },
+    { label:'Rio Grande (CO)', sub:'Alamosa → South Fork',   usgs:'08220000', lat:37.4698, lon:-106.0887 },
+  ],
+  WY: [
+    { label:'Snake River (WY)',sub:'Jackson → Hoback',       usgs:'13013650', lat:43.4354, lon:-110.7654 },
+    { label:'Green River (WY)',sub:'Warren Bridge → Big Piney', usgs:'09188500', lat:42.8732, lon:-110.1987 },
+    { label:'North Platte (WY)',sub:'Saratoga → Alcova',     usgs:'06635000', lat:41.4543, lon:-106.7876 },
+    { label:'Bighorn River',   sub:'Thermopolis → Worland',  usgs:'06279500', lat:43.6543, lon:-108.2154 },
+    { label:'Yellowstone (WY)',sub:'Yellowstone Park',       usgs:'06191500', lat:44.9876, lon:-110.6543 },
+    { label:'Shoshone River',  sub:'Cody → Lovell',          usgs:'06289000', lat:44.5254, lon:-109.0287 },
+    { label:'Wind River',      sub:'Dubois → Riverton',      usgs:'06219500', lat:43.5432, lon:-108.8765 },
+    { label:'Hoback River',    sub:'Bondurant → Jackson',    usgs:'13016450', lat:43.2543, lon:-110.4876 },
+    { label:'Greys River',     sub:'Alpine → Snake Confluence',usgs:'13018750', lat:43.1632, lon:-110.9345 },
+    { label:'Laramie River',   sub:'Glendevey → Laramie',   usgs:'06659500', lat:41.3143, lon:-105.5987 },
+  ],
+  CA: [
+    { label:'Truckee River',   sub:'Tahoe City → Reno',      usgs:'10338000', lat:39.3254, lon:-120.1543 },
+    { label:'McCloud River',   sub:'Upper McCloud Falls',     usgs:'11460400', lat:41.1432, lon:-122.1234 },
+    { label:'Hat Creek',       sub:'Cassel → Pit River',     usgs:'11355500', lat:40.8765, lon:-121.5876 },
+    { label:'Pit River',       sub:'Fall River Mills → Shasta', usgs:'11381500', lat:40.9654, lon:-121.4432 },
+    { label:'Sacramento (Upper)', sub:'Dunsmuir → Redding',  usgs:'11342000', lat:41.2543, lon:-122.2765 },
+    { label:'Feather River',   sub:'Oroville → Sacramento',  usgs:'11407000', lat:39.5143, lon:-121.5234 },
+    { label:'Kern River',      sub:'Kernville → Isabella',   usgs:'11186000', lat:35.7543, lon:-118.4287 },
+    { label:'Kings River',     sub:'Pine Flat → Fresno',     usgs:'11251000', lat:36.8654, lon:-119.3187 },
+    { label:'Owen River',      sub:'Crowley Lake → Bishop',  usgs:'10336780', lat:37.5432, lon:-118.7654 },
+    { label:'Fall River (CA)', sub:'Thousand Springs',        usgs:'11355010', lat:41.0143, lon:-121.4432 },
+    { label:'Trinity River',   sub:'Lewiston → Douglas City',usgs:'11525500', lat:40.7243, lon:-122.7987 },
+  ],
+  AK: [
+    { label:'Kenai River',     sub:'Kenai Lake → Cook Inlet', usgs:'15266300', lat:60.4398, lon:-150.6543 },
+    { label:'Anchor River',    sub:'Anchor Point',            usgs:'15239900', lat:59.7765, lon:-151.7543 },
+    { label:'Kasilof River',   sub:'Tustumena Lake → Cook Inlet', usgs:'15267900', lat:60.3543, lon:-151.2654 },
+    { label:'Gulkana River',   sub:'Paxson → Copper River',  usgs:'15294300', lat:62.2876, lon:-145.3987 },
+    { label:'Copper River',    sub:'Chitina → Cordova',       usgs:'15214000', lat:61.5143, lon:-145.2765 },
+    { label:'Naknek River',    sub:'King Salmon',             usgs:'15300500', lat:58.6876, lon:-156.6543 },
+    { label:'Kvichak River',   sub:'Iliamna Lake → Kvichak Bay', usgs:'15302000', lat:59.3254, lon:-156.9876 },
+    { label:'Russian River',   sub:'Cooper Landing',          usgs:'15258000', lat:60.4832, lon:-149.9654 },
+    { label:'Alagnak (Branch)',sub:'Kukaklek Lake → Bristol Bay', usgs:'15301900', lat:59.1543, lon:-156.4321 },
+    { label:'Klutina River',   sub:'Copper Center',           usgs:'15212000', lat:61.9654, lon:-145.3123 },
+  ],
+  MN: [
+    { label:'Brule River (MN)',sub:'Brule → Lake Superior',  usgs:'04024000', lat:46.5543, lon:-91.5876 },
+    { label:'Baptism River',   sub:'Finland → Tettegouche',  usgs:'04015330', lat:47.2154, lon:-91.2987 },
+    { label:'Temperance River',sub:'Schroeder to Lake Superior',usgs:'04015438', lat:47.5543, lon:-90.8765 },
+    { label:'Cascade River',   sub:'Lutsen → Lake Superior', usgs:'04016000', lat:47.7032, lon:-90.5432 },
+    { label:'Knife River',     sub:'Two Harbors area',        usgs:'04014500', lat:46.9243, lon:-91.7987 },
+    { label:'Vermilion River', sub:'Cook → Tower area',      usgs:'05124000', lat:47.8234, lon:-92.7654 },
+    { label:'St. Louis River', sub:'Cloquet → Duluth',       usgs:'04024430', lat:46.7432, lon:-92.5123 },
+    { label:'Crow Wing River', sub:'Motley → Brainerd',      usgs:'05243725', lat:46.3154, lon:-94.6543 },
+  ],
+  MI: [
+    { label:'Au Sable River',  sub:'Grayling → Mio',         usgs:'04137500', lat:44.6543, lon:-84.6987 },
+    { label:'Pere Marquette',  sub:'Baldwin → Lake Michigan', usgs:'04059000', lat:43.8876, lon:-85.8543 },
+    { label:'Muskegon River',  sub:'Evart → Newaygo',        usgs:'04119000', lat:43.5932, lon:-85.4876 },
+    { label:'Manistee River',  sub:'Wellston → Manistee',    usgs:'04126520', lat:44.2543, lon:-85.9123 },
+    { label:'Jordan River (MI)',sub:'East Jordan → Advance', usgs:'04057005', lat:45.1243, lon:-85.1287 },
+    { label:'Betsie River',    sub:'Thompsonville → Frankfort',usgs:'04127997', lat:44.5432, lon:-85.9765 },
+    { label:'Black River (MI)',sub:'Onaway → Cheboygan',     usgs:'04001000', lat:45.3876, lon:-84.2543 },
+    { label:'Two Hearted',     sub:'McMillan → Lake Superior',usgs:'04062000', lat:46.5432, lon:-85.6987 },
+    { label:'Pigeon River',    sub:'Vanderbilt → Cheboygan', usgs:'04004000', lat:45.1432, lon:-84.4876 },
+    { label:'Boardman River',  sub:'Kalkaska → Traverse City',usgs:'04126600', lat:44.7654, lon:-85.5432 },
+  ],
+  PA: [
+    { label:'Penns Creek',     sub:'Coburn → Selinsgrove',   usgs:'01555000', lat:40.8543, lon:-77.2987 },
+    { label:'Brodhead Creek',  sub:'Analomink → Delaware',   usgs:'01440000', lat:41.0432, lon:-75.2765 },
+    { label:'Letort Spring Run',sub:'Carlisle',              usgs:'01569800', lat:40.2054, lon:-77.1987 },
+    { label:'Yellow Breeches', sub:'Boiling Springs → Susquehanna', usgs:'01570000', lat:40.1543, lon:-77.1234 },
+    { label:'Big Spring Creek',sub:'Newville area',          usgs:'01570500', lat:40.1876, lon:-77.4543 },
+    { label:'Falling Spring',  sub:'Chambersburg',           usgs:'01570893', lat:39.9354, lon:-77.6654 },
+    { label:'Little Juniata',  sub:'Tyrone → Petersburg',    usgs:'01562000', lat:40.6543, lon:-78.2987 },
+    { label:'Loyalsock Creek', sub:'Forksville → Montoursville', usgs:'01553500', lat:41.2543, lon:-76.9654 },
+    { label:'Spring Creek (PA)',sub:'Bellefonte → Milesburg',usgs:'01546500', lat:40.9143, lon:-77.7876 },
+    { label:'Tulpehocken Creek',sub:'Blue Marsh → Reading',  usgs:'01470870', lat:40.3343, lon:-76.0543 },
+  ],
+  NY: [
+    { label:'Beaverkill',      sub:'Roscoe → East Branch',   usgs:'01421000', lat:41.9543, lon:-74.9876 },
+    { label:'Willowemoc Creek',sub:'Livingston Manor → Roscoe', usgs:'01421618', lat:41.9032, lon:-74.8543 },
+    { label:'Delaware (West Branch)', sub:'Deposit → Hancock',usgs:'01423000', lat:42.1876, lon:-75.3654 },
+    { label:'Esopus Creek',    sub:'Shandaken → Kingston',   usgs:'01362500', lat:42.0876, lon:-74.3987 },
+    { label:'Catskill Creek',  sub:'Stamford → Catskill',    usgs:'01363000', lat:42.2543, lon:-74.5432 },
+    { label:'Schoharie Creek', sub:'Grand Gorge → Esperance',usgs:'01350000', lat:42.5143, lon:-74.5876 },
+    { label:'Ausable River',   sub:'Wilmington → Keeseville',usgs:'04275000', lat:44.4321, lon:-73.7654 },
+    { label:'Salmon River (NY)',sub:'Pulaski',               usgs:'04249000', lat:43.5698, lon:-76.1254 },
+    { label:'Battenkill',      sub:'Manchester VT → Hudson', usgs:'01329000', lat:43.1876, lon:-73.4321 },
+    { label:'Connetquot River',sub:'Long Island',            usgs:'01305000', lat:40.7432, lon:-73.1654 },
+  ],
+  NC: [
+    { label:'Watauga River',   sub:'Boone → Trade TN',       usgs:'03463300', lat:36.2143, lon:-81.6754 },
+    { label:'New River (NC)',  sub:'Todd → Virginia',         usgs:'03165000', lat:36.4432, lon:-81.6876 },
+    { label:'South Holston',   sub:'Holston Tailwater',      usgs:'03465500', lat:36.5432, lon:-82.0543 },
+    { label:'Nantahala River', sub:'Whitewater → Bryson City',usgs:'03503000', lat:35.3765, lon:-83.5987 },
+    { label:'Tuckasegee',      sub:'Bryson City → Whittier', usgs:'03502000', lat:35.4254, lon:-83.4321 },
+    { label:'Davidson River',  sub:'Pisgah Forest',          usgs:'03441000', lat:35.2876, lon:-82.6987 },
+    { label:'Linville River',  sub:'Linville Falls area',    usgs:'03451000', lat:35.9543, lon:-81.9765 },
+    { label:'French Broad',    sub:'Rosman → Asheville',     usgs:'03443000', lat:35.5432, lon:-82.5543 },
+    { label:'Wilson Creek',    sub:'Edgemont area',          usgs:'03453000', lat:36.0543, lon:-81.7876 },
+    { label:'Catawba River',   sub:'Old Fort → Hickory',     usgs:'02137727', lat:35.7143, lon:-81.9432 },
+  ],
+  TN: [
+    { label:'Clinch River (TN)',sub:'Norris Tailwater',      usgs:'03528000', lat:36.2154, lon:-84.0776 },
+    { label:'Caney Fork',      sub:'Center Hill Tailwater',  usgs:'03597860', lat:36.0932, lon:-85.8654 },
+    { label:'Hiwassee River',  sub:'Reliance to Charleston', usgs:'03568000', lat:35.1987, lon:-84.5012 },
+    { label:'South Holston (TN)',sub:'Holston Dam Tailwater',usgs:'07030392', lat:36.5543, lon:-82.1543 },
+    { label:'Watauga (TN)',    sub:'Wilbur Dam Tailwater',   usgs:'03465000', lat:36.3543, lon:-82.2987 },
+    { label:'Elk River (TN)',  sub:'Tims Ford Tailwater',    usgs:'03583000', lat:35.2543, lon:-86.2765 },
+    { label:'Little River (TN)',sub:'Metcalf Bottoms',       usgs:'03497300', lat:35.6543, lon:-83.7654 },
+    { label:'Tellico River',   sub:'Tellico Plains area',    usgs:'03541000', lat:35.3765, lon:-84.2987 },
+    { label:'Ocoee River',     sub:'Ducktown to Parksville', usgs:'03567000', lat:35.1154, lon:-84.5432 },
+    { label:'Pigeon River (TN)',sub:'Hartford area',         usgs:'03460000', lat:35.8143, lon:-83.1543 },
+  ],
+  VT: [
+    { label:'Batten Kill',     sub:'Manchester → Arlington', usgs:'01362000', lat:43.0987, lon:-73.0876 },
+    { label:'Lamoille River',  sub:'Johnson → Hardwick',     usgs:'04288000', lat:44.6343, lon:-72.6543 },
+    { label:'Mad River (VT)',  sub:'Waitsfield → Moretown',  usgs:'04284000', lat:44.1876, lon:-72.8432 },
+    { label:'Dog River',       sub:'Northfield area',        usgs:'04284300', lat:44.1543, lon:-72.6543 },
+    { label:'Black River (VT)',sub:'Ludlow → Springfield',   usgs:'01153550', lat:43.3987, lon:-72.5432 },
+    { label:'White River (VT)',sub:'Hancock → Sharon',       usgs:'01144000', lat:43.9765, lon:-72.5987 },
+    { label:'Winooski River',  sub:'Montpelier → Burlington',usgs:'04288500', lat:44.3432, lon:-72.5234 },
+    { label:'Otter Creek',     sub:'Middlebury → Vergennes', usgs:'04282000', lat:44.0143, lon:-73.1543 },
+  ],
+  WI: [
+    { label:'Driftless Coulee',sub:'Vernon County Streams',  usgs:'05410490', lat:43.5632, lon:-90.8765 },
+    { label:'Kinnickinnic',    sub:'River Falls area',       usgs:'05342000', lat:44.8643, lon:-92.6543 },
+    { label:'Bois Brule',      sub:'Brule → Lake Superior',  usgs:'04025500', lat:46.5543, lon:-91.6243 },
+    { label:'Wolf River (WI)',  sub:'Langlade → Shawano',   usgs:'04074950', lat:45.1543, lon:-88.9876 },
+    { label:'Prairie River',   sub:'Merrill area',           usgs:'04073500', lat:45.2543, lon:-89.7432 },
+    { label:'Namekagon',       sub:'Cable → Trego',          usgs:'05330000', lat:46.0232, lon:-91.3987 },
+    { label:'Timber Coulee',   sub:'Coon Valley area',       usgs:'05408000', lat:43.7154, lon:-90.9543 },
+    { label:'Rush River',      sub:'Martell area',           usgs:'05344500', lat:44.7154, lon:-92.4876 },
+    { label:'Oconto River',    sub:'Gillett → Oconto',       usgs:'04075000', lat:44.8876, lon:-88.3543 },
+    { label:'Peshtigo River',  sub:'Crivitz → Peshtigo',     usgs:'04077000', lat:45.2154, lon:-88.1987 },
+  ],
+};
+
+// ── RENDER STATE RIVER TABS ───────────────────────────────────────────────────
+function renderStateTabs(stateCode) {
+  const nav = document.querySelector('.river-tabs');
+
+  // WA: restore the full preset tabs (with hatches, access points, etc.)
+  if (stateCode === 'WA') {
+    const waRivers = [
+      ['upperYakima',   'Upper Yakima',    'Easton → Thorpe'],
+      ['yakimaCanyon',  'Yakima Canyon',   'Roza Dam → Ellensburg'],
+      ['naches',        'Naches River',    'Upper → Confluence'],
+      ['snoqualmie',    'Snoqualmie MF',   'Middle Fork · Above Falls'],
+      ['methow',        'Methow',          'Winthrop → Pateros'],
+      ['okanogan',      'Okanogan',        'Tonasket → Omak'],
+      ['klickitat',     'Klickitat',       'Canyon → Columbia'],
+      ['cowlitz',       'Cowlitz',         'Packwood → Riffe Lake'],
+      ['kalama',        'Kalama',          'Headwaters → Columbia'],
+      ['skykomish',     'Skykomish',       'Index → Monroe'],
+      ['wenatchee',     'Wenatchee',       'Leavenworth → Columbia'],
+      ['greenRiver',    'Green River',     'Hanson Dam → Auburn'],
+      ['stillaguamish', 'Stillaguamish',   'North Fork → Arlington'],
+    ];
+    nav.innerHTML = waRivers.map(function(r, i) {
+      return '<button class="river-tab' + (i===0?' active':'') + '" data-wa="' + r[0] + '">' +
+        r[1] + '<span class="tab-sub">' + r[2] + '</span></button>';
+    }).join('');
+    nav.querySelectorAll('.river-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() { switchRiver(this.dataset.wa); });
+    });
+    switchRiver('upperYakima');
+    updateShopsForState('WA');
+    updateRegsForState('WA');
+    return;
+  }
+
+  const rivers = STATE_RIVERS[stateCode];
+  if (!rivers) {
+    document.getElementById('site-search-status').textContent =
+      'No preset tabs for ' + stateCode + ' — use search above';
+    return;
+  }
+
+  // Build tabs for other states using data attributes (no quote escaping issues)
+  nav.innerHTML = rivers.map(function(r, i) {
+    return '<button class="river-tab' + (i===0?' active':'') + '" data-idx="' + i + '" data-state="' + stateCode + '">' +
+      r.label + '<span class="tab-sub">' + r.sub + '</span></button>';
+  }).join('');
+
+  nav.querySelectorAll('.river-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      loadStateRiver(parseInt(this.dataset.idx), this.dataset.state);
+    });
+  });
+
+  // Load first river immediately
+  loadStateRiver(0, stateCode);
+  // Update shops and regs for this state
+  updateShopsForState(stateCode);
+  updateRegsForState(stateCode);
+}
+
+function loadStateRiver(idx, stateCode) {
+  const rivers = STATE_RIVERS[stateCode];
+  if (!rivers || !rivers[idx]) return;
+  const r = rivers[idx];
+
+  // Update active tab
+  document.querySelectorAll('.river-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
+
+  // Build a minimal river config compatible with the dashboard
+  activeRiver = {
+    id: stateCode + '_' + idx,
+    label: r.label,
+    sublabel: r.sub,
+    usgs: r.usgs,
+    gaugeName: r.label + ' gauge',
+    lat: r.lat,
+    lon: r.lon,
+    wadingThresholds: { easy: 500, moderate: 1200, difficult: 2500, floatOnly: 4000 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — ' + r.label,
+    accessLabel: 'Access — ' + r.label,
+    aiContext: r.label + ', ' + stateCode + ' (' + r.sub + ')',
+    insightTip: 'Seasonal patterns, best hatches, typical fish species, and access notes for ' + r.label,
+  };
+
+  // Update all header/footer labels
+  const parts = r.label.split(' ');
+  const first = parts[0], rest = parts.slice(1).join(' ');
+  document.getElementById('river-title').innerHTML = rest
+    ? first + ' <em style="font-style:italic;color:var(--accent)">' + rest + '</em>'
+    : '<em style="font-style:italic;color:var(--accent)">' + first + '</em>';
+  document.getElementById('river-subtitle').innerHTML = '🎣 ' + r.sub + ' &nbsp;·&nbsp; Fishing Dashboard';
+  document.getElementById('gauge-label').textContent = 'USGS #' + r.usgs + ' · ' + r.label;
+  document.getElementById('footer-gauge').textContent = 'Flow: USGS #' + r.usgs + ' (' + r.label + ')';
+  document.getElementById('hatch-label').textContent = 'Hatches — ' + r.label;
+  document.getElementById('access-label').textContent = 'Access — ' + r.label;
+  document.getElementById('gage-note').textContent = r.label + ' gauge';
+  document.getElementById('airtemp-note').textContent = r.sub.split('→')[0].trim();
+  document.title = r.label + ' — DriftScout';
+
+  // Reset wading ticks
+  const t = activeRiver.wadingThresholds;
+  const fmt = n => n >= 1000 ? (n/1000).toFixed(0)+'k' : n.toString();
+  document.getElementById('wading-t1').textContent = fmt(t.easy) + ' cfs';
+  document.getElementById('wading-t2').textContent = fmt(t.moderate);
+  document.getElementById('wading-t3').textContent = fmt(t.difficult);
+  document.getElementById('wading-t4').textContent = fmt(t.floatOnly) + '+';
+
+  // Reset stat cards
+  flowData = []; currentFlow = null; currentGage = null;
+  currentWaterTemp = null; airTemp = null; weatherData = null;
+  ['flow-val','gage-val','wtemp-val','airtemp-val'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = '—'; el.classList.add('skeleton'); }
+  });
+  const wb = document.getElementById('wtemp-est-wrap');
+  if (wb) wb.style.display = 'none';
+  const baroEl = document.getElementById('baro-val');
+  if (baroEl) { baroEl.textContent = '--'; baroEl.classList.add('skeleton'); }
+  document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
+  document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
+  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for Washington preset rivers.</div>';
+  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for Washington preset rivers.</div>';
+
+  const snap = activeRiver.id;
+  Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
+    if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRIP LOG
+// ═══════════════════════════════════════════════════════════
+function exportTripLog() {
+  var entries = getTripLog();
+  if (!entries.length) { alert('No trips to export.'); return; }
+  var headers = ['Date','River','Flow (cfs)','Fly Pattern','Method','Fish Count','Notes'];
+  var rows = entries.map(function(e) {
+    return [e.date, e.river, e.flow||'', e.fly||'', e.method||'', e.fish||'', (e.notes||'').replace(/,/g,'；').replace(/\n/g,' ')].join(',');
+  });
+  var csv = headers.join(',') + '\n' + rows.join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'driftscout-trips-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+
+function setDefaultDate() {
+  const d = document.getElementById('log-date');
+  if (d && !d.value) d.value = new Date().toISOString().split('T')[0];
+}
+
+function getTripLog() {
+  try {
+    var raw = localStorage.getItem('driftscout_trips');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) {
+    console.warn('Trip log read error:', e);
+    return [];
+  }
+}
+
+function saveTripData(entries) {
+  try {
+    localStorage.setItem('driftscout_trips', JSON.stringify(entries));
+    return true;
+  } catch(e) {
+    alert('Could not save trip — your browser storage may be full or disabled.');
+    return false;
+  }
+}
+
+function saveTripEntry() {
+  const date   = document.getElementById('log-date').value;
+  const river  = document.getElementById('log-river').value;
+  const flow   = document.getElementById('log-flow').value;
+  const fly    = document.getElementById('log-fly').value;
+  const method = document.getElementById('log-method').value;
+  const fish   = document.getElementById('log-fish').value;
+  const notes  = document.getElementById('log-notes').value;
+  if (!date || !river) { alert('Please fill in at least a date and river.'); return; }
+  const entries = getTripLog();
+  entries.unshift({ id: Date.now(), date, river, flow, fly, method, fish, notes });
+  if (!saveTripData(entries)) return;
+  document.getElementById('log-fly').value = '';
+  document.getElementById('log-fish').value = '';
+  document.getElementById('log-notes').value = '';
+  renderTripLog();
+}
+
+function clearTripLog() {
+  if (!confirm('Clear all trip entries?')) return;
+  try { localStorage.removeItem('driftscout_trips'); } catch(e) {}
+  renderTripLog();
+}
+
+function deleteTripEntry(id) {
+  const entries = getTripLog().filter(e => e.id !== id);
+  localStorage.setItem('driftscout_trips', JSON.stringify(entries));
+  renderTripLog();
+}
+
+function renderTripLog() {
+  const entries = getTripLog();
+  const container = document.getElementById('trip-entries');
+  if (!container) return;
+  if (!entries.length) {
+    container.innerHTML = '<div class="trip-empty"><span class="trip-empty-title">No trips logged yet</span>Fill in the form above to record your first outing.</div>';
+    return;
+  }
+  container.innerHTML = entries.map(e => {
+    const tags = [e.method, e.flow ? e.flow + ' cfs' : null].filter(Boolean);
+    return '<div class="trip-entry">' +
+      '<div>' +
+        '<div class="trip-entry-top">' +
+          '<span class="trip-entry-river">' + e.river + '</span>' +
+          '<span class="trip-entry-date">' + e.date + '</span>' +
+        '</div>' +
+        (e.fly ? '<div class="trip-entry-fly">' + e.fly + '</div>' : '') +
+        (e.notes ? '<div class="trip-entry-note">' + e.notes + '</div>' : '') +
+        (e.fish ? '<div class="trip-entry-note" style="margin-top:4px">&#x1F41F; ' + e.fish + ' fish</div>' : '') +
+        '<div class="trip-entry-tags">' + tags.map(t => '<span class="trip-tag">' + t + '</span>').join('') + '</div>' +
+      '</div>' +
+      '<button class="btn-danger" onclick="deleteTripEntry(' + e.id + ')" title="Delete">&#x2715;</button>' +
+    '</div>';
+  }).join('');
+}
+
+// =============================================================
+// STATE-AWARE SHOPS & REGULATIONS
+// =============================================================
+
+const STATE_SHOPS = {
+  WA: [
+    { name:'The Evening Hatch', location:'Ellensburg, WA', rivers:'Yakima River & Canyon', tags:['Guided','Gear','Flies','Lessons'], website:'https://www.eveninghatch.com', phone:'(509) 962-5959' },
+    { name:'Worley Bugger Fly Co.', location:'Ellensburg, WA', rivers:'Upper Yakima, Canyon', tags:['Gear','Flies','Classes','Repairs'], website:'https://www.worleybugger.com', phone:'(509) 962-2033' },
+    { name:'The Spotted Frog', location:'Yakima, WA', rivers:'Yakima Canyon, Naches', tags:['Guided','Gear','Flies'], website:'https://spottedfroglyfishing.com', phone:'(509) 225-0909' },
+    { name:"Red's Fly Shop", location:'Winthrop, WA', rivers:'Methow, Okanogan', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.redsflyshop.com', phone:'(509) 997-3900' },
+    { name:'Creekside Angling', location:'Issaquah, WA', rivers:'Snoqualmie, Cedar, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.creeksideangling.com', phone:'(425) 392-3800' },
+    { name:"Patrick's Fly Shop", location:'Seattle, WA', rivers:'All WA rivers', tags:['Gear','Flies','Classes','Reports'], website:'https://www.patricksflyfishing.com', phone:'(206) 325-8988' },
+    { name:'Avid Angler', location:'Lake Forest Park, WA', rivers:'Puget Sound rivers, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.avidangler.com', phone:'(206) 362-4030' },
+    { name:"Swede's Fly Shop", location:'Randle, WA', rivers:'Cowlitz River', tags:['Guided','Gear','Flies','Intel'], website:'https://www.swedesflyfishing.com', phone:'(360) 497-7397' },
+    { name:'Confluence Fly Shop', location:'Hood River, OR', rivers:'Klickitat, Deschutes, Columbia Gorge', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.confluenceflyshop.com', phone:'(541) 386-6002' },
+    { name:"Kaufmann's Streamborn", location:'Tigard, OR', rivers:'All PNW rivers', tags:['Gear','Flies','Books','Mail Order'], website:'https://www.kman.com', phone:'(800) 442-4359' },
+  ],
+  OR: [
+    { name:'The Fly Fisher Place', location:'Sisters, OR', rivers:'Metolius, Deschutes, McKenzie', tags:['Guided','Gear','Flies','Classes'], website:'https://www.theflyfisherplace.com', phone:'(541) 549-3474' },
+    { name:'The Deschutes Angler', location:'Maupin, OR', rivers:'Deschutes River', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.deschutesangler.com', phone:'(541) 395-0995' },
+    { name:'Confluence Fly Shop', location:'Hood River, OR', rivers:'Deschutes, Klickitat, Sandy', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.confluenceflyshop.com', phone:'(541) 386-6002' },
+    { name:'The Caddis Fly', location:'Eugene, OR', rivers:'McKenzie, Willamette, North Umpqua', tags:['Guided','Gear','Flies','Classes'], website:'https://www.thecaddisfly.com', phone:'(541) 342-7005' },
+    { name:'Steamboat Inn', location:'Steamboat, OR', rivers:'North Umpqua', tags:['Guided','Lodging','Flies','Gear'], website:'https://www.thesteamboatinn.com', phone:'(541) 498-2230' },
+    { name:'Home Waters Fly Fishing', location:'Eugene, OR', rivers:'McKenzie, Willamette, statewide', tags:['Guided','Gear','Flies','Lessons'], website:'https://www.homewaters.com', phone:'(541) 342-6691' },
+    { name:'Camp Sherman Store', location:'Camp Sherman, OR', rivers:'Metolius River', tags:['Gear','Flies','Local Intel'], website:'https://www.campshermanstore.com', phone:'(541) 595-6711' },
+    { name:"Kaufmann's Streamborn", location:'Tigard, OR', rivers:'All PNW rivers', tags:['Gear','Flies','Books','Mail Order'], website:'https://www.kman.com', phone:'(800) 442-4359' },
+  ],
+  MT: [
+    { name:'Blue Ribbon Flies', location:'West Yellowstone, MT', rivers:'Madison, Firehole, Gallatin, Yellowstone', tags:['Guided','Gear','Flies','Classes'], website:'https://www.blueribbonflies.com', phone:'(406) 646-7642' },
+    { name:'Madison River Fishing Co.', location:'Ennis, MT', rivers:'Madison River', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.mrfc.com', phone:'(406) 682-4293' },
+    { name:'Grizzly Hackle', location:'Missoula, MT', rivers:'Bitterroot, Clark Fork, Blackfoot', tags:['Guided','Gear','Flies','Classes'], website:'https://www.grizzlyhackle.com', phone:'(406) 721-8996' },
+    { name:'Gallatin River Guides', location:'Big Sky, MT', rivers:'Gallatin River', tags:['Guided','Gear','Flies'], website:'https://www.montanaflyfishing.com', phone:'(406) 995-2290' },
+    { name:'The Tackle Shop', location:'Ennis, MT', rivers:'Madison, Big Hole, Ruby', tags:['Guided','Gear','Flies','Reports'], website:'https://www.thetackleshop.com', phone:'(406) 682-4263' },
+    { name:'Blackfoot River Outfitters', location:'Missoula, MT', rivers:'Blackfoot, Clark Fork, Rock Creek', tags:['Guided','Gear','Flies','Trips'], website:'https://www.blackfootriver.com', phone:'(406) 542-7411' },
+    { name:'Cross Currents', location:'Helena, MT', rivers:'Missouri, Smith, statewide', tags:['Guided','Gear','Flies'], website:'https://www.crosscurrentsflyfishing.com', phone:'(406) 449-2292' },
+    { name:'Big Hole River Outfitters', location:'Wise River, MT', rivers:'Big Hole River', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.bigholeriver.com', phone:'(406) 832-3252' },
+  ],
+  ID: [
+    { name:'Henry Fork Anglers', location:'Island Park, ID', rivers:'Henrys Fork', tags:['Guided','Gear','Flies','Reports'], website:'https://www.henrysforkanglers.com', phone:'(208) 558-7525' },
+    { name:'South Fork Outfitters', location:'Swan Valley, ID', rivers:'South Fork Snake', tags:['Guided','Gear','Flies','Shuttles'], website:'https://www.southforkoutfitters.com', phone:'(208) 483-2722' },
+    { name:'Silver Creek Outfitters', location:'Ketchum, ID', rivers:'Silver Creek, Big Wood, South Fork Snake', tags:['Guided','Gear','Flies','Classes'], website:'https://www.silvercreekoutfitters.com', phone:'(208) 726-5282' },
+    { name:'Hyde Outfitters', location:'Idaho Falls, ID', rivers:'South Fork Snake, Henrys Fork, Teton', tags:['Guided','Gear','Flies'], website:'https://www.hydeoutfitters.com', phone:'(208) 529-4343' },
+    { name:'Stonefly Angler', location:'Boise, ID', rivers:'Boise River, Salmon, statewide', tags:['Gear','Flies','Guided','Classes'], website:'https://www.stoneflyidaho.com', phone:'(208) 338-1700' },
+    { name:'Tight Lines Fly Shop', location:'Twin Falls, ID', rivers:'Snake River, Salmon, statewide', tags:['Gear','Flies','Guided'], website:'https://www.tightlinesflyfishing.com', phone:'(208) 734-8008' },
+  ],
+  CO: [
+    { name:'Anglers All', location:'Littleton, CO', rivers:'South Platte, Arkansas, statewide', tags:['Guided','Gear','Flies','Classes'], website:'https://www.anglersall.com', phone:'(303) 794-1139' },
+    { name:'Dragonfly Anglers', location:'Crested Butte, CO', rivers:'Gunnison, Taylor, East', tags:['Guided','Gear','Flies'], website:'https://www.dragonfly-anglers.com', phone:'(970) 349-1228' },
+    { name:'Roaring Fork Anglers', location:'Glenwood Springs, CO', rivers:'Roaring Fork, Colorado, Fryingpan', tags:['Guided','Gear','Flies','Classes'], website:'https://www.roaringforkanglers.com', phone:'(970) 945-0180' },
+    { name:'Fryingpan Anglers', location:'Basalt, CO', rivers:'Fryingpan River', tags:['Guided','Gear','Flies','Licenses'], website:'https://www.fryingpananglers.com', phone:'(970) 927-3441' },
+    { name:'Taylor Creek Fly Shop', location:'Basalt, CO', rivers:'Fryingpan, Roaring Fork, Colorado', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.taylorcreek.com', phone:'(970) 927-4374' },
+    { name:'Arkansas Valley Fly Shop', location:'Buena Vista, CO', rivers:'Arkansas River', tags:['Guided','Gear','Flies'], website:'https://www.arkansasvalleyflyfishing.com', phone:'(719) 395-8081' },
+    { name:'Minturn Anglers', location:'Minturn, CO', rivers:'Eagle River, Colorado', tags:['Guided','Gear','Flies'], website:'https://www.minturnanglers.com', phone:'(970) 827-9500' },
+    { name:'St. Peters Fly Shop', location:'Fort Collins, CO', rivers:'Cache la Poudre, North Platte', tags:['Guided','Gear','Flies','Classes'], website:'https://www.stpetersflyfishing.com', phone:'(970) 498-8968' },
+  ],
+  WY: [
+    { name:'Jack Dennis Outdoor Shop', location:'Jackson, WY', rivers:'Snake River, Green River, Yellowstone', tags:['Guided','Gear','Flies','Classes'], website:'https://www.jackdennis.com', phone:'(307) 733-3270' },
+    { name:'High Country Flies', location:'Jackson, WY', rivers:'Snake River, Green River, statewide', tags:['Guided','Gear','Flies','Reports'], website:'https://www.highcountryflies.com', phone:'(307) 733-7210' },
+    { name:'Reel Deal Anglers', location:'Cody, WY', rivers:'Shoshone, Bighorn, Yellowstone Park', tags:['Guided','Gear','Flies'], website:'https://www.reeldealanglers.com', phone:'(307) 527-6928' },
+    { name:'Wyoming Fly Fishing', location:'Lander, WY', rivers:'Wind River, Popo Agie, statewide', tags:['Guided','Gear','Flies'], website:'https://www.wyomingflyfishing.com', phone:'(307) 332-4137' },
+    { name:'The Trout Shop', location:'Saratoga, WY', rivers:'North Platte Gold Medal tailwater', tags:['Guided','Gear','Flies','Lodging'], website:'https://www.saratogatroutshop.com', phone:'(307) 326-8544' },
+  ],
+  CA: [
+    { name:'The Fly Shop', location:'Redding, CA', rivers:'McCloud, Pit, Upper Sacramento, Hat Creek', tags:['Guided','Gear','Flies','Classes','Trips'], website:'https://www.theflyshop.com', phone:'(800) 669-3474' },
+    { name:'Ted Fay Fly Shop', location:'Dunsmuir, CA', rivers:'Upper Sacramento', tags:['Guided','Gear','Flies','Local Intel'], website:'https://www.tedfay.com', phone:'(530) 235-2969' },
+    { name:'Clearwater House on Hat Creek', location:'Cassel, CA', rivers:'Hat Creek, Pit River, Fall River', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.clearwaterhouse.com', phone:'(530) 335-5500' },
+    { name:'Truckee River Outfitters', location:'Truckee, CA', rivers:'Truckee River, local Sierra streams', tags:['Guided','Gear','Flies','Classes'], website:'https://www.truckeeriveroutfitters.com', phone:'(530) 582-0900' },
+    { name:'Kern River Fly Fishing', location:'Kernville, CA', rivers:'Kern River', tags:['Guided','Gear','Flies'], website:'https://www.kernriverflyfishing.com', phone:'(760) 376-2040' },
+    { name:'Mammoth Fly Fishing', location:'Mammoth Lakes, CA', rivers:'Owens River, Hot Creek, local lakes', tags:['Guided','Gear','Flies'], website:'https://www.mammothflyfishing.com', phone:'(760) 934-3404' },
+  ],
+  AK: [
+    { name:'Alaska Fly Fishing Goods', location:'Anchorage, AK', rivers:'Kenai, Russian, statewide', tags:['Gear','Flies','Guided','Reports'], website:'https://www.alaskaflyfishinggoods.com', phone:'(907) 222-1230' },
+    { name:'Kenai Riverfront Resort', location:'Soldotna, AK', rivers:'Kenai River', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.kenairiverfront.com', phone:'(907) 262-4000' },
+    { name:'Soldotna Fly Shop', location:'Soldotna, AK', rivers:'Kenai, Kasilof, Anchor', tags:['Gear','Flies','Guided','Licenses'], website:'https://www.soldotnaflyfishing.com', phone:'(907) 262-7491' },
+    { name:'Alaska Sportsman Lodge', location:'King Salmon, AK', rivers:'Naknek, Kvichak, Alagnak', tags:['Guided','Lodging','Gear','Flies'], website:'https://www.alaskasportsmanlodge.com', phone:'(907) 246-3287' },
+    { name:'Rainbow King Lodge', location:'Iliamna, AK', rivers:'Kvichak, Alagnak, Bristol Bay', tags:['Guided','Lodging','Flies','Remote'], website:'https://www.rainbowking.com', phone:'(907) 571-1313' },
+  ],
+};
+
+const STATE_REGS = {
+  WA: {
+    title:'Washington Fishing Regulations',
+    agency:'WDFW', agencyUrl:'https://wdfw.wa.gov/fishing/regulations',
+    eRegsUrl:'https://www.eregulations.com/washington/fishing',
+    licenseUrl:'https://fishhunt.dfw.wa.gov/',
+    season:'Varies by river and species — many WA rivers open year-round for trout',
+    highlights:[
+      'Selective gear rules on most premier trout streams (barbless, artificial only)',
+      'Wild trout must be released on selective gear waters',
+      'Steelhead: wild fish release only on most rivers; check for adipose clip',
+      'Salmon/steelhead seasons set annually — always verify current year rules',
+      'Tribal co-management waters have separate regulations — check boundaries',
+    ],
+    license:'Annual freshwater license required. Combination license available.',
+    notes:'WA uses a punch card system for salmon and steelhead — carry it when fishing.',
+  },
+  OR: {
+    title:'Oregon Fishing Regulations',
+    agency:'ODFW', agencyUrl:'https://myodfw.com/fishing/regulations',
+    eRegsUrl:'https://www.eregulations.com/oregon/fishing',
+    licenseUrl:'https://odfw.huntfishoregon.com/',
+    season:'Varies widely — Deschutes and most coastal rivers have year-round sections',
+    highlights:[
+      'Deschutes: flies and lures only on most trophy sections; wild redband release required',
+      'North Umpqua: flies only above Soda Springs — one of few fly-only rivers in the US',
+      'Wild steelhead: release only on most rivers; check adipose fin for hatchery marks',
+      'Metolius River: catch-and-release only for all species',
+      'Annual emergency closures common — check ODFW before any trip',
+    ],
+    license:'Annual angling license required. Combined harvest tag for salmon/steelhead.',
+    notes:'OR requires a Combined Angling Tag for salmon, steelhead, sturgeon, and halibut.',
+  },
+  MT: {
+    title:'Montana Fishing Regulations',
+    agency:'Montana FWP', agencyUrl:'https://fwp.mt.gov/fish/regulations',
+    eRegsUrl:'https://www.eregulations.com/montana/fishing',
+    licenseUrl:'https://fwp.mt.gov/fish/license',
+    season:'Most trout streams open third Saturday in May through November 30',
+    highlights:[
+      'Madison, Gallatin, Yellowstone: catch-and-release strongly recommended for wild trout',
+      'Clark Fork and tributaries: check specific size and bag limits by section',
+      'Bull trout: fully protected statewide — immediate release required',
+      'Non-residents require a separate Conservation License plus fishing license',
+      'Some rivers have special regulations for specific species — check the booklet',
+    ],
+    license:'Conservation license plus fishing license required. Non-resident fees significantly higher.',
+    notes:'MT FWP publishes an annual regulation booklet — pick one up at any license vendor.',
+  },
+  ID: {
+    title:'Idaho Fishing Regulations',
+    agency:'IDFG', agencyUrl:'https://idfg.idaho.gov/fish/regs',
+    eRegsUrl:'https://www.eregulations.com/idaho/fishing',
+    licenseUrl:'https://idfg.idaho.gov/license',
+    season:'Varies by water — many trout streams open year-round',
+    highlights:[
+      'Henrys Fork: catch-and-release only in many sections; artificial only above Last Chance',
+      'Silver Creek: artificial flies and lures only; catch-and-release for trout',
+      'South Fork Snake: check current bag limits — actively managed trophy fishery',
+      'Salmon and steelhead: harvest rules change annually based on run forecasts',
+      'Bull trout: fully protected statewide — immediate release required',
+    ],
+    license:'Annual fishing license required. Separate salmon/steelhead tag required.',
+    notes:'IDFG updates emergency rules frequently — check their website before each trip.',
+  },
+  CO: {
+    title:'Colorado Fishing Regulations',
+    agency:'CPW', agencyUrl:'https://cpw.state.co.us/thingstodo/Pages/Fishing-Regulations.aspx',
+    eRegsUrl:'https://www.eregulations.com/colorado/fishing',
+    licenseUrl:'https://cpw.state.co.us/buyapply/Pages/Fishing.aspx',
+    season:'Year-round on most Gold Medal and designated waters',
+    highlights:[
+      'Gold Medal waters (South Platte, Fryingpan, Taylor) have special regulations',
+      'Most Gold Medal: artificial flies and lures only; 2-fish bag limit minimum 15 inches',
+      'Wild Trout waters: catch-and-release only or very restrictive limits',
+      'Arkansas River: check specific sections — regulations vary significantly',
+      'Possession of live bait prohibited on many quality waters',
+    ],
+    license:'Annual fishing license required. 1-day and 5-day licenses available for visitors.',
+    notes:'CO has some of the most detailed section-specific rules in the West — read carefully.',
+  },
+  WY: {
+    title:'Wyoming Fishing Regulations',
+    agency:'WGFD', agencyUrl:'https://wgfd.wyo.gov/Fishing/Fishing-Regulations',
+    eRegsUrl:'https://www.eregulations.com/wyoming/fishing',
+    licenseUrl:'https://wgfd.wyo.gov/Licensing',
+    season:'Most trout waters open January 1 through October 31',
+    highlights:[
+      'Snake River Fine-spotted Cutthroat: catch-and-release only in most sections',
+      'Green River below Fontenelle: special regulations — check current rules',
+      'North Platte Miracle Mile: artificial only; check bag and size limits',
+      'Yellowstone Park has separate NPS regulations — different from state rules',
+      'Bighorn River below Yellowtail: trophy section with special regulations',
+    ],
+    license:'Annual fishing license required. Separate conservation stamp may be required.',
+    notes:'Yellowstone Park fishing requires a separate NPS permit, not covered by state license.',
+  },
+  CA: {
+    title:'California Fishing Regulations',
+    agency:'CDFW', agencyUrl:'https://wildlife.ca.gov/Regulations/Sport-Fish',
+    eRegsUrl:'https://www.eregulations.com/california/fishing',
+    licenseUrl:'https://www.ca.wildlifeaccountmanager.com/',
+    season:'Varies — many streams open last Saturday in April through November 15',
+    highlights:[
+      'Wild trout program waters: artificial lures with barbless hooks; catch-and-release',
+      'McCloud, Hat Creek, Fall River: special artificial-only regulations',
+      'Trophy trout waters have specific size and bag limits',
+      'Native steelhead: closed most areas; check for rare open sections',
+      'Two-rod stamp allows fishing with two rods on most waters',
+    ],
+    license:'Annual fishing license required. Two-rod stamp available. Report card for steelhead/salmon.',
+    notes:'CA requires a separate Steelhead Report Card available at license vendors.',
+  },
+  AK: {
+    title:'Alaska Fishing Regulations',
+    agency:'ADF&G', agencyUrl:'https://www.adfg.alaska.gov/index.cfm?adfg=fishingregs.main',
+    eRegsUrl:'https://www.eregulations.com/alaska/fishing',
+    licenseUrl:'https://www.adfg.alaska.gov/index.cfm?adfg=license.main',
+    season:'Varies dramatically by drainage and species — consult area-specific regulations',
+    highlights:[
+      'King salmon: strict limits and closures many years — verify current rules before any trip',
+      'Rainbow and steelhead: many rivers are catch-and-release only for wild fish',
+      'King salmon report cards often required regardless of harvest intent',
+      'Remote drainages may have completely different rules than road-system waters',
+      'Emergency orders can close fisheries with 48-hour notice — check before flying in',
+    ],
+    license:'Annual license required. King salmon stamp required. Harvest record cards for salmon.',
+    notes:'AK regulations are complex and change frequently. Call ADF&G regional office before remote trips.',
+  },
+  DEFAULT: {
+    title:'State Fishing Regulations',
+    agency:'State Wildlife Agency', agencyUrl:'https://www.fishingregulations.com',
+    eRegsUrl:'https://www.eregulations.com',
+    licenseUrl:'',
+    season:'Varies by water and species',
+    highlights:[
+      'Always check current regulations before fishing — rules change annually',
+      'Obtain required fishing license and any applicable stamps or tags',
+      'Check for special regulations on specific waters (barbless, artificial only, C&R)',
+      'Wild fish typically have stricter regulations than hatchery fish',
+      'Verify tribal co-management boundaries if applicable in your region',
+    ],
+    license:'State fishing license required for all waters. Additional stamps may be required.',
+    notes:'Visit your state wildlife agency website for the current regulations booklet.',
+  },
+};
+
+function updateShopsForState(stateCode) {
+  var shops = STATE_SHOPS[stateCode] || STATE_SHOPS.WA;
+  var grid = document.getElementById('shop-grid');
+  if (!grid) return;
+  // Update panel headings
+  var stateNames = {WA:'Washington',OR:'Oregon',MT:'Montana',ID:'Idaho',CO:'Colorado',
+    WY:'Wyoming',CA:'California',AK:'Alaska',MN:'Minnesota',MI:'Michigan',
+    PA:'Pennsylvania',NY:'New York',NC:'North Carolina',TN:'Tennessee',
+    VT:'Vermont',WI:'Wisconsin'};
+  var stateName = stateNames[stateCode] || stateCode;
+  var t = document.getElementById('shops-title');
+  var s = document.getElementById('shops-subtitle');
+  if (t) t.textContent = stateName + ' Fly Shops';
+  if (s) s.textContent = 'Local shops near the rivers you fish in ' + stateName + ' — best sources for current intel';
+  grid.innerHTML = shops.map(function(s) {
+    return '<div class="shop-card">' +
+      '<div class="shop-name">' + s.name + '</div>' +
+      '<div class="shop-location">&#128205; ' + s.location + '</div>' +
+      '<div class="shop-rivers">' + s.rivers + '</div>' +
+      '<div class="shop-tags">' + s.tags.map(function(t){ return '<span class="shop-tag">'+t+'</span>'; }).join('') + '</div>' +
+      '<div class="shop-links">' +
+        '<a href="' + s.website + '" target="_blank" class="shop-link">Website &#8599;</a>' +
+        '<a href="tel:' + s.phone.replace(/[^0-9]/g,'') + '" class="shop-link">&#128222; Call</a>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function updateRegsForState(stateCode) {
+  var r = STATE_REGS[stateCode] || STATE_REGS.DEFAULT;
+  var stateAgencies = {WA:'WDFW',OR:'ODFW',MT:'MT FWP',ID:'IDFG',CO:'CPW',
+    WY:'WGFD',CA:'CDFW',AK:'ADF&G'};
+  var agency = stateAgencies[stateCode] || 'state fish & wildlife agency';
+
+  // Update title and subtitle
+  var t = document.getElementById('regs-title');
+  var s = document.getElementById('regs-subtitle');
+  if (t) t.textContent = r.title;
+  if (s) s.textContent = 'Quick reference — always verify with ' + agency + ' before fishing';
+
+  // Update the warning banner link + text
+  var warnLink = document.getElementById('regs-warning-link');
+  if (warnLink) {
+    warnLink.href = r.agencyUrl;
+    warnLink.textContent = agency + ' Fishing Regulations';
+  }
+
+  var select = document.getElementById('regs-river-select');
+  var selectWrap = select ? select.parentElement : null;
+  var content = document.getElementById('regs-content');
+
+  if (stateCode === 'WA') {
+    if (selectWrap) selectWrap.style.display = '';
+    renderRegs();
+    return;
+  }
+  if (selectWrap) selectWrap.style.display = 'none';
+  if (!content) return;
+  content.innerHTML =
+    '<div class="reg-card"><div class="reg-card-title">&#128197; Season</div><ul><li>' + r.season + '</li></ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#128203; Key Rules</div><ul>' +
+      r.highlights.map(function(h){ return '<li>' + h + '</li>'; }).join('') +
+    '</ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#127918; License Required</div><ul><li>' + r.license + '</li></ul></div>' +
+    '<div class="reg-card"><div class="reg-card-title">&#128221; Notes</div><ul><li>' + r.notes + '</li></ul></div>' +
+    '<div style="grid-column:1/-1;display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">' +
+      '<a href="' + r.agencyUrl + '" target="_blank" class="shop-link">' + r.agency + ' Official Regs &#8599;</a>' +
+      '<a href="' + r.eRegsUrl + '" target="_blank" class="shop-link">eRegulations.com &#8599;</a>' +
+      (r.licenseUrl ? '<a href="' + r.licenseUrl + '" target="_blank" class="shop-link">Buy License &#8599;</a>' : '') +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// MATCH THE HATCH — Photo bug identifier
+// ═══════════════════════════════════════════════════════════
+
+function handleHatchDrop(event) {
+  event.preventDefault();
+  document.getElementById('hatch-upload-area').style.borderColor = 'var(--border)';
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processHatchImage(file);
+}
+
+function handleHatchFile(event) {
+  const file = event.target.files[0];
+  if (file) processHatchImage(file);
+}
+
+function processHatchImage(file) {
+  var objectUrl = URL.createObjectURL(file);
+  document.getElementById('hatch-preview-img').src = objectUrl;
+  document.getElementById('hatch-upload-area').style.display = 'none';
+  document.getElementById('hatch-preview-wrap').style.display = 'block';
+  document.getElementById('hatch-result').innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.82rem"><div class="spinner"></div>Resizing &amp; identifying…</div>';
+  var img = new Image();
+  img.onload = function() {
+    var MAX = 1024;
+    var w = img.width, h = img.height;
+    if (w > MAX || h > MAX) {
+      if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+      else { w = Math.round(w * MAX / h); h = MAX; }
+    }
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    var base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+    URL.revokeObjectURL(objectUrl);
+    identifyHatch(base64, 'image/jpeg');
+  };
+  img.onerror = function() {
+    document.getElementById('hatch-result').innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem">Could not load image. Try a different photo.</div>';
+  };
+  img.src = objectUrl;
+}
+
+async function identifyHatch(base64, mediaType) {
+  var resultEl = document.getElementById('hatch-result');
+  var riverCtx = activeRiver ? activeRiver.label + ' (' + activeRiver.sublabel + ')' : 'a Pacific Northwest trout stream';
+
+  var prompt = 'You are an expert aquatic entomologist and fly fishing guide. The angler is fishing ' + riverCtx + '.\n\nExamine this photo carefully and identify the insect. Respond with ONLY a JSON object in this exact shape — no markdown, no explanation:\n\n{\n  "identified": true,\n  "commonName": "<common name e.g. Blue-Wing Olive>",\n  "latinName": "<genus/species if identifiable>",\n  "order": "<insect order e.g. Ephemeroptera>",\n  "lifeStage": "<Nymph | Emerger | Dun | Spinner | Adult | Larva | Pupa>",\n  "size": "<estimated body length e.g. 8-12mm / hook size #16-18>",\n  "confidence": "<High | Medium | Low>",\n  "notes": "<one sentence observation about the specimen>",\n  "patterns": [\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" },\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" },\n    { "name": "<fly pattern>", "size": "<hook size>", "notes": "<when/how to fish it>" }\n  ]\n}\n\nIf no insect is visible or identifiable, respond with:\n{ "identified": false, "reason": "<brief explanation>" }\n\nReturn 3-4 fly patterns matching this exact life stage and size.';
+
+  try {
+    var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    var data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    var text = (data.content && data.content[0] && data.content[0].text || '').trim().replace(/```json|```/g, '').trim();
+    if (!text) throw new Error('Empty response from AI');
+    var result = JSON.parse(text);
+
+    if (!result.identified) {
+      resultEl.innerHTML =
+        '<div style="padding:16px;background:var(--surface2);border-radius:4px;border:1px solid var(--border)">' +
+        '<div style="font-size:0.7rem;color:var(--amber);margin-bottom:6px;font-family:IBM Plex Mono,monospace">Could not identify</div>' +
+        '<div style="font-size:0.82rem;color:var(--muted)">' + (result.reason || 'No aquatic insect detected.') + '</div>' +
+        '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Try a closer photo on a light background.</div>' +
+        '</div>';
+      return;
+    }
+
+    var confColor = result.confidence === 'High' ? 'var(--green)' : result.confidence === 'Medium' ? 'var(--amber)' : 'var(--red)';
+    var patternsHtml = (result.patterns || []).map(function(p, i) {
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;' + (i < (result.patterns.length-1) ? 'border-bottom:1px solid var(--border)' : '') + '">' +
+        '<div style="font-size:0.7rem;color:var(--accent);flex-shrink:0;min-width:20px;margin-top:1px">' + (i+1) + '</div>' +
+        '<div><div style="font-size:0.8rem;font-weight:500;color:var(--text)">' + p.name + ' <span style="color:var(--muted)">' + p.size + '</span></div>' +
+        '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">' + p.notes + '</div></div></div>';
+    }).join('');
+
+    resultEl.innerHTML =
+      '<div style="margin-bottom:16px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+          '<div style="font-size:1.1rem;font-weight:700;font-style:italic;color:var(--text)">' + result.commonName + '</div>' +
+          '<span style="font-size:0.55rem;color:' + confColor + ';border:1px solid currentColor;padding:1px 6px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + result.confidence + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.68rem;color:var(--muted);font-style:italic;margin-bottom:6px">' + (result.latinName || '') + '</div>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+          '<span style="font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.order||'') + '</span>' +
+          '<span style="font-size:0.6rem;background:rgba(200,68,26,0.1);color:var(--accent);border:1px solid rgba(200,68,26,0.25);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.lifeStage||'') + '</span>' +
+          '<span style="font-size:0.6rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">' + (result.size||'') + '</span>' +
+          (result.isAquatic === false ? '<span style="font-size:0.6rem;background:rgba(192,122,26,0.12);color:var(--amber);border:1px solid rgba(192,122,26,0.3);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">Terrestrial</span>' : '<span style="font-size:0.6rem;background:rgba(58,107,53,0.12);color:var(--green);border:1px solid rgba(58,107,53,0.3);padding:2px 8px;border-radius:2px;font-family:IBM Plex Mono,monospace">Aquatic</span>') +
+        '</div>' +
+        (result.notes ? '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic">' + result.notes + '</div>' : '') +
+      '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px 16px">' +
+        '<div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-family:IBM Plex Mono,monospace">Matching Fly Patterns</div>' +
+        patternsHtml +
+      '</div>';
+
+  } catch(e) {
+    console.error('Hatch ID error:', e);
+    resultEl.innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem">' +
+      '<div style="color:var(--red);margin-bottom:8px">Error: ' + e.message + '</div>' +
+      '<button onclick="document.getElementById(&quot;hatch-file-input&quot;).click()" style="font-size:0.65rem;color:var(--accent);border:1px solid var(--accent);background:none;padding:6px 14px;border-radius:2px;cursor:pointer">Try New Photo</button>' +
+      '</div>';
+  }
+}
+
+
+// ── MAP STATE VARIABLES ────────────────────────────────────────
+var dsMap = null;
+var mapLayers = {};
+var mapLayerGroups = { access: null, gauges: null, public: null };
+var mapLayerVisible = { access: true, gauges: true, public: false };
+var userLocationMarker = null;
+var mapInitialized = false;
+var TILE_LAYERS = null;
+var currentTileLayer = 'topo';
+
+
+function initMap() {
+  if (mapInitialized) {
+    centerMapOnRiver();
+    return;
+  }
+
+  // Safety check — Leaflet must be loaded
+  if (typeof L === 'undefined') {
+    console.error('Leaflet not loaded');
+    document.getElementById('ds-map').innerHTML =
+      '<div style="padding:40px;text-align:center;color:#6b6659;font-family:IBM Plex Mono,monospace;font-size:0.8rem">Map failed to load. Check your internet connection and reload.</div>';
+    return;
+  }
+
+  // Build tile layers here (not at parse time) so L is guaranteed available
+  TILE_LAYERS = {
+    topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 17,
+      attribution: '&copy; OpenTopoMap contributors'
+    }),
+    satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: '&copy; Esri, Maxar, GeoEye, Earthstar Geographics'
+    })
+  };
+
+  var lat = activeRiver ? activeRiver.lat : 47.2437;
+  var lon = activeRiver ? activeRiver.lon : -121.1848;
+
+  dsMap = L.map('ds-map', {
+    center: [lat, lon],
+    zoom: 11,
+    zoomControl: true,
+  });
+
+  TILE_LAYERS.topo.addTo(dsMap);
+
+  // Initialize layer groups
+  mapLayerGroups.gauges = L.layerGroup().addTo(dsMap);
+  mapLayerGroups.access = L.layerGroup().addTo(dsMap);
+  mapLayerGroups.public = L.layerGroup(); // not added yet — toggled off by default
+
+  mapInitialized = true;
+
+  // Populate markers
+  addGaugeMarkers();
+  addAccessMarkers();
+
+  // Force size recalculation
+  dsMap.invalidateSize();
+  setTimeout(function() { dsMap.invalidateSize(); }, 200);
+  setTimeout(function() { dsMap.invalidateSize(); }, 600);
+
+  // ResizeObserver as backup for any layout shifts
+  if (typeof ResizeObserver !== 'undefined') {
+    var ro = new ResizeObserver(function() { if (dsMap) dsMap.invalidateSize(); });
+    ro.observe(document.getElementById('ds-map'));
+    setTimeout(function() { ro.disconnect(); }, 3000);
+  }
+}
+
+function centerMapOnRiver() {
+  if (!dsMap || !activeRiver) return;
+  dsMap.setView([activeRiver.lat, activeRiver.lon], 11);
+  mapLayerGroups.gauges.clearLayers();
+  mapLayerGroups.access.clearLayers();
+  addGaugeMarkers();
+  addAccessMarkers();
+  setTimeout(function() { dsMap.invalidateSize(); }, 50);
+  setTimeout(function() { dsMap.invalidateSize(); }, 400);
+}
+
+// ── Custom SVG markers ─────────────────────────────────────────
+function makeMarker(color, size) {
+  size = size || 14;
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';border:2px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.35)"></div>',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2 - 2]
+  });
+}
+
+function makeGaugeMarker() {
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:18px;height:18px;background:#c8441a;border:2px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(200,68,26,0.5);display:flex;align-items:center;justify-content:center"><div style="width:6px;height:6px;background:white;border-radius:50%"></div></div>',
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -12]
+  });
+}
+
+// ── Gauge markers (current river + nearby presets) ─────────────
+function getFlowColor(flow) {
+  if (!flow) return '#94a3b8';
+  if (flow < 600)  return '#3a6b35';
+  if (flow < 1500) return '#86efac';
+  if (flow < 3000) return '#c07a1a';
+  if (flow < 6000) return '#c8441a';
+  return '#b83232';
+}
+
+function getCachedFlow(usgsId) {
+  var cached = _cacheGet(_usgsCache, usgsId);
+  if (!cached) return null;
+  var series = (cached.value && cached.value.timeSeries) || [];
+  for (var i = 0; i < series.length; i++) {
+    var code = series[i].variable && series[i].variable.variableCode &&
+               series[i].variable.variableCode[0] && series[i].variable.variableCode[0].value;
+    if (code === '00060') {
+      var vals = series[i].values && series[i].values[0] && series[i].values[0].value;
+      if (vals && vals.length) return parseFloat(vals[vals.length-1].value);
+    }
+  }
+  return null;
+}
+
+function addGaugeMarkers() {
+  if (!dsMap || !mapLayerGroups.gauges) return;
+
+  var riverList = Object.values(RIVERS);
+  var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : 'WA';
+  if (stateCode && stateCode !== 'WA' && STATE_RIVERS[stateCode]) {
+    STATE_RIVERS[stateCode].forEach(function(r) {
+      riverList.push({ label: r.label, sublabel: r.sub, usgs: r.usgs, lat: r.lat, lon: r.lon, accessPoints: [] });
+    });
+  }
+
+  riverList.forEach(function(river) {
+    if (!river.lat || !river.lon) return;
+    var isActive = activeRiver && river.usgs === activeRiver.usgs;
+    var flow = isActive && currentFlow ? currentFlow : getCachedFlow(river.usgs);
+    var color = getFlowColor(flow);
+    var size = isActive ? 20 : 14;
+    var flowLabel = flow ? Math.round(flow).toLocaleString() + ' cfs' : 'Tap to load';
+    var condLabel = !flow ? '' : flow < 600 ? 'Low — great wading' : flow < 1500 ? 'Good flows' : flow < 3000 ? 'Moderate — caution' : 'High — boat only';
+
+    var icon = L.divIcon({
+      className: '',
+      html: '<div style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';border:' + (isActive ? '3px' : '2px') + ' solid white;border-radius:50%;box-shadow:0 2px 8px ' + color + '99"></div>',
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2],
+      popupAnchor: [0, -size/2 - 2]
+    });
+
+    var marker = L.marker([river.lat, river.lon], { icon: icon, zIndexOffset: isActive ? 1000 : 0 });
+    marker.bindPopup(
+      '<div class="popup-title">&#128200; ' + river.label + (isActive ? ' <span style="color:' + color + '">&#9679;</span>' : '') + '</div>' +
+      '<div class="popup-detail">' + (river.sublabel || '') + '</div>' +
+      '<div class="popup-detail" style="margin-top:4px">USGS #' + river.usgs + '</div>' +
+      '<div class="popup-detail" style="margin-top:6px;font-weight:600;color:' + color + '">' + flowLabel + '</div>' +
+      (condLabel ? '<div class="popup-detail" style="color:' + color + ';font-size:0.72rem">' + condLabel + '</div>' : '') +
+      '<div style="margin-top:8px"><span class="popup-tag">Gauge</span>' +
+      (isActive ? '<span class="popup-tag" style="color:var(--accent)">Active</span>' : '') +
+      '</div>'
+    );
+    mapLayerGroups.gauges.addLayer(marker);
+  });
+}
+
+
+// ── Access point markers — uses real lat/lon if present ────────
+function addAccessMarkers() {
+  if (!dsMap || !mapLayerGroups.access || !activeRiver) return;
+  var points = (activeRiver.accessPoints || []);
+  if (!points.length) {
+    var m = L.marker([activeRiver.lat, activeRiver.lon], { icon: makeMarker('#3a6b35', 14) });
+    m.bindPopup('<div class="popup-title">&#128663; ' + activeRiver.label + '</div><div class="popup-detail">USGS gauge location</div>');
+    mapLayerGroups.access.addLayer(m);
+    return;
+  }
+  points.forEach(function(pt) {
+    if (!pt.lat || !pt.lon) return; // skip if no real coords
+    var tags = (pt.tags || []).map(function(t) { return '<span class="popup-tag">' + t + '</span>'; }).join('');
+    var m = L.marker([pt.lat, pt.lon], { icon: makeMarker('#3a6b35', 14) });
+    m.bindPopup(
+      '<div class="popup-title">&#128663; ' + pt.name + '</div>' +
+      '<div class="popup-detail">' + pt.detail + '</div>' +
+      '<div style="margin-top:6px">' + tags + '</div>'
+    );
+    mapLayerGroups.access.addLayer(m);
+  });
+}
+
+// ── Public land overlay (USFS/BLM via OSM overpass-based tiles) ──
+function addPublicLandLayer() {
+  if (!dsMap) return;
+
+  // Use USFS/BLM data from ArcGIS Living Atlas public service
+  var blmLayer = L.tileLayer(
+    'https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_Cached_NPT/MapServer/tile/{z}/{y}/{x}',
+    { opacity: 0.35, maxZoom: 16, attribution: '&copy; BLM' }
+  );
+
+  var usfsLayer = L.tileLayer(
+    'https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/tile/{z}/{y}/{x}',
+    { opacity: 0.3, maxZoom: 16, attribution: '&copy; USDA Forest Service' }
+  );
+
+  mapLayers.blm = blmLayer;
+  mapLayers.usfs = usfsLayer;
+  blmLayer.addTo(dsMap);
+  usfsLayer.addTo(dsMap);
+}
+
+function removePublicLandLayer() {
+  if (mapLayers.blm) dsMap.removeLayer(mapLayers.blm);
+  if (mapLayers.usfs) dsMap.removeLayer(mapLayers.usfs);
+}
+
+// ── Layer controls ─────────────────────────────────────────────
+function setMapLayer(type) {
+  if (!dsMap || !TILE_LAYERS) return;
+  dsMap.removeLayer(TILE_LAYERS[currentTileLayer]);
+  currentTileLayer = type;
+  TILE_LAYERS[type].addTo(dsMap);
+  TILE_LAYERS[type].bringToBack();
+  document.getElementById('btn-topo').classList.toggle('active', type === 'topo');
+  document.getElementById('btn-satellite').classList.toggle('active', type === 'satellite');
+}
+
+function toggleMapLayer(layer) {
+  if (!dsMap) return;
+  mapLayerVisible[layer] = !mapLayerVisible[layer];
+  var btn = document.getElementById('btn-' + layer);
+  if (btn) btn.classList.toggle('active', mapLayerVisible[layer]);
+
+  if (layer === 'public') {
+    if (mapLayerVisible.public) addPublicLandLayer();
+    else removePublicLandLayer();
+    return;
+  }
+
+  if (mapLayerGroups[layer]) {
+    if (mapLayerVisible[layer]) dsMap.addLayer(mapLayerGroups[layer]);
+    else dsMap.removeLayer(mapLayerGroups[layer]);
+  }
+}
+
+// ── User location ──────────────────────────────────────────────
+function locateUser() {
+  if (!dsMap) return;
+  var btn = document.getElementById('btn-locate');
+  if (btn) btn.textContent = '&#127757; Locating...';
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
+      var acc = Math.round(pos.coords.accuracy);
+
+      if (userLocationMarker) dsMap.removeLayer(userLocationMarker);
+
+      var userIcon = L.divIcon({
+        className: '',
+        html: '<div style="width:16px;height:16px;background:#4a7fb5;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(74,127,181,0.6)"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        popupAnchor: [0, -12]
+      });
+
+      userLocationMarker = L.marker([lat, lon], { icon: userIcon, zIndexOffset: 2000 });
+      userLocationMarker.bindPopup(
+        '<div class="popup-title">&#127757; Your Location</div>' +
+        '<div class="popup-detail">Accuracy: &plusmn;' + acc + 'm</div>' +
+        '<div class="popup-detail">' + lat.toFixed(5) + ', ' + lon.toFixed(5) + '</div>'
+      ).openPopup();
+      userLocationMarker.addTo(dsMap);
+
+      // Add accuracy circle
+      L.circle([lat, lon], { radius: acc, color: '#4a7fb5', fillColor: '#4a7fb5', fillOpacity: 0.08, weight: 1 }).addTo(dsMap);
+
+      dsMap.setView([lat, lon], 13);
+      if (btn) btn.textContent = '&#127757; My Location';
+    },
+    function(err) {
+      if (btn) btn.textContent = '&#127757; My Location';
+      alert('Location access denied or unavailable. Enable location in your browser settings.');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+// =============================================================
+// LAKES DASHBOARD
+// =============================================================
+
+const LAKES = {
+  WA: [
+    { id:'lenice', label:'Lake Lenice', sub:'Seep Lakes · Potholes', lat:46.7234, lon:-119.6543,
+      species:'Wild rainbow trout to 20"+', depth:'Max 18ft', access:[
+        {name:'Lenice Trailhead', detail:'1.5 mile walk-in. No motorized boats. Pack-in/pack-out. Prime chironomid and damsel water.', tags:['Walk-in','No Motors']},
+        {name:'Nunnally Lake', detail:'Adjacent lake via short trail. Similar fishery, slightly less pressure than Lenice.', tags:['Walk-in','Adjacent']},
+      ],
+      regs:'Fly fishing only. Single barbless hook. All trout catch-and-release. Open Apr 1–Oct 31. No gas motors.',
+      context:'Lake Lenice in the Columbia Basin seep lakes, central Washington — shallow chironomid lake, wild rainbows, fly fishing only',
+      hatches:'Chironomid (midges) year-round, Callibaetis mayfly May–Sept, damselfly June–Aug, leech patterns year-round' },
+    { id:'lenore', label:'Lake Lenore', sub:'Columbia Basin', lat:47.5432, lon:-119.5234,
+      species:'Lahontan cutthroat trout — trophy fishery', depth:'Max 30ft', access:[
+        {name:'Lake Lenore Caves Trailhead', detail:'Main access. Roadside parking along SR-17. Multiple pullouts along the lake.',tags:['Drive-to','Roadside']},
+        {name:'South End Access', detail:'Less pressured south shore. Good chironomid water in spring.',tags:['Drive-to','Wading']},
+      ],
+      regs:'Catch-and-release only. Fly fishing only. Single barbless hook. Open Mar 1–Nov 30.',
+      context:'Lake Lenore in the Columbia Basin, Washington — alkaline lake, trophy Lahontan cutthroat, fly fishing only',
+      hatches:'Chironomid March–May and Sept–Oct, Callibaetis summer, scud patterns year-round, leech' },
+    { id:'chopaka', label:'Chopaka Lake', sub:'Okanogan Highlands', lat:48.8543, lon:-119.7012,
+      species:'Wild rainbow trout, some trophy fish', depth:'Max 55ft', access:[
+        {name:'Chopaka Campground', detail:'USFS campground at lake. Dirt road access — high clearance recommended. Boats allowed, no gas motors.',tags:['Camping','Boat Launch','No Motors']},
+      ],
+      regs:'Fly fishing only. Catch-and-release. Open last Saturday April through Oct 31. No gas motors.',
+      context:'Chopaka Lake in the Okanogan Highlands of Washington — high elevation wild rainbow lake, fly fishing only, pristine clear water',
+      hatches:'Callibaetis mayfly June–Sept, chironomid spring/fall, damselfly July–Aug, caddis evening hatches summer' },
+    { id:'dry_falls', label:'Dry Falls Lake', sub:'Sun Lakes State Park', lat:47.6098, lon:-119.3765,
+      species:'Trophy rainbow trout — stocked and wild', depth:'Max 25ft', access:[
+        {name:'Sun Lakes State Park', detail:'State park access. Day use fee. Boat launch available. Handicap accessible fishing dock.',tags:['State Park','Boat Launch','Accessible']},
+        {name:'Blue Lake', detail:'Adjacent lake via short walk. Similar fishery.',tags:['Walk-in','Adjacent']},
+      ],
+      regs:'Selective gear — artificial lures and flies only. Catch-and-release. Open Apr 1–Oct 31.',
+      context:'Dry Falls Lake in Sun Lakes State Park, Washington — former waterfall plunge pool, trophy trout, sheltered from wind by basalt cliffs',
+      hatches:'Chironomid April–May and Sept–Oct, Callibaetis June–Aug, damselfly July–Aug' },
+    { id:'american', label:'American Lake', sub:'Pierce County', lat:47.1234, lon:-122.5432,
+      species:'Rainbow and brown trout', depth:'Max 36ft', access:[
+        {name:'American Lake Boat Launch', detail:'Public boat launch. Good stillwater chironomid and leech fishing.',tags:['Boat Launch','Drive-to']},
+      ],
+      regs:'Check WDFW regs — standard Pierce County lake rules apply. Some seasonal closures.',
+      context:'American Lake near Tacoma, Washington — western WA lowland lake, rainbow and brown trout, urban accessible fishery',
+      hatches:'Chironomid year-round, Callibaetis spring/summer, damselfly summer, leech year-round' },
+  ],
+  OR: [
+    { id:'hosmer', label:'Hosmer Lake', sub:'Cascade Lakes Highway', lat:43.9876, lon:-121.8234,
+      species:'Atlantic salmon, brook trout — catch-and-release only', depth:'Max 20ft', access:[
+        {name:'Hosmer Lake Campground', detail:'USFS campground. Non-motorized boats only. Classic Callibaetis and sedge lake.',tags:['Camping','No Motors','Canoe']},
+      ],
+      regs:'Fly fishing only. Atlantic salmon and brook trout must be released. Open June 1–Oct 31.',
+      context:'Hosmer Lake on the Cascade Lakes Highway, Oregon — unique Atlantic salmon fishery, pristine volcanic lake, fly fishing only',
+      hatches:'Callibaetis mayfly July–Sept, sedge/caddis evening summer, chironomid spring/fall, damselfly July–Aug' },
+    { id:'crane_prairie', label:'Crane Prairie Reservoir', sub:'Deschutes National Forest', lat:43.7654, lon:-121.8012,
+      species:'Rainbow and brown trout to 5 lbs+', depth:'Max 12ft', access:[
+        {name:'Crane Prairie Resort', detail:'Full service resort with boat launch, gear shop, and guide service.',tags:['Resort','Boat Launch','Guided']},
+        {name:'Quinn River Arm', detail:'Good wading access. Productive damselfly and leech water.',tags:['Wading','Walk-in']},
+      ],
+      regs:'Standard ODFW regulations apply. Check current year rules for season and limits.',
+      context:'Crane Prairie Reservoir in Deschutes National Forest, Oregon — shallow trophy trout reservoir, excellent stillwater fishery, tules and structure throughout',
+      hatches:'Damselfly June–Aug, Callibaetis summer, chironomid spring/fall, leech year-round, dragon nymph' },
+    { id:'odell', label:'Odell Lake', sub:'Willamette Pass', lat:43.5765, lon:-122.0012,
+      species:'Rainbow, brown, kokanee, lake trout (mackinaw)', depth:'Max 285ft', access:[
+        {name:'Odell Lake Resort', detail:'Full service resort. Deep lake — trolling and jigging effective. Some stillwater fly fishing in shallows.',tags:['Resort','Boat Launch','Deep Water']},
+      ],
+      regs:'Standard ODFW — check current year. Mackinaw open year-round.',
+      context:'Odell Lake at Willamette Pass, Oregon — deep volcanic lake, diverse species, deep water fishing for mackinaw and trolling for rainbows',
+      hatches:'Callibaetis in shallows summer, midges, kokanee fly patterns, trolling streamers for rainbow and browns' },
+  ],
+  MT: [
+    { id:'hebgen', label:'Hebgen Lake', sub:'Near West Yellowstone', lat:44.8543, lon:-111.3234,
+      species:'Rainbow and brown trout — trophy stillwater', depth:'Max 70ft', access:[
+        {name:'Kirkwood Marina', detail:'Full service marina with boat launch, rentals, and guide service.',tags:['Marina','Boat Launch','Guided']},
+        {name:'Madison Arm', detail:'Shallow arm — excellent wading and float tube fishing. Callibaetis and PMD hatches.',tags:['Wading','Float Tube']},
+      ],
+      regs:'Montana FWP standard regulations. Check current year for limits and seasons.',
+      context:'Hebgen Lake near West Yellowstone, Montana — volcanic reservoir, trophy rainbow and brown trout, excellent Callibaetis and Trico hatches, can be windy',
+      hatches:'Trico July–Aug, Callibaetis June–Sept, chironomid spring/fall, damselfly, PMD, caddis evening' },
+    { id:'flathead', label:'Flathead Lake', sub:'Polson to Bigfork', lat:47.8765, lon:-114.1234,
+      species:'Bull trout, lake trout, bass, yellow perch', depth:'Max 370ft', access:[
+        {name:'Polson Bay', detail:'South end. Boat launch. Sheltered bay — good fly fishing for yellow perch and bass shallows.',tags:['Boat Launch','Drive-to']},
+        {name:'Wild Horse Island State Park', detail:'Accessible by boat only. Bighorn sheep, osprey, excellent stillwater trout fishing.',tags:['Boat Only','State Park']},
+      ],
+      regs:'Flathead Indian Reservation boundaries — check tribal and state regulations carefully. Tribal permit may be required.',
+      context:'Flathead Lake in northwest Montana — largest natural freshwater lake west of the Mississippi, diverse fishery including bull trout and lake trout in deep water',
+      hatches:'Callibaetis in shallows, damselfly summer, large streamers for bull trout and lake trout, perch jigging' },
+  ],
+  ID: [
+    { id:'henrys_lake', label:"Henry's Lake", sub:'Island Park', lat:44.6098, lon:-111.3987,
+      species:"Hybrid cutthroat-rainbow, brook trout — trophy fishery", depth:'Max 20ft', access:[
+        {name:"Henry's Lake State Park", detail:'State park with boat launch, camping, and fishing access. Shallow lake — excellent float tube and pontoon water.',tags:['State Park','Boat Launch','Camping']},
+      ],
+      regs:'Idaho FWP regulations. Check current season dates and limits — special rules often apply.',
+      context:"Henry's Lake in Island Park, Idaho — high elevation shallow lake, world-class trophy hybrid cutthroat and brook trout, prolific hatches and leech fishing",
+      hatches:'Callibaetis June–Sept, damselfly July–Aug, chironomid spring/fall, leech year-round, snail/scud patterns' },
+    { id:'priest', label:'Priest Lake', sub:'Northern Idaho', lat:48.5432, lon:-116.8765,
+      species:'Bull trout, cutthroat, lake trout, bass', depth:'Max 320ft', access:[
+        {name:'Priest Lake State Park', detail:'Multiple units along the lake. Boat launches available. Bull trout catch-and-release.',tags:['State Park','Boat Launch','Camping']},
+      ],
+      regs:'Idaho FWP — bull trout fully protected, immediate release. Check current regulations.',
+      context:"Priest Lake in northern Idaho's panhandle — deep scenic lake, bull trout and west slope cutthroat in clear water, excellent streamer fishing",
+      hatches:'Callibaetis in shallows, chironomid spring/fall, damselfly summer, articulated streamers for bull trout and lake trout' },
+  ],
+  CO: [
+    { id:'eleven_mile', label:'Eleven Mile Reservoir', sub:'South Platte Drainage', lat:38.9234, lon:-105.5012,
+      species:'Rainbow, brown, cutthroat, carp — trophy fishery', depth:'Max 85ft', access:[
+        {name:'Eleven Mile State Park', detail:'Full service state park with multiple boat launches, camping, and fishing access. Excellent bank fishing on north shore.',tags:['State Park','Boat Launch','Camping']},
+        {name:'North Shore', detail:'Best bank fishing access. Sheltered coves for chironomid fishing.',tags:['Bank Fishing','Drive-to']},
+      ],
+      regs:'Colorado state park — valid fishing license and state park pass required. Check current limits.',
+      context:'Eleven Mile Reservoir in South Park, Colorado — high altitude trophy reservoir, rainbow and brown trout to 10 lbs, excellent chironomid and Callibaetis fishing',
+      hatches:'Chironomid spring and fall, Callibaetis July–Sept, damselfly July–Aug, Trico August, carp on surface June–Aug' },
+    { id:'blue_mesa', label:'Blue Mesa Reservoir', sub:'Gunnison Country', lat:38.4543, lon:-107.3234,
+      species:'Rainbow and brown trout, kokanee salmon', depth:'Max 350ft', access:[
+        {name:'Elk Creek Marina', detail:'Full service marina. Largest body of water in Colorado. Kokanee and rainbow trolling.',tags:['Marina','Boat Launch','Guided']},
+        {name:'Iola Basin', detail:'Shallow upstream arm — best fly fishing. Wading and float tube access.',tags:['Wading','Float Tube','Drive-to']},
+      ],
+      regs:'Standard Colorado regulations. Check current kokanee season.',
+      context:"Blue Mesa Reservoir in Gunnison country, Colorado — Colorado's largest lake, trophy brown trout in Iola Basin arms, excellent stillwater hatches",
+      hatches:'Callibaetis summer in shallows, chironomid spring/fall, damselfly, leech, kokanee streamer patterns' },
+  ],
+  CA: [
+    { id:'crowley', label:'Crowley Lake', sub:'Eastern Sierra', lat:37.5876, lon:-118.7234,
+      species:'Rainbow and brown trout — one of CA top stillwater fisheries', depth:'Max 65ft', access:[
+        {name:'Crowley Lake Campground', detail:'Boat launch and camping. Famous for Callibaetis and midge hatches. Float tube and pontoon popular.',tags:['Camping','Boat Launch','Float Tube']},
+      ],
+      regs:'California CDFW. Check current season — opens last Saturday April. Report card required.',
+      context:'Crowley Lake in the Eastern Sierra, California — premier stillwater trout fishery, trophy rainbow and brown trout, famous Callibaetis and midge hatches at altitude',
+      hatches:'Chironomid opening through June, Callibaetis June–Oct, damselfly July–Aug, scud year-round, Trico Aug–Sept' },
+    { id:'hot_creek', label:'Hot Creek', sub:'Mammoth Area', lat:37.6543, lon:-118.8012,
+      species:'Wild brown and rainbow trout', depth:'Spring creek — shallow', access:[
+        {name:'Hot Creek Geological Site', detail:'USFS managed. Limited bank access. Wild fish — technical sight fishing. Geothermal springs maintain year-round temps.',tags:['Walk-in','Technical','No Wading']},
+      ],
+      regs:'Fly fishing only. Catch-and-release. Artificial lures only. No wading (geothermal hazard). Open year-round.',
+      context:'Hot Creek near Mammoth, California — geothermally heated spring creek, wild brown and rainbow trout, technical sight fishing, no wading allowed due to thermal vents',
+      hatches:'Midge year-round, Callibaetis spring/fall, PMD summer, Trico Aug–Sept, scud and sowbug patterns' },
+  ],
+  AK: [
+    { id:'lake_iliamna', label:'Lake Iliamna', sub:'Bristol Bay', lat:59.5543, lon:-154.9012,
+      species:'Rainbow trout to 30"+, Arctic char, grayling, salmon', depth:'Max 1000ft', access:[
+        {name:'Iliamna Village', detail:'Fly-in access. Full service lodges with guided fishing. World-class rainbow and salmon fishery.',tags:['Fly-in','Guided','Lodge']},
+      ],
+      regs:'Alaska ADF&G regulations. Rainbow trout catch-and-release on most tributaries. Check current rules.',
+      context:"Lake Iliamna in Alaska's Bristol Bay region — world's largest rainbow trout fishery, trophy rainbows following sockeye salmon, remote fly-in destination",
+      hatches:'Sockeye salmon flesh flies and egg patterns July–Sept, mouse patterns for big rainbows, chironomid spring/fall, Callibaetis' },
+  ],
+  MN: [
+    { id:'mille_lacs', label:'Mille Lacs Lake', sub:'Central Minnesota', lat:46.2543, lon:-93.6234,
+      species:'Walleye, smallmouth bass, muskie, pike', depth:'Max 42ft', access:[
+        {name:'Garrison Bay', detail:'Multiple boat launches. Fly fishing for smallmouth on rock reefs and flats in summer.',tags:['Boat Launch','Drive-to']},
+      ],
+      regs:'Minnesota DNR — walleye slot limits apply. Check current year for season dates.',
+      context:'Mille Lacs Lake in central Minnesota — large shallow lake, excellent smallmouth bass fly fishing on rock reefs in summer, walleye and muskie for streamer anglers',
+      hatches:'Callibaetis and mayflies June–Aug, Hex hatch late June–July, damselfly and dragonfly summer, crayfish and minnow streamers for smallmouth' },
+  ],
+  WI: [
+    { id:'green_lake', label:'Green Lake', sub:'Southeastern Wisconsin', lat:43.8432, lon:-89.0098,
+      species:'Trout, smallmouth bass, northern pike', depth:'Max 237ft — deepest WI lake', access:[
+        {name:'Green Lake City Park', detail:'Public boat launch. Deepest natural lake in Wisconsin. Good cold-water trout fishing.',tags:['Boat Launch','Drive-to','Public']},
+      ],
+      regs:'Wisconsin DNR standard regulations. Check current year.',
+      context:"Green Lake in Wisconsin — state's deepest natural lake, cold water trout fishing, excellent smallmouth bass fly fishing in summer shallows",
+      hatches:'Hex mayfly late June–July (famous hatch), Callibaetis summer, damselfly, smallmouth streamers and poppers summer' },
+  ],
+  NY: [
+    { id:'adirondack', label:'Adirondack Lakes', sub:'Lake Placid Area', lat:44.2876, lon:-73.9876,
+      species:'Brook trout, lake trout, smallmouth bass, landlocked salmon', depth:'Varies', access:[
+        {name:'Lake Placid', detail:'Multiple access points. Guide services available for brook trout and landlocked salmon.',tags:['Drive-to','Guided','Multiple Lakes']},
+        {name:'St. Regis Canoe Area', detail:'Paddle-in wilderness lakes. Brook trout in pristine remote ponds.',tags:['Canoe-in','Remote','Brook Trout']},
+      ],
+      regs:'New York DEC regulations. Check current year for seasons and limits.',
+      context:'Adirondack lakes in upstate New York — pristine wilderness brook trout ponds and lakes, landlocked salmon, smallmouth bass, classic northeastern stillwater',
+      hatches:'Callibaetis summer, Hex late June–July, damselfly, chironomid spring/fall, smelt imitations for landlocked salmon' },
+  ],
+};
+
+// ── ACTIVE LAKE STATE ─────────────────────────────────────
+var activeLake = null;
+var lakesInitialized = false;
+var _lakeWxCache = new Map();
+
+function initLakes() {
+  if (lakesInitialized && activeLake) return;
+  lakesInitialized = true;
+  var state = document.getElementById('lake-state-picker').value || 'WA';
+  renderLakeTabs(state);
+}
+
+function onLakeStatePick() {
+  var state = document.getElementById('lake-state-picker').value;
+  renderLakeTabs(state);
+}
+
+function renderLakeTabs(stateCode) {
+  var lakes = LAKES[stateCode];
+  var nav = document.getElementById('lake-tabs');
+  if (!nav) return;
+
+  if (!lakes || !lakes.length) {
+    nav.innerHTML = '<div style=";font-size:0.72rem;color:var(--muted);padding:8px 0">No preset lakes for ' + stateCode + ' yet — check back soon.</div>';
+    return;
+  }
+
+  nav.innerHTML = lakes.map(function(lake, i) {
+    return '<button class="river-tab' + (i===0?' active':'') + '" data-lake-idx="' + i + '" data-state="' + stateCode + '">' +
+      lake.label + '<span class="tab-sub">' + lake.sub + '</span></button>';
+  }).join('');
+
+  nav.querySelectorAll('.river-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      nav.querySelectorAll('.river-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var idx = parseInt(btn.dataset.lakeIdx);
+      var state = btn.dataset.state;
+      activeLake = LAKES[state][idx];
+      loadLake(activeLake);
+    });
+  });
+
+  // Load first lake
+  activeLake = lakes[0];
+  loadLake(activeLake);
+}
+
+async function loadLake(lake) {
+  if (!lake) return;
+  activeLake = lake;
+
+  // Reset stat cards
+  ['lake-wtemp-val','lake-air-val','lake-wind-val','lake-baro-val'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = '--'; el.classList.add('skeleton'); }
+  });
+
+  document.getElementById('lake-rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
+  document.getElementById('lake-insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating lake report…</span></div>';
+  document.getElementById('lake-access-label').textContent = 'Access & Info — ' + lake.label;
+  document.getElementById('lake-regs-strip').innerHTML = '<strong>⚖️ Regulations:</strong> ' + lake.regs;
+
+  // Render access points
+  var accessList = document.getElementById('lake-access-list');
+  if (lake.access && lake.access.length) {
+    accessList.innerHTML = lake.access.map(function(a) {
+      return '<div class="access-card"><div class="access-name">' + a.name + '</div>' +
+        '<div class="access-detail">' + a.detail + '</div>' +
+        a.tags.map(function(t) { return '<span class="access-tag">' + t + '</span>'; }).join('') +
+        '</div>';
+    }).join('');
+  } else {
+    accessList.innerHTML = '<div style="color:var(--muted);font-size:0.82rem">Access information not available.</div>';
+  }
+
+  // Fetch weather
+  try {
+    var wxKey = lake.lat.toFixed(3) + ',' + lake.lon.toFixed(3);
+    var cached = _lakeWxCache.get(wxKey);
+    var wx;
+    if (cached && Date.now() - cached.ts < 300000) {
+      wx = cached.json;
+    } else {
+      var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lake.lat + '&longitude=' + lake.lon +
+        '&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max' +
+        '&hourly=surface_pressure,soil_temperature_0cm&current_weather=true' +
+        '&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=7';
+      var res = await fetch(url);
+      wx = await res.json();
+      _lakeWxCache.set(wxKey, { json: wx, ts: Date.now() });
+    }
+
+    var curr = wx.current_weather;
+    var airT = Math.round(curr.temperature);
+    var wind = Math.round(curr.windspeed);
+    var wdir = curr.winddirection;
+
+    // Air temp
+    var airEl = document.getElementById('lake-air-val');
+    if (airEl) { airEl.textContent = airT; airEl.classList.remove('skeleton'); }
+    var airNote = document.getElementById('lake-air-note');
+    if (airNote) airNote.textContent = curr.is_day ? 'Daytime' : 'Nighttime';
+
+    // Wind
+    var windEl = document.getElementById('lake-wind-val');
+    if (windEl) { windEl.textContent = wind; windEl.classList.remove('skeleton'); }
+    var windNote = document.getElementById('lake-wind-note');
+    var dirs = ['N','NE','E','SE','S','SW','W','NW'];
+    var dirStr = dirs[Math.round(wdir/45) % 8];
+    if (windNote) windNote.textContent = dirStr + ' — ' + (wind < 8 ? 'calm, good for dry fly' : wind < 15 ? 'light chop' : wind < 25 ? 'choppy — fish windward shore' : 'rough — seek sheltered bays');
+
+    // Surface temp estimate (soil_temperature_0cm is a proxy)
+    var hourIdx = Math.min(new Date().getHours(), 23);
+    var surfTemps = wx.hourly && wx.hourly.soil_temperature_0cm;
+    var surfT = surfTemps ? Math.round(surfTemps[hourIdx]) : Math.round(airT - 8);
+    var wtempEl = document.getElementById('lake-wtemp-val');
+    if (wtempEl) { wtempEl.textContent = surfT; wtempEl.classList.remove('skeleton'); }
+    var wtempNote = document.getElementById('lake-wtemp-note');
+    if (wtempNote) wtempNote.textContent = surfT < 45 ? 'Cold — midge/leech deep' : surfT < 55 ? 'Cool — fish pick up' : surfT < 65 ? 'Prime — full activity' : surfT < 72 ? 'Warm — fish dawn/dusk' : 'Hot — fish deep or night';
+
+    // Baro
+    var pressures = wx.hourly && wx.hourly.surface_pressure;
+    if (pressures) {
+      var hPa = pressures[hourIdx];
+      var inHg = (hPa * 0.02953).toFixed(2);
+      var baroEl = document.getElementById('lake-baro-val');
+      if (baroEl) { baroEl.textContent = inHg; baroEl.classList.remove('skeleton'); }
+      var baroNote = document.getElementById('lake-baro-note');
+      var prev = pressures[Math.max(0, hourIdx-3)];
+      var diff = hPa - prev;
+      if (baroNote) baroNote.textContent = diff > 2 ? '↗ Rising — fish feeding' : diff < -2 ? '↘ Falling — fish go deep' : '→ Steady';
+    }
+
+    // Update condition banner
+    var banner = document.getElementById('lake-condition-banner');
+    var status = document.getElementById('lake-condition-status');
+    var summary = document.getElementById('lake-condition-summary');
+    if (banner && status && summary) {
+      banner.className = 'condition-banner';
+      if (surfT >= 52 && surfT <= 68 && wind < 15) {
+        status.textContent = 'Prime Conditions';
+        summary.textContent = lake.label + ' — ' + surfT + '°F surface, ' + wind + ' mph wind. Active feeding likely.';
+      } else if (wind > 20) {
+        banner.classList.add('caution');
+        status.textContent = 'Windy — Fish Sheltered Water';
+        summary.textContent = 'Wind at ' + wind + ' mph. Target lee shores and protected bays. Chironomid and leech effective.';
+      } else if (surfT < 45) {
+        banner.classList.add('caution');
+        status.textContent = 'Cold Water — Fish Slow & Deep';
+        summary.textContent = 'Surface at ' + surfT + '°F. Slow presentation key. Midge and leech near bottom.';
+      } else if (surfT > 70) {
+        banner.classList.add('caution');
+        status.textContent = 'Warm — Fish Early & Late';
+        summary.textContent = 'Surface at ' + surfT + '°F. Best fishing dawn and dusk. Fish deeper structure midday.';
+      } else {
+        banner.classList.add('caution');
+        status.textContent = 'Fishable Conditions';
+        summary.textContent = lake.label + ' — check wind and baro for best windows.';
+      }
+    }
+
+    // Render forecast
+    renderForecast(wx.daily);
+    document.getElementById('lake-forecast-row') && (document.getElementById('lake-forecast-row').id = 'forecast-row') && renderForecast(wx.daily);
+    // Actually render into lake forecast row
+    var lForecast = document.getElementById('lake-forecast-row');
+    var days = wx.daily.time;
+    var today = new Date().toISOString().split('T')[0];
+    if (lForecast) {
+      lForecast.innerHTML = days.slice(0,7).map(function(date, i) {
+        var code = wx.daily.weathercode[i];
+        var WX = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',95:'⛈️'};
+        var icon = WX[code] || '🌡️';
+        var tmax = Math.round(wx.daily.temperature_2m_max[i]);
+        var tmin = Math.round(wx.daily.temperature_2m_min[i]);
+        var prec = wx.daily.precipitation_sum[i];
+        var wnd = wx.daily.windspeed_10m_max[i];
+        var cls = ([95,96,99].includes(code) || prec > 10) ? 'poor' : ([61,63,80,81].includes(code) || wnd > 20) ? 'fair' : ([0,1,2].includes(code) && wnd < 12) ? 'excellent' : 'good';
+        var label = {excellent:'Excellent',good:'Good',fair:'Fair',poor:'Poor'}[cls];
+        var dayLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short'});
+        var isToday = date === today;
+        return '<div class="forecast-day' + (isToday?' today':'') + '">' +
+          '<div class="fc-day">' + (isToday?'Today':dayLabel) + '</div>' +
+          '<span class="fc-icon">' + icon + '</span>' +
+          '<div class="fc-rating ' + cls + '">' + label + '</div>' +
+          '<div class="fc-temp">' + tmax + '&#176; / ' + tmin + '&#176;</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    // Get AI rigs + insights
+    fetchLakeRigs(lake, { airT, wind, dirStr, surfT, hPa: pressures ? pressures[hourIdx] : null });
+    generateLakeInsights(lake, { airT, wind, dirStr, surfT });
+
+  } catch(e) {
+    console.error('Lake weather error:', e);
+    ['lake-wtemp-val','lake-air-val','lake-wind-val','lake-baro-val'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.textContent = 'ERR'; el.classList.remove('skeleton'); }
+    });
+  }
+}
+
+async function fetchLakeRigs(lake, cond) {
+  var container = document.getElementById('lake-rig-setups');
+  var hour = new Date().getHours();
+  var timeOfDay = hour < 6 ? 'pre-dawn' : hour < 9 ? 'early morning' : hour < 11 ? 'mid-morning' : hour < 13 ? 'late morning' : hour < 15 ? 'early afternoon' : hour < 17 ? 'mid-afternoon' : hour < 19 ? 'evening' : 'dusk/dark';
+  var month = new Date().toLocaleString('en-US', {month:'long'});
+
+  var prompt = 'You are an expert stillwater fly fishing guide at ' + lake.label + '. ' + lake.context + '. Conditions: surface ' + cond.surfT + 'F, air ' + cond.airT + 'F, wind ' + cond.wind + ' mph from ' + cond.dirStr + ', month: ' + month + '. Active food sources: ' + lake.hatches + '. Species: ' + lake.species + '. Write a practical 3-paragraph stillwater fishing report: 1) Overall conditions and best fishing windows today. 2) Where on the lake to focus (windward vs lee shore, depths, structure) and why. 3) Specific presentation tips for the most effective technique right now. Be specific about stillwater techniques. Bold key fly patterns with **pattern name**.';
+
+  try {
+    var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400,
+        messages: [{role:'user', content: prompt}] })
+    });
+    var data = await res.json();
+    var text = (data.content && data.content[0] && data.content[0].text || '').trim().replace(/```json|```/g,'').trim();
+    var setups = JSON.parse(text);
+    container.innerHTML = setups.map(function(s, i) {
+      return '<div style="display:flex;gap:10px;align-items:flex-start;padding:' + (i<setups.length-1?'0 0 8px 0':'0') + ';' + (i<setups.length-1?'border-bottom:1px solid rgba(0,0,0,0.06)':'') + '">' +
+        '<div style="font-size:1.3rem;line-height:1;margin-top:2px">' + s.emoji + '</div>' +
+        '<div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">' +
+        '<span style="font-family:IBM Plex Mono,monospace;font-size:0.75rem;font-weight:600;color:' + (i===0?'var(--accent)':'var(--text)') + '">' + s.rig + '</span>' +
+        (i===0?'<span style="font-family:IBM Plex Mono,monospace;font-size:0.5rem;background:rgba(200,68,26,0.15);color:var(--accent);padding:1px 5px;border-radius:2px">BEST BET</span>':'') +
+        '</div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:2px">' + s.flies + '</div>' +
+        '<div style="font-size:0.7rem;color:rgba(0,0,0,0.35);font-style:italic">' + s.tip + '</div></div></div>';
+    }).join('');
+  } catch(e) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem">Could not load rig recommendations.</div>';
+  }
+  document.getElementById('lake-card-rigs') && document.getElementById('lake-card-rigs').classList.add('loaded');
+}
+
+async function generateLakeInsights(lake, cond) {
+  var box = document.getElementById('lake-insights-content');
+  var month = new Date().toLocaleString('en-US', {month:'long'});
+
+  var prompt = 'You are an expert stillwater fly fishing guide at ' + lake.label + '. ' + lake.context + '. Conditions: surface ' + cond.surfT + 'F, air ' + cond.airT + 'F, wind ' + cond.wind + ' mph from ' + cond.dirStr + ', month: ' + month + '. Active food sources: ' + lake.hatches + '. Species: ' + lake.species + '. Write a practical 3-paragraph stillwater fishing report: 1) Overall conditions and best fishing windows today. 2) Where on the lake to focus (windward vs lee shore, depths, structure) and why. 3) Specific presentation tips for the most effective technique right now. Be specific about stillwater techniques. Bold key fly patterns with **pattern name**.';
+
+  try {
+    var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800,
+        messages: [{role:'user', content: prompt}] })
+    });
+    var data = await res.json();
+    var text = data.content && data.content[0] && data.content[0].text || '';
+    var html2 = text.split('\n\n').map(function(p) { return p.trim(); }).filter(Boolean).map(function(p) {
+      return '<p style="margin-bottom:14px" class="insights-text">' + p.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>') + '</p>';
+    }).join('');
+    box.innerHTML = html2 + '<button class="generate-btn" onclick="loadLake(activeLake)">&#8634; Regenerate</button>';
+  } catch(e) {
+    box.innerHTML = '<div style="color:var(--muted);font-size:0.82rem">Could not load insights. <button class="generate-btn" onclick="loadLake(activeLake)">Try Again</button></div>';
+  }
 }
 
 </script>
