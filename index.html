@@ -2815,7 +2815,22 @@ async function fetchUSGS(riverId) {
     }));
 
     const fromCache = !!_cacheGet(_usgsCache, siteId);
-    document.getElementById('last-updated').textContent = `Updated ${timeAgo(latest.dateTime)}${fromCache ? ' · cached' : ''}`;
+    const isStale = (Date.now() - new Date(latest.dateTime).getTime()) > 6 * 60 * 60 * 1000;
+    document.getElementById('last-updated').textContent = isStale
+      ? `⚠️ Last reading ${timeAgo(latest.dateTime)} — gauge may be offline`
+      : `Updated ${timeAgo(latest.dateTime)}${fromCache ? ' · cached' : ''}`;
+  } else {
+    // USGS returned a response but no usable discharge series for this
+    // gauge (offline, maintenance, decommissioned parameter, etc).
+    // Surface this clearly instead of leaving the card stuck on skeleton.
+    currentFlow = null;
+    flowData = [];
+    const el = document.getElementById('flow-val');
+    el.textContent = 'N/A';
+    el.classList.remove('skeleton');
+    document.getElementById('flow-delta').textContent = 'No discharge data from this gauge';
+    document.getElementById('last-updated').textContent = '⚠️ No live flow data — gauge may be offline or lack this parameter';
+    console.warn('[DriftScout] No 00060 (discharge) series for site ' + siteId + ' (' + riverId + ')');
   }
 
   if (gageVals.length) {
@@ -2825,6 +2840,11 @@ async function fetchUSGS(riverId) {
     el.textContent = currentGage.toFixed(2);
     el.classList.remove('skeleton');
     document.getElementById('card-gage').classList.add('loaded');
+  } else {
+    currentGage = null;
+    const el = document.getElementById('gage-val');
+    el.textContent = 'N/A';
+    el.classList.remove('skeleton');
   }
 
   // Water temp
@@ -3628,7 +3648,17 @@ setTimeout(function() {
       if (_cacheGet(_usgsCache, siteId)) return; // already cached
       fetch('https://yakima-proxy.ljlukelj.workers.dev/usgs?site=' + siteId)
         .then(function(r) { return r.json(); })
-        .then(function(json) { _cacheSet(_usgsCache, siteId, json); })
+        .then(function(json) {
+          // Only cache responses that actually contain a usable time series.
+          // Empty/error/malformed payloads must NOT be cached, or the real
+          // fetch gets skipped later and the card silently shows no data.
+          var series = json && json.value && json.value.timeSeries;
+          if (series && series.length) {
+            _cacheSet(_usgsCache, siteId, json);
+          } else {
+            console.warn('[DriftScout] Prefetch got empty series for site ' + siteId + ' — not caching');
+          }
+        })
         .catch(function() {}); // silent fail — prefetch only
       var wxKey = river.lat.toFixed(3) + ',' + river.lon.toFixed(3);
       if (!_cacheGet(_wxCache, wxKey)) {
