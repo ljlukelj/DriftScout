@@ -3206,9 +3206,14 @@ async function fetchWeather(riverId) {
 
 // ─── WADING INDEX ─────────────────────────────────────────
 function updateWading() {
-  if (!currentFlow) return;
   const fill = document.getElementById('wading-fill');
   const rating = document.getElementById('wading-rating');
+  if (!currentFlow) {
+    fill.style.width = '0%';
+    rating.style.color = 'var(--muted)';
+    rating.textContent = 'No live flow data';
+    return;
+  }
   const t = activeRiver.wadingThresholds;
   const pct = Math.min(100, (currentFlow / t.floatOnly) * 100);
   fill.style.width = pct + '%';
@@ -3238,10 +3243,15 @@ function updateWading() {
 
 // ─── CONDITION BANNER ─────────────────────────────────────
 function updateConditionBanner() {
-  if (!currentFlow) return;
   const banner = document.getElementById('condition-banner');
   const status = document.getElementById('condition-status');
   const summary= document.getElementById('condition-summary');
+  if (!currentFlow) {
+    banner.className = 'condition-banner poor';
+    status.textContent = 'No Live Data';
+    summary.textContent = '⚠️ This gauge is not reporting flow right now — conditions below may be out of date. Check back shortly.';
+    return;
+  }
   const t = activeRiver.wadingThresholds;
 
   banner.className = 'condition-banner';
