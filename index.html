@@ -129,6 +129,54 @@
     font-size: 0.8rem;
   }
 
+  /* ── MY WATERS (saved rivers) ── */
+  .star-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 5px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    color: var(--muted); cursor: pointer;
+  }
+  .star-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .star-btn.saved { color: var(--accent); border-color: var(--accent); background: var(--river-dim); }
+
+  .my-waters-section {
+    margin-bottom: 20px; padding: 16px 20px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+  }
+  .my-waters-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block;
+  }
+  .my-waters-strip {
+    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
+  }
+  .my-waters-empty {
+    font-size: 0.8rem; color: var(--muted);
+  }
+  .water-card {
+    flex: 0 0 auto; min-width: 150px;
+    padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; cursor: pointer; text-align: left;
+  }
+  .water-card:hover { border-color: var(--accent); }
+  .water-card .wc-name {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+  }
+  .water-card .wc-flow {
+    font-size: 1.1rem; font-weight: 600; color: var(--text); margin-top: 4px;
+  }
+  .water-card .wc-flow .wc-unit { font-size: 0.65rem; color: var(--muted); font-weight: 400; margin-left: 3px; }
+  .water-card .wc-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
+  }
+  .water-card .wc-remove {
+    float: right; color: var(--muted); font-size: 0.7rem; cursor: pointer; padding: 0 2px;
+  }
+  .water-card .wc-remove:hover { color: var(--red); }
+
   /* ── CONDITION BADGE ── */
   .condition-banner {
     margin-bottom: 28px;
@@ -1608,6 +1656,7 @@
         <img src="logo.svg" class="driftscout-logo-img" alt="DriftScout">
         <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
+        <button class="star-btn" id="save-water-btn" type="button">☆ Save This Water</button>
       </div>
       <div class="header-meta">
         <div class="date" id="current-date">Loading…</div>
@@ -1635,6 +1684,14 @@
   <!-- RIVER DASHBOARD -->
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="river-dashboard">
+
+  <!-- My Waters (saved rivers) -->
+  <div class="my-waters-section" id="my-waters-section">
+    <span class="my-waters-label">⭐ My Waters</span>
+    <div class="my-waters-strip" id="my-waters-strip">
+      <div class="my-waters-empty">Tap "Save This Water" on any river to pin it here for quick access.</div>
+    </div>
+  </div>
 
   <!-- Nationwide River Search -->
   <div class="river-search-box">
@@ -2676,6 +2733,115 @@ let airTemp = null;
 let weatherData = null;
 
 // ─── SWITCH RIVER ─────────────────────────────────────────
+// ─── MY WATERS (saved rivers) ──────────────────────────────
+const SAVED_WATERS_KEY = "driftscout_saved_waters";
+
+function getSavedWaters() {
+  try { return JSON.parse(localStorage.getItem(SAVED_WATERS_KEY) || "[]"); }
+  catch (e) { return []; }
+}
+function setSavedWaters(list) {
+  try { localStorage.setItem(SAVED_WATERS_KEY, JSON.stringify(list)); } catch (e) {}
+}
+function isWaterSaved(id) {
+  return getSavedWaters().some(function(w) { return w.id === id; });
+}
+function currentWaterSnapshot() {
+  var r = activeRiver;
+  return {
+    id: r.id, label: r.label, sublabel: r.sublabel || "",
+    usgs: r.usgs, lat: r.lat, lon: r.lon,
+    wadingThresholds: r.wadingThresholds || { easy:500, moderate:1200, difficult:2500, floatOnly:4000 }
+  };
+}
+function updateSaveButton() {
+  var btn = document.getElementById("save-water-btn");
+  if (!btn || !activeRiver) return;
+  var saved = isWaterSaved(activeRiver.id);
+  btn.textContent = saved ? "★ Saved" : "☆ Save This Water";
+  btn.classList.toggle("saved", saved);
+}
+function toggleSaveWater() {
+  if (!activeRiver) return;
+  var list = getSavedWaters();
+  var idx = list.findIndex(function(w) { return w.id === activeRiver.id; });
+  if (idx >= 0) list.splice(idx, 1);
+  else list.push(currentWaterSnapshot());
+  setSavedWaters(list);
+  updateSaveButton();
+  renderMyWaters();
+}
+function removeSavedWater(id) {
+  setSavedWaters(getSavedWaters().filter(function(w) { return w.id !== id; }));
+  updateSaveButton();
+  renderMyWaters();
+}
+function selectSavedWater(id) {
+  if (RIVERS[id]) { switchMode("rivers"); switchRiver(id); return; }
+  var entry = getSavedWaters().find(function(w) { return w.id === id; });
+  if (!entry) return;
+  switchMode("rivers");
+  document.getElementById("site-results").innerHTML = "";
+  loadCustomRiver(entry.usgs, entry.label, entry.lat, entry.lon);
+}
+function wadingDotColor(flow, thresholds) {
+  if (flow == null || !thresholds) return "var(--muted)";
+  if (flow <= thresholds.easy) return "var(--green)";
+  if (flow <= thresholds.moderate) return "var(--amber)";
+  return "var(--red)";
+}
+function renderMyWaters() {
+  var strip = document.getElementById("my-waters-strip");
+  if (!strip) return;
+  var saved = getSavedWaters();
+  if (!saved.length) {
+    strip.innerHTML = '<div class="my-waters-empty">Tap "Save This Water" on any river to pin it here for quick access.</div>';
+    return;
+  }
+  strip.innerHTML = saved.map(function(w) {
+    return '<div class="water-card" data-water-id="' + w.id + '">' +
+      '<span class="wc-remove" data-remove-id="' + w.id + '">✕</span>' +
+      '<div class="wc-name">' + w.label + '</div>' +
+      '<div class="wc-flow" id="mw-flow-' + w.id + '"><span class="wc-dot" style="background:var(--muted)"></span>…</div>' +
+      "</div>";
+  }).join("");
+
+  saved.forEach(function(w) {
+    fetch("https://yakima-proxy.ljlukelj.workers.dev/usgs/current?site=" + w.usgs)
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        var series = (json && json.value && json.value.timeSeries) || [];
+        var flowSeries = series.find(function(s) {
+          return s.variable && s.variable.variableCode && s.variable.variableCode[0] && s.variable.variableCode[0].value === "00060";
+        });
+        var vals = flowSeries && flowSeries.values && flowSeries.values[0] && flowSeries.values[0].value;
+        var el = document.getElementById("mw-flow-" + w.id);
+        if (!el) return;
+        if (vals && vals.length) {
+          var flow = parseFloat(vals[vals.length - 1].value);
+          var dot = wadingDotColor(flow, w.wadingThresholds);
+          el.innerHTML = '<span class="wc-dot" style="background:' + dot + '"></span>' +
+            Math.round(flow).toLocaleString() + '<span class="wc-unit">cfs</span>';
+        } else {
+          el.innerHTML = '<span class="wc-dot" style="background:var(--muted)"></span>N/A';
+        }
+      })
+      .catch(function() {
+        var el = document.getElementById("mw-flow-" + w.id);
+        if (el) el.innerHTML = '<span class="wc-dot" style="background:var(--muted)"></span>N/A';
+      });
+  });
+}
+
+// Delegated clicks for save button, water cards, and per-card remove buttons
+document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "save-water-btn") { toggleSaveWater(); return; }
+  var removeId = e.target && e.target.getAttribute && e.target.getAttribute("data-remove-id");
+  if (removeId) { e.stopPropagation(); removeSavedWater(removeId); return; }
+  var card = e.target && e.target.closest && e.target.closest(".water-card");
+  if (card) { selectSavedWater(card.getAttribute("data-water-id")); }
+});
+
 function switchRiver(riverId) {
   activeRiver = RIVERS[riverId];
 
@@ -2735,6 +2901,7 @@ function switchRiver(riverId) {
       if (rs.options[i].value === riverId) { rs.selectedIndex = i; break; }
     }
   }
+  updateSaveButton();
 }
 
 // ─── DATE/TIME ────────────────────────────────────────────
@@ -3592,6 +3759,7 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
     if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
   });
+  updateSaveButton();
 }
 
 // ── SESSION CACHE (5-min TTL) ─────────────────────────────────────────────────
@@ -3636,6 +3804,8 @@ async function loadAll() {
 }
 
 loadAll();
+updateSaveButton();
+renderMyWaters();
 
 // ── Background prefetch all preset WA rivers after initial load ───────────────
 // Staggered 800ms apart so they don't compete with the active river fetch
