@@ -1788,6 +1788,12 @@
     <button class="refresh-btn" onclick="loadAll()" aria-label="Refresh river data">↺ Refresh</button>
   </div>
 
+  <!-- Worker diagnostics (dev aid — shows raw worker response for the active river) -->
+  <div style="margin: 4px 0 14px;">
+    <button id="diag-toggle-btn" type="button" style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:.05em;background:none;border:1px solid var(--border);border-radius:4px;padding:4px 9px;color:var(--muted);cursor:pointer;">🔍 Show worker diagnostics</button>
+    <pre id="diag-output" style="display:none;margin-top:8px;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-size:0.68rem;line-height:1.5;overflow-x:auto;white-space:pre-wrap;word-break:break-word;"></pre>
+  </div>
+
   <!-- Stat Grid -->
   <div class="stat-grid">
     <div class="stat-card" id="card-flow">
@@ -2734,6 +2740,45 @@ let weatherData = null;
 
 // ─── SWITCH RIVER ─────────────────────────────────────────
 // ─── MY WATERS (saved rivers) ──────────────────────────────
+// ─── WORKER DIAGNOSTICS (dev aid) ───────────────────────────
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.getElementById("diag-toggle-btn");
+  var out = document.getElementById("diag-output");
+  if (!btn || !out) return;
+  var loaded = false;
+  btn.addEventListener("click", function() {
+    if (out.style.display === "none") {
+      out.style.display = "block";
+      btn.textContent = "🔍 Hide worker diagnostics";
+      if (!loaded) {
+        out.textContent = "Fetching from worker…";
+        var site = (activeRiver && activeRiver.usgs) || "12484500";
+        fetch("https://yakima-proxy.ljlukelj.workers.dev/usgs/current?site=" + site)
+          .then(function(r) { return r.text(); })
+          .then(function(text) {
+            loaded = true;
+            var summary = "River: " + ((activeRiver && activeRiver.label) || "?") + "  |  Site: " + site + "\n\n";
+            try {
+              var json = JSON.parse(text);
+              var seriesCount = (json.value && json.value.timeSeries && json.value.timeSeries.length) || 0;
+              summary += "timeSeries entries returned: " + seriesCount + "\n\n";
+              out.textContent = summary + JSON.stringify(json, null, 2);
+            } catch (e) {
+              out.textContent = summary + "Response was not valid JSON:\n\n" + text;
+            }
+          })
+          .catch(function(e) {
+            loaded = true;
+            out.textContent = "Fetch to worker failed entirely: " + (e.message || e);
+          });
+      }
+    } else {
+      out.style.display = "none";
+      btn.textContent = "🔍 Show worker diagnostics";
+    }
+  });
+});
+
 const SAVED_WATERS_KEY = "driftscout_saved_waters";
 
 function getSavedWaters() {
