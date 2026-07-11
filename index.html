@@ -3007,6 +3007,13 @@ const RIVER_GROUPS = {
 };
 var lastReachByGroup = {};
 
+function switchToGroup(groupId) {
+  var group = RIVER_GROUPS[groupId];
+  if (!group) return;
+  var target = lastReachByGroup[groupId] || group.reaches[0];
+  switchRiver(target);
+}
+
 function updateReachDropdown(riverId) {
   var reachWrap = document.getElementById('reach-select-wrap');
   var reachSelect = document.getElementById('reach-select');
@@ -4800,8 +4807,7 @@ function renderStateTabs(stateCode) {
   // WA: restore the full preset tabs (with hatches, access points, etc.)
   if (stateCode === 'WA') {
     const waRivers = [
-      ['upperYakima',   'Upper Yakima',    'Easton → Thorpe'],
-      ['yakimaCanyon',  'Yakima Canyon',   'Roza Dam → Ellensburg'],
+      ['__yakimaGroup__', 'Yakima River',    'Keechelus → Kiona'],
       ['naches',        'Naches River',    'Upper → Confluence'],
       ['snoqualmie',    'Snoqualmie MF',   'Middle Fork · Above Falls'],
       ['methow',        'Methow',          'Winthrop → Pateros'],
@@ -4815,11 +4821,17 @@ function renderStateTabs(stateCode) {
       ['stillaguamish', 'Stillaguamish',   'North Fork → Arlington'],
     ];
     nav.innerHTML = waRivers.map(function(r, i) {
-      return '<button class="river-tab' + (i===0?' active':'') + '" data-wa="' + r[0] + '">' +
+      var isGroup = r[0] === '__yakimaGroup__';
+      var attr = isGroup ? 'data-group="yakima"' : 'data-wa="' + r[0] + '"';
+      return '<button class="river-tab' + (i===0?' active':'') + '" ' + attr + '>' +
         r[1] + '<span class="tab-sub">' + r[2] + '</span></button>';
     }).join('');
     nav.querySelectorAll('.river-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() { switchRiver(this.dataset.wa); });
+      btn.addEventListener('click', function() {
+        var group = this.getAttribute('data-group');
+        if (group) { switchToGroup(group); return; }
+        switchRiver(this.dataset.wa);
+      });
     });
     switchRiver('upperYakima');
     updateShopsForState('WA');
