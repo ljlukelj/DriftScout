@@ -1657,6 +1657,10 @@
         <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
         <button class="star-btn" id="save-water-btn" type="button">☆ Save This Water</button>
+        <div class="reach-select-wrap" id="reach-select-wrap" style="display:none;margin-top:8px">
+          <label style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Gauge / Reach</label>
+          <select id="reach-select" class="form-select" onchange="switchRiver(this.value)" style="max-width:320px"></select>
+        </div>
       </div>
       <div class="header-meta">
         <div class="date" id="current-date">Loading…</div>
@@ -1724,55 +1728,51 @@
 
   <!-- River Tabs -->
   <nav class="river-tabs">
-    <button class="river-tab active" onclick="switchRiver('upperYakima')">
-      Upper Yakima
-      <span class="tab-sub">Easton → Thorpe</span>
+    <button class="river-tab active" data-group="yakima" onclick="switchToGroup('yakima')">
+      Yakima River
+      <span class="tab-sub">Keechelus → Kiona</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('yakimaCanyon')">
-      Yakima Canyon
-      <span class="tab-sub">Roza Dam → Ellensburg</span>
-    </button>
-    <button class="river-tab" onclick="switchRiver('naches')">
+    <button class="river-tab" data-river="naches" onclick="switchRiver('naches')">
       Naches River
       <span class="tab-sub">Upper → Confluence</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('snoqualmie')">
+    <button class="river-tab" data-river="snoqualmie" onclick="switchRiver('snoqualmie')">
       Snoqualmie MF
       <span class="tab-sub">Middle Fork · Above Falls</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('methow')">
+    <button class="river-tab" data-river="methow" onclick="switchRiver('methow')">
       Methow
       <span class="tab-sub">Winthrop → Pateros</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('okanogan')">
+    <button class="river-tab" data-river="okanogan" onclick="switchRiver('okanogan')">
       Okanogan
       <span class="tab-sub">Tonasket → Omak</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('klickitat')">
+    <button class="river-tab" data-river="klickitat" onclick="switchRiver('klickitat')">
       Klickitat
       <span class="tab-sub">Canyon → Columbia</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('cowlitz')">
+    <button class="river-tab" data-river="cowlitz" onclick="switchRiver('cowlitz')">
       Cowlitz
       <span class="tab-sub">Packwood → Riffe Lake</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('kalama')">
+    <button class="river-tab" data-river="kalama" onclick="switchRiver('kalama')">
       Kalama
       <span class="tab-sub">Headwaters → Columbia</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('skykomish')">
+    <button class="river-tab" data-river="skykomish" onclick="switchRiver('skykomish')">
       Skykomish
       <span class="tab-sub">Index → Monroe</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('wenatchee')">
+    <button class="river-tab" data-river="wenatchee" onclick="switchRiver('wenatchee')">
       Wenatchee
       <span class="tab-sub">Leavenworth → Columbia</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('greenRiver')">
+    <button class="river-tab" data-river="greenRiver" onclick="switchRiver('greenRiver')">
       Green River
       <span class="tab-sub">Hanson Dam → Auburn</span>
     </button>
-    <button class="river-tab" onclick="switchRiver('stillaguamish')">
+    <button class="river-tab" data-river="stillaguamish" onclick="switchRiver('stillaguamish')">
       Stillaguamish
       <span class="tab-sub">North Fork → Arlington</span>
     </button>
@@ -2028,6 +2028,12 @@
       <select class="form-select regs-river-select" id="regs-river-select" onchange="renderRegs()" style="max-width:280px">
         <option value="upperYakima">Upper Yakima</option>
         <option value="yakimaCanyon">Yakima Canyon</option>
+        <option value="yakimaKeechelus">Yakima — Keechelus</option>
+        <option value="yakimaCleElum">Yakima — Cle Elum</option>
+        <option value="yakimaUnionGap">Yakima — Union Gap</option>
+        <option value="yakimaMabton">Yakima — Mabton</option>
+        <option value="yakimaProsser">Yakima — Prosser</option>
+        <option value="yakimaKiona">Yakima — Kiona</option>
         <option value="naches">Naches River</option>
         <option value="snoqualmie">Snoqualmie MF</option>
         <option value="methow">Methow River</option>
@@ -2392,9 +2398,11 @@ const RIVERS = {
     id: 'upperYakima',
     label: 'Upper Yakima',
     sublabel: 'Easton Dam → Thorpe',
+    riverGroup: 'yakima',
+    reachLabel: 'Upper (Easton → Thorp) — Umtanum gauge',
     usgs: '12484500',
     gaugeName: 'Umtanum gauge',
-    lat: 47.2437, lon: -121.1848,
+    lat: 46.8628, lon: -120.4789, // corrected — gauge 12484500 is actually at Umtanum, not Easton
     wadingThresholds: { easy: 500, moderate: 900, difficult: 1400, floatOnly: 2000 },
     hatches: [
       { name:'Skwala Stonefly', icon:'🪲', when:[2,3,4], detail:'Early-season stone. Look for adults on rocks and trees streamside. Nymphs migrate to banks Feb–Apr. Upper river can have impressive hatches.' },
@@ -2423,6 +2431,8 @@ const RIVERS = {
     id: 'yakimaCanyon',
     label: 'Yakima Canyon',
     sublabel: 'Roza Dam → Ellensburg',
+    riverGroup: 'yakima',
+    reachLabel: 'Canyon (Roza Dam → Ellensburg) — Selah Gap gauge',
     usgs: '12487000',
     gaugeName: 'Selah Gap gauge (canyon exit)',
     lat: 46.8701, lon: -120.4816,
@@ -2448,6 +2458,108 @@ const RIVERS = {
     accessLabel: 'Access Points — Roza Dam to Ellensburg',
     aiContext: 'the Yakima Canyon between Roza Dam and Ellensburg, WA (bigger water, canyon walls, classic pool-riffle structure, famous for Skwala and Salmonfly hatches)',
     insightTip: 'One or two specific tips unique to the canyon character (larger pools, canyon wall thermals, drift boat vs wading considerations)',
+  },
+  yakimaKeechelus: {
+    id: 'yakimaKeechelus',
+    label: 'Yakima — Keechelus',
+    sublabel: 'Below Keechelus Dam',
+    riverGroup: 'yakima',
+    reachLabel: 'Headwaters — below Keechelus Dam',
+    usgs: '12474510',
+    gaugeName: 'Yakima River 2 mi below Keechelus Lake at Martin, WA',
+    lat: 47.3115, lon: -121.3634, // approximate — near Keechelus Dam, not the exact gauge point
+    wadingThresholds: { easy: 200, moderate: 450, difficult: 800, floatOnly: 1200 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Headwaters (Keechelus)',
+    accessLabel: 'Access Points — Headwaters (Keechelus)',
+    aiContext: 'the Yakima River headwaters immediately below Keechelus Dam, WA (small, cold, dam-controlled flows)',
+    insightTip: 'Any seasonal patterns typical of a small, dam-controlled headwater stretch just below a reservoir',
+  },
+  yakimaCleElum: {
+    id: 'yakimaCleElum',
+    label: 'Yakima — Cle Elum',
+    sublabel: 'At Cle Elum, WA',
+    riverGroup: 'yakima',
+    reachLabel: 'Cle Elum',
+    usgs: '12479500',
+    gaugeName: 'Yakima River at Cle Elum, WA',
+    lat: 47.1931, lon: -120.9486,
+    wadingThresholds: { easy: 400, moderate: 800, difficult: 1300, floatOnly: 1900 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Cle Elum',
+    accessLabel: 'Access Points — Cle Elum',
+    aiContext: 'the Yakima River at Cle Elum, WA (upper-basin water below the Cle Elum River confluence)',
+    insightTip: 'Any seasonal patterns typical of this upper-basin stretch near Cle Elum',
+  },
+  yakimaUnionGap: {
+    id: 'yakimaUnionGap',
+    label: 'Yakima — Union Gap',
+    sublabel: 'At Union Gap, WA',
+    riverGroup: 'yakima',
+    reachLabel: 'Union Gap (with canal returns)',
+    usgs: '12503002',
+    gaugeName: 'Yakima River (Flow With Canals) at Union Gap, WA',
+    lat: 46.5581, lon: -120.4723, // approximate — town-level, not exact gauge point
+    wadingThresholds: { easy: 1200, moderate: 2200, difficult: 3500, floatOnly: 5000 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Union Gap',
+    accessLabel: 'Access Points — Union Gap',
+    aiContext: 'the Yakima River at Union Gap, WA (larger valley water, irrigation-influenced flows)',
+    insightTip: 'Any seasonal patterns typical of this larger, irrigation-influenced valley stretch',
+  },
+  yakimaMabton: {
+    id: 'yakimaMabton',
+    label: 'Yakima — Mabton',
+    sublabel: 'At Mabton, WA',
+    riverGroup: 'yakima',
+    reachLabel: 'Mabton (lower valley)',
+    usgs: '12508990',
+    gaugeName: 'Yakima River at Mabton, WA',
+    lat: 46.2075, lon: -119.9987, // approximate — town-level, not exact gauge point
+    wadingThresholds: { easy: 1200, moderate: 2200, difficult: 3500, floatOnly: 5000 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Mabton',
+    accessLabel: 'Access Points — Mabton',
+    aiContext: 'the Yakima River at Mabton, WA (lower agricultural valley stretch)',
+    insightTip: 'Any seasonal patterns typical of this lower valley, warmer-water stretch',
+  },
+  yakimaProsser: {
+    id: 'yakimaProsser',
+    label: 'Yakima — Prosser',
+    sublabel: 'At Prosser, WA',
+    riverGroup: 'yakima',
+    reachLabel: 'Prosser (near Prosser Falls)',
+    usgs: '12509489',
+    gaugeName: 'Yakima River at Prosser, WA',
+    lat: 46.2065, lon: -119.7686, // approximate — town-level, not exact gauge point
+    wadingThresholds: { easy: 1200, moderate: 2200, difficult: 3500, floatOnly: 5000 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Prosser',
+    accessLabel: 'Access Points — Prosser',
+    aiContext: 'the Yakima River at Prosser, WA, near Prosser Falls and the fish ladder',
+    insightTip: 'Any seasonal patterns typical of this lower-river stretch near Prosser Falls',
+  },
+  yakimaKiona: {
+    id: 'yakimaKiona',
+    label: 'Yakima — Kiona',
+    sublabel: 'At Kiona, WA (near mouth)',
+    riverGroup: 'yakima',
+    reachLabel: 'Kiona (near the Columbia confluence)',
+    usgs: '12510500',
+    gaugeName: 'Yakima River at Kiona, WA',
+    lat: 46.2532, lon: -119.4784, // approximate — town-level, not exact gauge point
+    wadingThresholds: { easy: 1500, moderate: 2800, difficult: 4500, floatOnly: 6500 },
+    hatches: [],
+    accessPoints: [],
+    hatchLabel: 'Hatches — Kiona',
+    accessLabel: 'Access Points — Kiona',
+    aiContext: 'the Yakima River at Kiona, WA, near its confluence with the Columbia River',
+    insightTip: 'Any seasonal patterns typical of this lowest, largest-volume stretch near the Columbia confluence',
   },
   naches: {
     id: 'naches',
@@ -2887,13 +2999,45 @@ document.addEventListener("click", function(e) {
   if (card) { selectSavedWater(card.getAttribute("data-water-id")); }
 });
 
+const RIVER_GROUPS = {
+  yakima: {
+    label: 'Yakima River',
+    reaches: ['yakimaKeechelus', 'yakimaCleElum', 'upperYakima', 'yakimaCanyon', 'yakimaUnionGap', 'yakimaMabton', 'yakimaProsser', 'yakimaKiona']
+  }
+};
+var lastReachByGroup = {};
+
+function updateReachDropdown(riverId) {
+  var reachWrap = document.getElementById('reach-select-wrap');
+  var reachSelect = document.getElementById('reach-select');
+  if (!reachWrap || !reachSelect) return;
+  var r0 = RIVERS[riverId];
+  if (r0 && r0.riverGroup && RIVER_GROUPS[r0.riverGroup]) {
+    var reaches = RIVER_GROUPS[r0.riverGroup].reaches;
+    reachSelect.innerHTML = reaches.map(function(id) {
+      var r = RIVERS[id];
+      return '<option value="' + id + '"' + (id === riverId ? ' selected' : '') + '>' + (r.reachLabel || r.label) + '</option>';
+    }).join('');
+    reachWrap.style.display = 'block';
+  } else {
+    reachWrap.style.display = 'none';
+  }
+}
+
 function switchRiver(riverId) {
   activeRiver = RIVERS[riverId];
+  if (activeRiver.riverGroup) lastReachByGroup[activeRiver.riverGroup] = riverId;
 
-  // Update tabs
-  document.querySelectorAll('.river-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', Object.keys(RIVERS)[i] === riverId);
+  // Update tabs — match by data attribute, not position (multiple RIVERS
+  // entries can now share one grouped tab, e.g. all Yakima reaches)
+  document.querySelectorAll('.river-tab').forEach(function(btn) {
+    var r = btn.getAttribute('data-river');
+    var g = btn.getAttribute('data-group');
+    var match = (r === riverId) || (g && activeRiver.riverGroup === g);
+    btn.classList.toggle('active', match);
   });
+
+  updateReachDropdown(riverId);
 
   // Update header
   const parts = activeRiver.label.split(' ');
@@ -3515,7 +3659,7 @@ Write in a confident, direct guide voice. Be specific — mention actual fly pat
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-5',
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -3628,7 +3772,7 @@ Be specific. Use real patterns that work on ${activeRiver.label}. Explain in the
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-5',
         max_tokens: 400,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -3860,6 +4004,7 @@ async function loadAll() {
 
 loadAll();
 updateSaveButton();
+updateReachDropdown(activeRiver.id);
 renderMyWaters();
 
 // ── Background prefetch all preset WA rivers after initial load ───────────────
@@ -4284,6 +4429,48 @@ const REGS = {
     rules: ['Above dam — wild trout regs, artificial only on most sections','Below dam — steelhead/salmon rules apply','Check WDFW boundary carefully'],
     species: ['Wild rainbow/cutthroat (above dam)','Steelhead (below dam — check season)','Chinook/coho salmon (below dam)'],
     notes: ['Very different fisheries above vs below Howard Hanson Dam','Upper river — wild trout, less pressure','Lower river — popular steelhead/salmon destination'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaKeechelus: {
+    season: 'Check WDFW — headwater/reservoir-tailwater rules may differ from mainstem',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow/cutthroat trout (verify)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaCleElum: {
+    season: 'Check WDFW for current Cle Elum-area rules',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow/cutthroat trout (verify)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaUnionGap: {
+    season: 'Check WDFW for current Union Gap-area rules',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow trout, whitefish (verify)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaMabton: {
+    season: 'Check WDFW for current lower-valley rules',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow trout, warmwater species (verify)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaProsser: {
+    season: 'Check WDFW for current Prosser-area rules',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow trout, salmon/steelhead near the fish ladder (verify season)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
+    wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
+  },
+  yakimaKiona: {
+    season: 'Check WDFW for current lower-river rules near the Columbia confluence',
+    rules: ['Not yet verified for this specific reach — check current WDFW rules before fishing'],
+    species: ['Rainbow trout, salmon/steelhead (verify season)'],
+    notes: ['Placeholder — boundary and rule specifics for this reach have not been verified yet'],
     wdfw: 'https://wdfw.wa.gov/fishing/regulations', eRegs: 'https://www.eregulations.com/washington/fishing',
   },
   stillaguamish: {
@@ -5189,7 +5376,7 @@ async function identifyHatch(base64, mediaType) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-5',
         max_tokens: 800,
         messages: [{
           role: 'user',
@@ -5943,7 +6130,7 @@ async function fetchLakeRigs(lake, cond) {
   try {
     var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400,
+      body: JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 400,
         messages: [{role:'user', content: prompt}] })
     });
     var data = await res.json();
@@ -5973,7 +6160,7 @@ async function generateLakeInsights(lake, cond) {
   try {
     var res = await fetch('https://yakima-proxy.ljlukelj.workers.dev/ai', {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800,
+      body: JSON.stringify({ model: 'claude-sonnet-5', max_tokens: 800,
         messages: [{role:'user', content: prompt}] })
     });
     var data = await res.json();
