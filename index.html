@@ -3910,14 +3910,19 @@ function filterSites() {
     const hits = allSites.filter(s => s.name.toLowerCase().includes(q)).slice(0, 50);
     if (!hits.length) { results.innerHTML = '<div class="site-result-item"><div class="site-result-name" style="color:var(--muted)">No matches</div></div>'; return; }
     results.innerHTML = hits.map(function(s) {
-      var n = s.name.replace(/'/g, '&#39;');
       var lat = parseFloat(s.lat).toFixed(3);
-      return '<div class="site-result-item" onclick="loadCustomRiver(\"' + s.id + '\",\"' + n + '\",' + s.lat + ',' + s.lon + ')">' +
+      return '<div class="site-result-item" data-site-id="' + s.id + '" data-site-name="' + s.name.replace(/"/g, '&quot;') + '" data-site-lat="' + s.lat + '" data-site-lon="' + s.lon + '">' +
         '<div class="site-result-name">' + s.name + '</div>' +
         '<div class="site-result-id">USGS #' + s.id + ' &middot; ' + lat + 'N</div></div>';
     }).join('');
   }, 200);
 }
+
+document.addEventListener('click', function(e) {
+  var item = e.target && e.target.closest && e.target.closest('.site-result-item[data-site-id]');
+  if (!item) return;
+  loadCustomRiver(item.getAttribute('data-site-id'), item.getAttribute('data-site-name'), parseFloat(item.getAttribute('data-site-lat')), parseFloat(item.getAttribute('data-site-lon')));
+});
 
 function loadCustomRiver(siteId, siteName, lat, lon) {
   document.getElementById('site-results').innerHTML = '';
