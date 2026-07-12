@@ -1657,10 +1657,6 @@
         <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
         <button class="star-btn" id="save-water-btn" type="button">☆ Save This Water</button>
-        <div class="reach-select-wrap" id="reach-select-wrap" style="display:none;margin-top:8px">
-          <label style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Gauge / Reach</label>
-          <select id="reach-select" class="form-select" onchange="switchRiver(this.value)" style="max-width:320px"></select>
-        </div>
       </div>
       <div class="header-meta">
         <div class="date" id="current-date">Loading…</div>
@@ -1778,6 +1774,13 @@
       <span class="tab-sub">North Fork → Arlington</span>
     </button>
   </nav>
+
+  <!-- Gauge / Reach picker — appears directly under the tabs when the -->
+  <!-- selected river has multiple reaches (e.g. Yakima River) -->
+  <div class="reach-select-wrap" id="reach-select-wrap" style="display:none;margin:12px 0 16px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px;">
+    <label style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">📍 Gauge / Reach</label>
+    <select id="reach-select" class="form-select" onchange="switchRiver(this.value)" style="max-width:100%;width:100%"></select>
+  </div>
 
   <!-- Condition Banner -->
   <div class="condition-banner loading" id="condition-banner">
