@@ -1666,6 +1666,7 @@
         <div class="date" id="current-date">Loading…</div>
         <div id="last-updated">Updating data…</div>
         <div id="gauge-label">USGS #12484500 · Umtanum gauge</div>
+        <button id="show-gauge-map-btn" onclick="showGaugeOnMap()" type="button" title="Show this gauge's exact location on the map" style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:.04em;background:none;border:1px solid var(--border);border-radius:3px;padding:2px 7px;color:var(--muted);cursor:pointer;margin-top:4px;">📍 Show gauge on map</button>
         <div id="moon-phase" style="margin-top:2px;font-size:0.75rem;color:var(--muted)"></div>
       </div>
     </div>
@@ -2435,7 +2436,7 @@ const RIVERS = {
     reachLabel: 'Canyon (Roza Dam → Ellensburg) — Selah Gap gauge',
     usgs: '12487000',
     gaugeName: 'Selah Gap gauge (canyon exit)',
-    lat: 46.8701, lon: -120.4816,
+    lat: 46.6310, lon: -120.5203, // corrected against verified site record for USGS-12487000 — previous value was ~16 miles off
     wadingThresholds: { easy: 800, moderate: 1500, difficult: 2500, floatOnly: 3500 },
     hatches: [
       { name:'Skwala Stonefly', icon:'🪲', when:[2,3,4], detail:'One of the best Skwala rivers in the state. Canyon walls warm quickly — look for adults crawling on rocks from late Feb.' },
@@ -3875,6 +3876,13 @@ let allSites = [], searchTimer = null;
 
 async function onStatePick() {
   const state = document.getElementById('state-picker').value;
+  if (!state) return;
+  // ── Render curated river tabs IMMEDIATELY — no waiting on network ──
+  renderStateTabs(state);
+  await loadSearchIndex(state);
+}
+
+async function loadSearchIndex(state) {
   const status = document.getElementById('site-search-status');
   const results = document.getElementById('site-results');
   const input = document.getElementById('site-search-input');
@@ -3882,10 +3890,6 @@ async function onStatePick() {
 
   allSites = []; results.innerHTML = ''; input.value = '';
 
-  // ── Render curated river tabs IMMEDIATELY — no waiting on network ──
-  renderStateTabs(state);
-
-  // ── Load USGS gauge list in background for the search box ──
   input.placeholder = 'Loading gauges…';
   input.disabled = true;
   status.textContent = '⏳ Loading search index for ' + state + '…';
@@ -4018,6 +4022,7 @@ loadAll();
 updateSaveButton();
 updateReachDropdown(activeRiver.id);
 renderMyWaters();
+loadSearchIndex(document.getElementById('state-picker').value); // populate the nationwide search index for the default state on load — previously only ran after a manual state-picker change, which is why search looked broken until you touched that dropdown
 
 // ── Background prefetch all preset WA rivers after initial load ───────────────
 // Staggered 800ms apart so they don't compete with the active river fetch
@@ -5462,6 +5467,7 @@ async function identifyHatch(base64, mediaType) {
 
 // ── MAP STATE VARIABLES ────────────────────────────────────────
 var dsMap = null;
+var activeGaugeMarker = null;
 var mapLayers = {};
 var mapLayerGroups = { access: null, gauges: null, public: null };
 var mapLayerVisible = { access: true, gauges: true, public: false };
@@ -5532,6 +5538,26 @@ function initMap() {
   }
 }
 
+// ── One-click: jump to the Map tab, centered tight on this exact gauge ──
+function showGaugeOnMap() {
+  if (!activeRiver) return;
+  switchMode('map');
+  var attempts = 0;
+  var tryFocus = function() {
+    attempts++;
+    if (dsMap && mapInitialized) {
+      dsMap.setView([activeRiver.lat, activeRiver.lon], 15);
+      setTimeout(function() {
+        dsMap.invalidateSize();
+        if (activeGaugeMarker) activeGaugeMarker.openPopup();
+      }, 150);
+    } else if (attempts < 20) {
+      setTimeout(tryFocus, 100); // map still lazy-initializing — keep waiting briefly
+    }
+  };
+  setTimeout(tryFocus, 100);
+}
+
 function centerMapOnRiver() {
   if (!dsMap || !activeRiver) return;
   dsMap.setView([activeRiver.lat, activeRiver.lon], 11);
@@ -5592,6 +5618,7 @@ function getCachedFlow(usgsId) {
 
 function addGaugeMarkers() {
   if (!dsMap || !mapLayerGroups.gauges) return;
+  activeGaugeMarker = null;
 
   var riverList = Object.values(RIVERS);
   var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : 'WA';
@@ -5619,6 +5646,7 @@ function addGaugeMarkers() {
     });
 
     var marker = L.marker([river.lat, river.lon], { icon: icon, zIndexOffset: isActive ? 1000 : 0 });
+    if (isActive) activeGaugeMarker = marker;
     marker.bindPopup(
       '<div class="popup-title">&#128200; ' + river.label + (isActive ? ' <span style="color:' + color + '">&#9679;</span>' : '') + '</div>' +
       '<div class="popup-detail">' + (river.sublabel || '') + '</div>' +
