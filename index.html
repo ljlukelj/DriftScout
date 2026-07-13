@@ -3146,6 +3146,16 @@ async function fetchUSGS(riverId) {
   // Parse legacy USGS waterservices format
   const series = json?.value?.timeSeries || [];
 
+  // Guard against stale historical readings being shown as "live" — some
+  // USGS gauges' continuous feed for a given parameter stopped updating
+  // years ago; the API can still return that old value as its "latest."
+  function isFreshReading(dateTimeStr, maxAgeHours) {
+    if (!dateTimeStr) return false;
+    const ageMs = Date.now() - new Date(dateTimeStr).getTime();
+    return ageMs >= 0 && ageMs <= maxAgeHours * 3600 * 1000;
+  }
+  const READING_MAX_AGE_HOURS = 72; // beyond this, treat the gauge as not currently reporting
+
   let dischargeVals = [];
   let gageVals = [];
 
@@ -3159,7 +3169,7 @@ async function fetchUSGS(riverId) {
   // Bail if user switched to a different river while this was fetching
   if (activeRiver.id !== riverId) return;
 
-  if (dischargeVals.length) {
+  if (dischargeVals.length && isFreshReading(dischargeVals[dischargeVals.length - 1].dateTime, READING_MAX_AGE_HOURS)) {
     const latest = dischargeVals[dischargeVals.length - 1];
     const prev   = dischargeVals[Math.max(0, dischargeVals.length - 5)];
     currentFlow  = parseFloat(latest.value);
@@ -3197,10 +3207,14 @@ async function fetchUSGS(riverId) {
     el.classList.remove('skeleton');
     document.getElementById('flow-delta').textContent = 'No discharge data from this gauge';
     document.getElementById('last-updated').textContent = '⚠️ No live flow data — gauge may be offline or lack this parameter';
-    console.warn('[DriftScout] No 00060 (discharge) series for site ' + siteId + ' (' + riverId + ')');
+    if (dischargeVals.length) {
+      console.warn('[DriftScout] 00060 (discharge) series for site ' + siteId + ' (' + riverId + ') is stale — latest reading is ' + dischargeVals[dischargeVals.length-1].dateTime);
+    } else {
+      console.warn('[DriftScout] No 00060 (discharge) series for site ' + siteId + ' (' + riverId + ')');
+    }
   }
 
-  if (gageVals.length) {
+  if (gageVals.length && isFreshReading(gageVals[gageVals.length - 1].dateTime, READING_MAX_AGE_HOURS)) {
     const latest = gageVals[gageVals.length - 1];
     currentGage  = parseFloat(latest.value);
     const el = document.getElementById('gage-val');
@@ -3224,7 +3238,7 @@ async function fetchUSGS(riverId) {
   const wtEl   = document.getElementById('wtemp-val');
   const wtNote = document.getElementById('wtemp-note');
   const wtEst  = document.getElementById('wtemp-est-wrap');
-  if (waterTempVals.length) {
+  if (waterTempVals.length && isFreshReading(waterTempVals[waterTempVals.length - 1].dateTime, READING_MAX_AGE_HOURS)) {
     const tempC = parseFloat(waterTempVals[waterTempVals.length - 1].value);
     currentWaterTemp = Math.round(((tempC * 9/5) + 32) * 10) / 10;
     if (wtEl)  { wtEl.textContent = currentWaterTemp.toFixed(1); wtEl.classList.remove('skeleton'); }
