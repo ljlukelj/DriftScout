@@ -1721,6 +1721,8 @@
     </div>
     <span id="site-search-status"></span>
     <div id="site-results"></div>
+    <button id="search-diag-toggle-btn" type="button" style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:.05em;background:none;border:1px solid var(--border);border-radius:4px;padding:4px 9px;color:var(--muted);cursor:pointer;">🔍 Show search diagnostics</button>
+    <pre id="search-diag-output" style="display:none;margin-top:8px;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-size:0.68rem;line-height:1.5;overflow-x:auto;white-space:pre-wrap;word-break:break-word;"></pre>
   </div>
 
   <!-- River Tabs -->
@@ -2891,6 +2893,43 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
       out.style.display = "none";
       btn.textContent = "🔍 Show worker diagnostics";
+    }
+  });
+});
+
+// ─── SEARCH DIAGNOSTICS (dev aid) ───────────────────────────
+document.addEventListener("DOMContentLoaded", function() {
+  var btn = document.getElementById("search-diag-toggle-btn");
+  var out = document.getElementById("search-diag-output");
+  if (!btn || !out) return;
+  var loaded = false;
+  btn.addEventListener("click", function() {
+    if (out.style.display === "none") {
+      out.style.display = "block";
+      btn.textContent = "🔍 Hide search diagnostics";
+      if (!loaded) {
+        out.textContent = "Fetching from worker for current state and a comparison state…";
+        var currentState = (document.getElementById("state-picker") && document.getElementById("state-picker").value) || "WA";
+        var compareState = currentState === "OR" ? "WA" : "OR";
+        Promise.all([
+          fetch("https://yakima-proxy.ljlukelj.workers.dev/sites?state=" + currentState + "&debug=1").then(function(r){ return r.text(); }),
+          fetch("https://yakima-proxy.ljlukelj.workers.dev/sites?state=" + compareState + "&debug=1").then(function(r){ return r.text(); })
+        ]).then(function(results) {
+          loaded = true;
+          var summary = "Current state (" + currentState + ") vs. comparison state (" + compareState + ")\n\n";
+          summary += "=== " + currentState + " ===\n";
+          try { summary += JSON.stringify(JSON.parse(results[0]), null, 2); } catch(e) { summary += "Not valid JSON:\n" + results[0]; }
+          summary += "\n\n=== " + compareState + " ===\n";
+          try { summary += JSON.stringify(JSON.parse(results[1]), null, 2); } catch(e) { summary += "Not valid JSON:\n" + results[1]; }
+          out.textContent = summary;
+        }).catch(function(e) {
+          loaded = true;
+          out.textContent = "Fetch to worker failed entirely: " + (e.message || e);
+        });
+      }
+    } else {
+      out.style.display = "none";
+      btn.textContent = "🔍 Show search diagnostics";
     }
   });
 });
