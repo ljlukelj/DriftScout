@@ -3730,9 +3730,16 @@ Write in a confident, direct guide voice. Be specific — mention actual fly pat
     });
 
     const data = await res.json();
-    const text = data.content?.[0]?.text || 'Unable to generate insights.';
-
     if (checkRiver && activeRiver.id !== riverId) return;
+
+    if (!data.content?.[0]?.text) {
+      // The call didn't throw, but didn't return the expected shape either —
+      // usually means the AI proxy/Anthropic API returned an error object.
+      const reason = data?.error?.message || data?.error?.type || JSON.stringify(data).slice(0, 300) || 'Unknown response shape';
+      box.innerHTML = `<div class="insights-text">Could not load AI insights. Reason: ${reason}<br><br><button class="generate-btn" onclick="generateInsights()">↺ Try Again</button></div>`;
+      return;
+    }
+    const text = data.content[0].text;
 
     const html = text.split('\n\n').map(p => p.trim()).filter(Boolean).map(p =>
       `<p style="margin-bottom:14px" class="insights-text">${p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`
