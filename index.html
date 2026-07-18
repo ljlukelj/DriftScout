@@ -2943,8 +2943,24 @@ document.addEventListener("DOMContentLoaded", function() {
 const SAVED_WATERS_KEY = "driftscout_saved_waters";
 
 function getSavedWaters() {
-  try { return JSON.parse(localStorage.getItem(SAVED_WATERS_KEY) || "[]"); }
+  var list;
+  try { list = JSON.parse(localStorage.getItem(SAVED_WATERS_KEY) || "[]"); }
   catch (e) { return []; }
+
+  // Migration: some entries were saved before `id` was reliably stored.
+  // Backfill using the gauge ID (usgs), which old entries do have, matching
+  // against RIVERS first, then falling back to the same custom_ convention
+  // loadCustomRiver() uses. Re-save so this only needs to run once.
+  var changed = false;
+  list = list.map(function(w) {
+    if (w.id && w.id !== "undefined") return w;
+    changed = true;
+    var matchId = Object.keys(RIVERS).find(function(k) { return RIVERS[k].usgs === w.usgs; });
+    return Object.assign({}, w, { id: matchId || ("custom_" + w.usgs) });
+  }).filter(function(w) { return w.usgs; }); // drop anything unrecoverable (no gauge id at all)
+
+  if (changed) setSavedWaters(list);
+  return list;
 }
 function setSavedWaters(list) {
   try { localStorage.setItem(SAVED_WATERS_KEY, JSON.stringify(list)); } catch (e) {}
