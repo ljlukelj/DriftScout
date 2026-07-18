@@ -3685,7 +3685,13 @@ function renderHatches() {
 }
 
 function renderAccessPoints() {
-  document.getElementById('access-list').innerHTML = activeRiver.accessPoints.map((a, i) => `
+  var points = activeRiver.accessPoints || [];
+  if (!points.length) {
+    document.getElementById('access-list').innerHTML =
+      '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access points not yet added for this reach — check back soon, or verify locally with WDFW/local knowledge.</div>';
+    return;
+  }
+  document.getElementById('access-list').innerHTML = points.map((a, i) => `
     <div class="access-card" data-access-index="${i}" title="Click to show on map">
       <div class="access-name">📍 ${a.name}</div>
       <div class="access-detail">${a.detail}</div>
