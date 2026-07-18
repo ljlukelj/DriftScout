@@ -158,12 +158,13 @@
   .water-card {
     flex: 0 0 auto; min-width: 150px;
     padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 4px; cursor: pointer; text-align: left;
+    border-radius: 4px; cursor: pointer; text-align: left; position: relative;
   }
   .water-card:hover { border-color: var(--accent); }
   .water-card .wc-name {
     font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+    padding-right: 20px;
   }
   .water-card .wc-flow {
     font-size: 1.1rem; font-weight: 600; color: var(--text); margin-top: 4px;
@@ -173,9 +174,12 @@
     display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
   }
   .water-card .wc-remove {
-    float: right; color: var(--muted); font-size: 0.7rem; cursor: pointer; padding: 0 2px;
+    position: absolute; top: 6px; right: 8px;
+    color: var(--muted); font-size: 0.8rem; cursor: pointer;
+    width: 20px; height: 20px; line-height: 20px; text-align: center;
+    border-radius: 50%; z-index: 2;
   }
-  .water-card .wc-remove:hover { color: var(--red); }
+  .water-card .wc-remove:hover { color: var(--red); background: var(--surface); }
 
   /* ── CONDITION BADGE ── */
   .condition-banner {
@@ -601,7 +605,9 @@
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 16px 18px;
+    cursor: pointer;
   }
+  .access-card:hover { border-color: var(--accent); }
 
   .access-name {
     font-family: 'IBM Plex Mono', monospace;
@@ -1670,15 +1676,15 @@
 
   <!-- Mode Switcher -->
   <nav class="mode-switcher">
-    <button class="mode-btn active" onclick="switchMode('rivers')"><span class="mode-icon">🎣</span> Rivers</button>
-    <button class="mode-btn" onclick="switchMode('lakes')"><span class="mode-icon">🏔️</span> Lakes</button>
-    <button class="mode-btn" onclick="switchMode('knots')"><span class="mode-icon">🪢</span> Knots</button>
-    <button class="mode-btn" onclick="switchMode('triplog')"><span class="mode-icon">📓</span> Trip Log</button>
-    <button class="mode-btn" onclick="switchMode('regs')"><span class="mode-icon">⚖️</span> Regulations</button>
-    <button class="mode-btn" onclick="switchMode('calc')"><span class="mode-icon">📐</span> Calculator</button>
-    <button class="mode-btn" onclick="switchMode('shops')"><span class="mode-icon">🏪</span> Fly Shops</button>
-    <button class="mode-btn" onclick="switchMode('hatch')"><span class="mode-icon">🔍</span> Match the Hatch</button>
-    <button class="mode-btn" onclick="switchMode('map')"><span class="mode-icon">🗺️</span> Map</button>
+    <button class="mode-btn active" data-mode="rivers" onclick="switchMode('rivers')"><span class="mode-icon">🎣</span> Rivers</button>
+    <button class="mode-btn" data-mode="lakes" onclick="switchMode('lakes')"><span class="mode-icon">🏔️</span> Lakes</button>
+    <button class="mode-btn" data-mode="knots" onclick="switchMode('knots')"><span class="mode-icon">🪢</span> Knots</button>
+    <button class="mode-btn" data-mode="hatch" onclick="switchMode('hatch')"><span class="mode-icon">🔍</span> Match the Hatch</button>
+    <button class="mode-btn" data-mode="map" onclick="switchMode('map')"><span class="mode-icon">🗺️</span> Map</button>
+    <button class="mode-btn" data-mode="triplog" onclick="switchMode('triplog')"><span class="mode-icon">📓</span> Trip Log</button>
+    <button class="mode-btn" data-mode="regs" onclick="switchMode('regs')"><span class="mode-icon">⚖️</span> Regulations</button>
+    <button class="mode-btn" data-mode="calc" onclick="switchMode('calc')"><span class="mode-icon">📐</span> Calculator</button>
+    <button class="mode-btn" data-mode="shops" onclick="switchMode('shops')"><span class="mode-icon">🏪</span> Fly Shops</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -3679,13 +3685,21 @@ function renderHatches() {
 }
 
 function renderAccessPoints() {
-  document.getElementById('access-list').innerHTML = activeRiver.accessPoints.map(a => `
-    <div class="access-card">
-      <div class="access-name">${a.name}</div>
+  document.getElementById('access-list').innerHTML = activeRiver.accessPoints.map((a, i) => `
+    <div class="access-card" data-access-index="${i}" title="Click to show on map">
+      <div class="access-name">📍 ${a.name}</div>
       <div class="access-detail">${a.detail}</div>
       ${a.tags.map(t => `<span class="access-tag">${t}</span>`).join('')}
     </div>`).join('');
 }
+
+document.addEventListener('click', function(e) {
+  var card = e.target && e.target.closest && e.target.closest('.access-card[data-access-index]');
+  if (!card) return;
+  var idx = parseInt(card.getAttribute('data-access-index'), 10);
+  var pt = activeRiver.accessPoints && activeRiver.accessPoints[idx];
+  if (pt) showAccessPointOnMap(pt.name);
+});
 
 // ─── AI INSIGHTS ──────────────────────────────────────────
 async function generateInsights(riverId) {
@@ -4038,6 +4052,8 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
     if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
   });
   updateSaveButton();
+  updateReachDropdown(activeRiver.id); // hides the Yakima reach picker — custom rivers aren't in a group
+  if (mapInitialized) centerMapOnRiver(); // refresh map scope — don't leave stale WA/OR pins showing
 }
 
 // ── SESSION CACHE (5-min TTL) ─────────────────────────────────────────────────
@@ -4125,9 +4141,8 @@ setTimeout(function() {
 // MODE SWITCHER
 // ═══════════════════════════════════════════════════════════
 function switchMode(mode) {
-  document.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    const modes = ['rivers','lakes','knots','triplog','regs','calc','shops','hatch','map'];
-    btn.classList.toggle('active', modes[i] === mode);
+  document.querySelectorAll('.mode-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
   });
   document.getElementById('river-dashboard').style.display = mode === 'rivers' ? 'block' : 'none';
   ['knots','triplog','regs','calc','shops','hatch','map','lakes'].forEach(m => {
@@ -5580,6 +5595,7 @@ function initMap() {
   // Initialize layer groups
   mapLayerGroups.gauges = L.layerGroup().addTo(dsMap);
   mapLayerGroups.access = L.layerGroup().addTo(dsMap);
+  mapLayerGroups.spots = L.layerGroup().addTo(dsMap);
   mapLayerGroups.public = L.layerGroup(); // not added yet — toggled off by default
 
   mapInitialized = true;
@@ -5587,6 +5603,12 @@ function initMap() {
   // Populate markers
   addGaugeMarkers();
   addAccessMarkers();
+  renderSavedSpots();
+
+  // Click anywhere on the map (not on an existing marker) to save a favorite spot
+  dsMap.on('click', function(e) {
+    openSaveSpotPopup(e.latlng.lat, e.latlng.lng);
+  });
 
   // Force size recalculation
   dsMap.invalidateSize();
@@ -5633,6 +5655,86 @@ function centerMapOnRiver() {
 }
 
 // ── Custom SVG markers ─────────────────────────────────────────
+// ── Favorite Spots — click anywhere on the map to save a personal spot ──
+var SAVED_SPOTS_KEY = "driftscout_saved_spots";
+var pendingSpotLatLng = null;
+
+function getSavedSpots() {
+  try { return JSON.parse(localStorage.getItem(SAVED_SPOTS_KEY) || "[]"); }
+  catch (e) { return []; }
+}
+function setSavedSpots(list) {
+  try { localStorage.setItem(SAVED_SPOTS_KEY, JSON.stringify(list)); } catch (e) {}
+}
+function escapeSpotHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+  });
+}
+
+function openSaveSpotPopup(lat, lon) {
+  pendingSpotLatLng = { lat: lat, lon: lon };
+  L.popup({ closeOnClick: false, autoClose: true })
+    .setLatLng([lat, lon])
+    .setContent(
+      '<div style="min-width:180px">' +
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:0.68rem;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">SAVE THIS SPOT</div>' +
+      '<input type="text" id="spot-name-input" placeholder="e.g. Big bend hole" style="width:100%;box-sizing:border-box;padding:6px 8px;margin-bottom:8px;border:1px solid var(--border);border-radius:3px;font-family:inherit;font-size:0.8rem">' +
+      '<button id="spot-save-confirm-btn" style="width:100%;padding:6px;background:var(--accent);color:white;border:none;border-radius:3px;cursor:pointer;font-size:0.78rem">📍 Save Spot</button>' +
+      '</div>'
+    )
+    .openOn(dsMap);
+}
+
+function addSavedSpot(lat, lon, name) {
+  var spots = getSavedSpots();
+  spots.push({
+    id: 'spot_' + Date.now(),
+    lat: lat, lon: lon,
+    name: name || 'Unnamed Spot',
+    savedAt: new Date().toISOString(),
+    river: (typeof activeRiver !== 'undefined' && activeRiver) ? activeRiver.label : null
+  });
+  setSavedSpots(spots);
+  renderSavedSpots();
+}
+
+function removeSavedSpot(id) {
+  setSavedSpots(getSavedSpots().filter(function(s) { return s.id !== id; }));
+  renderSavedSpots();
+}
+
+function renderSavedSpots() {
+  if (!dsMap || !mapLayerGroups.spots) return;
+  mapLayerGroups.spots.clearLayers();
+  getSavedSpots().forEach(function(s) {
+    var m = L.marker([s.lat, s.lon], { icon: makeMarker('#c07a1a', 16) }); // amber — distinct from gauge (red) and access (green)
+    m.bindPopup(
+      '<div class="popup-title">⭐ ' + escapeSpotHtml(s.name) + '</div>' +
+      (s.river ? '<div class="popup-detail">Saved near ' + escapeSpotHtml(s.river) + '</div>' : '') +
+      '<button data-remove-spot-id="' + s.id + '" style="margin-top:8px;padding:4px 10px;background:none;border:1px solid var(--border);border-radius:3px;cursor:pointer;font-size:0.72rem;color:var(--muted)">✕ Remove</button>'
+    );
+    mapLayerGroups.spots.addLayer(m);
+  });
+}
+
+// Delegated — the save-confirm button and remove buttons live inside Leaflet
+// popups, which are added/removed from the DOM dynamically
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'spot-save-confirm-btn') {
+    var nameInput = document.getElementById('spot-name-input');
+    var name = (nameInput && nameInput.value.trim()) || 'Unnamed Spot';
+    if (pendingSpotLatLng) {
+      addSavedSpot(pendingSpotLatLng.lat, pendingSpotLatLng.lon, name);
+      pendingSpotLatLng = null;
+      dsMap.closePopup();
+    }
+    return;
+  }
+  var removeSpotId = e.target && e.target.getAttribute && e.target.getAttribute('data-remove-spot-id');
+  if (removeSpotId) { removeSavedSpot(removeSpotId); }
+});
+
 function makeMarker(color, size) {
   size = size || 14;
   return L.divIcon({
@@ -5683,12 +5785,24 @@ function addGaugeMarkers() {
   if (!dsMap || !mapLayerGroups.gauges) return;
   activeGaugeMarker = null;
 
-  var riverList = Object.values(RIVERS);
-  var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : 'WA';
-  if (stateCode && stateCode !== 'WA' && STATE_RIVERS[stateCode]) {
-    STATE_RIVERS[stateCode].forEach(function(r) {
-      riverList.push({ label: r.label, sublabel: r.sub, usgs: r.usgs, lat: r.lat, lon: r.lon, accessPoints: [] });
-    });
+  var isCustomRiver = activeRiver && typeof activeRiver.id === 'string' && activeRiver.id.indexOf('custom_') === 0;
+  var riverList;
+  if (isCustomRiver) {
+    // Viewing a searched, out-of-region river — don't clutter the map with
+    // unrelated WA/OR preset pins from a completely different part of the country.
+    riverList = [];
+    var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : null;
+    if (stateCode && STATE_RIVERS[stateCode]) {
+      STATE_RIVERS[stateCode].forEach(function(r) {
+        riverList.push({ label: r.label, sublabel: r.sub, usgs: r.usgs, lat: r.lat, lon: r.lon, accessPoints: [] });
+      });
+    }
+    if (!riverList.some(function(r) { return r.usgs === activeRiver.usgs; })) {
+      riverList.push({ label: activeRiver.label, sublabel: activeRiver.sublabel, usgs: activeRiver.usgs, lat: activeRiver.lat, lon: activeRiver.lon, accessPoints: [] });
+    }
+  } else {
+    // Active river is one of our WA/OR presets — show the full preset list
+    riverList = Object.values(RIVERS);
   }
 
   riverList.forEach(function(river) {
@@ -5728,6 +5842,7 @@ function addGaugeMarkers() {
 // ── Access point markers — uses real lat/lon if present ────────
 function addAccessMarkers() {
   if (!dsMap || !mapLayerGroups.access || !activeRiver) return;
+  accessMarkersByName = {};
   var points = (activeRiver.accessPoints || []);
   if (!points.length) {
     var m = L.marker([activeRiver.lat, activeRiver.lon], { icon: makeMarker('#3a6b35', 14) });
@@ -5745,7 +5860,31 @@ function addAccessMarkers() {
       '<div style="margin-top:6px">' + tags + '</div>'
     );
     mapLayerGroups.access.addLayer(m);
+    accessMarkersByName[pt.name] = m;
   });
+}
+
+// ── One-click: jump to the Map tab, centered on this specific access point ──
+var accessMarkersByName = {};
+function showAccessPointOnMap(name) {
+  var pt = (activeRiver.accessPoints || []).find(function(p) { return p.name === name; });
+  if (!pt) return;
+  switchMode('map');
+  var attempts = 0;
+  var tryFocus = function() {
+    attempts++;
+    if (dsMap && mapInitialized) {
+      dsMap.setView([pt.lat, pt.lon], 15);
+      setTimeout(function() {
+        dsMap.invalidateSize();
+        var marker = accessMarkersByName[name];
+        if (marker) marker.openPopup();
+      }, 150);
+    } else if (attempts < 20) {
+      setTimeout(tryFocus, 100);
+    }
+  };
+  setTimeout(tryFocus, 100);
 }
 
 // ── Public land overlay (USFS/BLM via OSM overpass-based tiles) ──
