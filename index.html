@@ -23,23 +23,23 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f5f2ed'/%3E%3Cpath d='M10 12 L10 52 L26 52 C40 52 50 43 50 32 C50 21 40 12 26 12 Z' fill='%234e6b2e'/%3E%3Cpath d='M18 22 L18 42 L25 42 C34 42 40 37 40 32 C40 27 34 22 25 22 Z' fill='%23f5f2ed'/%3E%3Cpath d='M20 32 Q25 29 30 32 Q35 35 40 32' stroke='%23c8441a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M26 16 Q44 8 56 20' stroke='%23c8441a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='57' cy='20' r='3' fill='%23c8441a'/%3E%3C/svg%3E" sizes="any">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f5f2ed'/%3E%3Cpath d='M10 12 L10 52 L26 52 C40 52 50 43 50 32 C50 21 40 12 26 12 Z' fill='%234e6b2e'/%3E%3Cpath d='M18 22 L18 42 L25 42 C34 42 40 37 40 32 C40 27 34 22 25 22 Z' fill='%23f5f2ed'/%3E%3Cpath d='M20 32 Q25 29 30 32 Q35 35 40 32' stroke='%23c8441a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M26 16 Q44 8 56 20' stroke='%23c8441a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='57' cy='20' r='3' fill='%23c8441a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f5f2ed;
+    --bg: #f8f5ef;
     --surface: #ffffff;
-    --surface2: #ede9e2;
-    --border: #d4cfc6;
-    --river: #c8441a;
-    --river-dim: #f0ddd6;
-    --green: #3a6b35;
-    --amber: #c07a1a;
+    --surface2: #ede9e1;
+    --border: #d9d3c7;
+    --river: #c65a1e;
+    --river-dim: #f3ddcb;
+    --green: #2f4f3a;
+    --amber: #b8791a;
     --red: #b83232;
-    --text: #1a1a17;
-    --muted: #6b6659;
-    --accent: #c8441a;
-    --gold: #4e6b2e;
+    --text: #2b2b2b;
+    --muted: #7a7a6e;
+    --accent: #c65a1e;
+    --gold: #7a886f;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -94,7 +94,7 @@
   }
 
   .title-block h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     font-weight: 700;
     line-height: 1.1;
@@ -208,7 +208,7 @@
   }
 
   .condition-status {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--green);
@@ -333,7 +333,7 @@
   }
 
   .wading-rating {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 1rem;
     font-weight: 700;
   }
@@ -426,7 +426,7 @@
   }
 
   .fc-rating {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
   }
@@ -468,7 +468,7 @@
   }
 
   .hatch-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-style: italic;
     font-size: 1rem;
     color: var(--text);
@@ -775,7 +775,7 @@
   }
 
   .knot-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--text);
@@ -979,7 +979,7 @@
   }
 
   .trip-entry-fly {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-style: italic;
     font-size: 0.95rem;
     color: var(--text);
@@ -1191,7 +1191,7 @@
   .shop-card:hover { border-color: var(--accent); }
 
   .shop-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Oswald', sans-serif;
     font-size: 1rem;
     font-weight: 700;
     color: var(--text);
@@ -1660,6 +1660,7 @@
     <div class="header-top">
       <div class="title-block">
         <img src="logo.svg" class="driftscout-logo-img" alt="DriftScout">
+        <div class="brand-tagline" style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase;margin:-6px 0 10px 2px">Fly Fishing. Explore More.</div>
         <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
         <button class="star-btn" id="save-water-btn" type="button">☆ Save This Water</button>
@@ -1946,7 +1947,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-knots" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Essential Fly Fishing Knots</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Essential Fly Fishing Knots</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Click any knot to watch the full tying tutorial · Video guides from Animated Knots</div>
     </div>
     <div class="knot-grid" id="knot-grid"></div>
@@ -1958,7 +1959,7 @@
   <div id="panel-triplog" class="tools-panel">
     <div class="trip-log-header">
       <div>
-        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Trip Log & Fly Box</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Trip Log & Fly Box</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">What worked, where, when — saved locally in your browser</div>
       </div>
       <div style="display:flex;gap:8px">
@@ -2029,7 +2030,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-regs" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="regs-title">Washington Fishing Regulations</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="regs-title">Washington Fishing Regulations</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="regs-subtitle">Quick reference — always verify with WDFW before fishing</div>
     </div>
     <div class="reg-warning" id="regs-warning">
@@ -2067,7 +2068,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-calc" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Tippet & Leader Calculator</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Tippet & Leader Calculator</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Match tippet to fly size · Build the right leader formula</div>
     </div>
     <div class="calc-grid">
@@ -2200,7 +2201,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-shops" class="tools-panel">
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="shops-title">Washington Fly Shops</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px" id="shops-title">Washington Fly Shops</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)" id="shops-subtitle">Local shops near the rivers you fish — best sources for current intel</div>
     </div>
     <div class="shop-grid" id="shop-grid"></div>
@@ -2214,7 +2215,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-hatch" class="tools-panel">
     <div style="margin-bottom:24px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Match the Hatch</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Match the Hatch</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Photo-identify any aquatic insect &middot; Get exact fly pattern matches</div>
     </div>
 
@@ -2224,7 +2225,7 @@
       ondragleave="this.style.borderColor='var(--border)'"
       ondrop="handleHatchDrop(event)">
       <div style="font-size:3rem;margin-bottom:12px">&#128247;</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:8px">Drop a bug photo here</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;color:var(--text);margin-bottom:8px">Drop a bug photo here</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:16px">or click to browse &middot; JPG, PNG, HEIC</div>
       <div style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:8px 20px;border-radius:2px">Choose Photo</div>
     </div>
@@ -2262,7 +2263,7 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <div id="panel-map" class="tools-panel">
     <div style="margin-bottom:16px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">River Map</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">River Map</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Explore water, access points &amp; public land &middot; Powered by OpenStreetMap</div>
     </div>
 
@@ -2299,7 +2300,7 @@
   <div id="panel-lakes" class="tools-panel">
 
     <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Stillwater Dashboard</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px">Stillwater Dashboard</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted)">Lake fly fishing — conditions, rigs & access nationwide</div>
     </div>
 
@@ -3700,16 +3701,36 @@ function renderHatches() {
   }).join('');
 }
 
+function getGroupAccessPoints() {
+  // For grouped rivers (e.g. Yakima), pull access points from every reach in
+  // the group, not just the currently-selected one — an angler floating past
+  // Cle Elum still benefits from knowing about access points near Roza Dam.
+  // Each point is tagged with which reach it actually belongs to.
+  if (activeRiver.riverGroup && RIVER_GROUPS[activeRiver.riverGroup]) {
+    var combined = [];
+    RIVER_GROUPS[activeRiver.riverGroup].reaches.forEach(function(rid) {
+      var r = RIVERS[rid];
+      (r.accessPoints || []).forEach(function(a, i) {
+        combined.push(Object.assign({}, a, { _riverId: rid, _localIndex: i, _reachLabel: r.reachLabel || r.label }));
+      });
+    });
+    return combined;
+  }
+  return (activeRiver.accessPoints || []).map(function(a, i) {
+    return Object.assign({}, a, { _riverId: activeRiver.id, _localIndex: i, _reachLabel: null });
+  });
+}
+
 function renderAccessPoints() {
-  var points = activeRiver.accessPoints || [];
+  var points = getGroupAccessPoints();
   if (!points.length) {
     document.getElementById('access-list').innerHTML =
-      '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access points not yet added for this reach — check back soon, or verify locally with WDFW/local knowledge.</div>';
+      '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access points not yet added for this river — check back soon, or verify locally with WDFW/local knowledge.</div>';
     return;
   }
   document.getElementById('access-list').innerHTML = points.map((a, i) => `
-    <div class="access-card" data-access-index="${i}" title="Click to show on map">
-      <div class="access-name">📍 ${a.name}</div>
+    <div class="access-card" data-access-river="${a._riverId}" data-access-index="${a._localIndex}" title="Click to show on map">
+      <div class="access-name">📍 ${a.name}${a._reachLabel ? ` <span style="font-weight:400;color:var(--muted);font-size:0.72em">— ${a._reachLabel}</span>` : ''}</div>
       <div class="access-detail">${a.detail}</div>
       ${a.tags.map(t => `<span class="access-tag">${t}</span>`).join('')}
     </div>`).join('');
@@ -3719,7 +3740,9 @@ document.addEventListener('click', function(e) {
   var card = e.target && e.target.closest && e.target.closest('.access-card[data-access-index]');
   if (!card) return;
   var idx = parseInt(card.getAttribute('data-access-index'), 10);
-  var pt = activeRiver.accessPoints && activeRiver.accessPoints[idx];
+  var riverId = card.getAttribute('data-access-river');
+  var sourceRiver = RIVERS[riverId] || activeRiver;
+  var pt = sourceRiver.accessPoints && sourceRiver.accessPoints[idx];
   if (pt) showAccessPointOnMap(pt.name);
 });
 
@@ -5865,7 +5888,7 @@ function addGaugeMarkers() {
 function addAccessMarkers() {
   if (!dsMap || !mapLayerGroups.access || !activeRiver) return;
   accessMarkersByName = {};
-  var points = (activeRiver.accessPoints || []);
+  var points = getGroupAccessPoints();
   if (!points.length) {
     var m = L.marker([activeRiver.lat, activeRiver.lon], { icon: makeMarker('#3a6b35', 14) });
     m.bindPopup('<div class="popup-title">&#128663; ' + activeRiver.label + '</div><div class="popup-detail">USGS gauge location</div>');
@@ -5889,7 +5912,7 @@ function addAccessMarkers() {
 // ── One-click: jump to the Map tab, centered on this specific access point ──
 var accessMarkersByName = {};
 function showAccessPointOnMap(name) {
-  var pt = (activeRiver.accessPoints || []).find(function(p) { return p.name === name; });
+  var pt = getGroupAccessPoints().find(function(p) { return p.name === name; });
   if (!pt) return;
   switchMode('map');
   var attempts = 0;
