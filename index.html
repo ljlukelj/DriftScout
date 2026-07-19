@@ -1330,11 +1330,36 @@
   /* ── DRIFTSCOUT LOGO ── */
   .driftscout-logo-img {
     display: block;
-    width: clamp(320px, 42vw, 560px);
+    width: clamp(120px, 14vw, 180px);
     height: auto;
-    margin-bottom: -8px;
-    margin-left: -12px;
   }
+  .brand-lockup { margin-bottom: 10px; }
+  .brand-icon-chip {
+    display: inline-block;
+    background: var(--text);
+    border-radius: 10px;
+    padding: 10px 14px 4px;
+    margin-left: -8px;
+    margin-bottom: 6px;
+  }
+  .brand-wordmark {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    line-height: 1;
+    margin-left: -2px;
+  }
+  .brand-drift { color: var(--text); }
+  .brand-scout { color: var(--accent); }
+  .brand-tagline {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.16em;
+    color: var(--gold); text-transform: uppercase;
+    margin: 4px 0 10px 0;
+  }
+  .tagline-rule { flex: 0 0 24px; height: 1px; background: var(--gold); opacity: 0.5; }
 
   /* ── LIGHT MODE SURFACE TWEAKS ── */
   .stat-card {
@@ -1515,7 +1540,7 @@
     /* ── HEADER ── */
     header { padding: 12px 0 12px; margin-bottom: 16px; }
     .header-top { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .driftscout-logo-img { width: clamp(200px, 72vw, 320px) !important; margin-left: -6px !important; margin-bottom: 0 !important; }
+    .driftscout-logo-img { width: clamp(90px, 30vw, 140px) !important; }
     #river-title { font-size: 1rem !important; margin-top: 2px !important; }
     .header-meta { text-align: left; font-size: 0.65rem; line-height: 1.6; }
 
@@ -1644,7 +1669,7 @@
     .mode-btn { font-size: 0.52rem; padding: 9px 7px 11px; }
     .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
     .stat-value { font-size: 1.2rem; }
-    .driftscout-logo-img { width: 200px !important; }
+    .driftscout-logo-img { width: 90px !important; }
     .forecast-row { grid-template-columns: repeat(3, 1fr) !important; }
     .forecast-row .forecast-day:nth-child(n+4) { display: none; }
   }
@@ -1659,8 +1684,11 @@
   <header>
     <div class="header-top">
       <div class="title-block">
-        <img src="logo.svg" class="driftscout-logo-img" alt="DriftScout">
-        <div class="brand-tagline" style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase;margin:-6px 0 10px 2px">Fly Fishing. Explore More.</div>
+        <div class="brand-lockup">
+          <div class="brand-icon-chip"><img src="logo.svg" class="driftscout-logo-img" alt="DriftScout"></div>
+          <div class="brand-wordmark"><span class="brand-drift">DRIFT</span><span class="brand-scout">SCOUT</span></div>
+          <div class="brand-tagline"><span class="tagline-rule"></span>Fly Fishing. Explore More.<span class="tagline-rule"></span></div>
+        </div>
         <h1 id="river-title" style="font-size:clamp(1rem,2vw,1.4rem);margin-top:0;font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--muted);letter-spacing:0.02em">Upper <em style="font-style:italic;color:var(--accent)">Yakima</em></h1>
         <div class="subtitle" id="river-subtitle">🎣 Easton Dam → Thorpe, WA &nbsp;·&nbsp; Fishing Dashboard</div>
         <button class="star-btn" id="save-water-btn" type="button">☆ Save This Water</button>
