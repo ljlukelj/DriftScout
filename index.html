@@ -1336,11 +1336,9 @@
   .brand-lockup { margin-bottom: 10px; }
   .brand-icon-chip {
     display: inline-block;
-    background: var(--text);
-    border-radius: 10px;
-    padding: 12px 16px;
+    padding: 4px 0;
     margin-left: -8px;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
   }
   .brand-wordmark {
     font-family: 'Oswald', sans-serif;
@@ -1962,10 +1960,10 @@
   </div>
 
   <!-- Regs -->
-  <div class="regs-strip">
-    <strong>⚖️ Selective Gear Rules — Year-Round:</strong>&nbsp;
-    Single, barbless hooks only (crimp or file your barbs). Maximum 3 flies. All trout must be released. No bait. This stretch is part of Washington's Blue Ribbon fishery. Always verify current WDFW regulations before fishing — rules can change.
-    &nbsp;<a href="https://wdfw.wa.gov/fishing/regulations" target="_blank" style="color:var(--gold);text-decoration:none">WDFW Regs ↗</a>
+  <div class="regs-strip" id="river-regs-strip">
+    <strong>⚖️ Know before you go:</strong>&nbsp;
+    <span id="river-regs-strip-text">Loading regulation summary…</span>
+    &nbsp;<a href="#" id="river-regs-strip-link" target="_blank" style="color:var(--gold);text-decoration:none">Check current regs ↗</a>
   </div>
 
   </div><!-- end #river-dashboard -->
@@ -3108,6 +3106,31 @@ function switchToGroup(groupId) {
   switchRiver(target);
 }
 
+function updateRiverRegsStrip() {
+  var textEl = document.getElementById('river-regs-strip-text');
+  var linkEl = document.getElementById('river-regs-strip-link');
+  if (!textEl || !linkEl || !activeRiver) return;
+
+  var regsEntry = REGS[activeRiver.id];
+  if (regsEntry) {
+    var summary = (regsEntry.rules && regsEntry.rules[0]) || (regsEntry.notes && regsEntry.notes[0]) || 'Check current regulations before fishing';
+    textEl.textContent = summary + '. Always verify current regulations before fishing — rules can change.';
+    linkEl.href = regsEntry.wdfw || regsEntry.eRegs || '#';
+    linkEl.textContent = 'Check current regs ↗';
+    return;
+  }
+
+  // No per-river regs entry (custom search result or state-preset river) —
+  // fall back to state-level generic regs info instead of leaving stale
+  // or wrong-state content showing.
+  var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : null;
+  var stateRegs = (stateCode && STATE_REGS[stateCode]) || STATE_REGS.DEFAULT;
+  var summary2 = (stateRegs.highlights && stateRegs.highlights[0]) || 'Regulations vary by water and season';
+  textEl.textContent = summary2 + '. Always verify current regulations before fishing — rules can change.';
+  linkEl.href = stateRegs.agencyUrl || stateRegs.eRegsUrl || '#';
+  linkEl.textContent = 'Check ' + (stateRegs.agency || 'state') + ' regs ↗';
+}
+
 function updateReachDropdown(riverId) {
   var reachWrap = document.getElementById('reach-select-wrap');
   var reachSelect = document.getElementById('reach-select');
@@ -3139,6 +3162,7 @@ function switchRiver(riverId) {
   });
 
   updateReachDropdown(riverId);
+  updateRiverRegsStrip();
 
   // Update header
   const parts = activeRiver.label.split(' ');
@@ -4126,6 +4150,7 @@ function loadCustomRiver(siteId, siteName, lat, lon) {
   });
   updateSaveButton();
   updateReachDropdown(activeRiver.id); // hides the Yakima reach picker — custom rivers aren't in a group
+  updateRiverRegsStrip();
   if (mapInitialized) centerMapOnRiver(); // refresh map scope — don't leave stale WA/OR pins showing
 }
 
@@ -4173,6 +4198,7 @@ async function loadAll() {
 loadAll();
 updateSaveButton();
 updateReachDropdown(activeRiver.id);
+setTimeout(updateRiverRegsStrip, 0); // deferred — REGS/STATE_REGS consts are declared later in the file
 renderMyWaters();
 loadSearchIndex(document.getElementById('state-picker').value); // populate the nationwide search index for the default state on load — previously only ran after a manual state-picker change, which is why search looked broken until you touched that dropdown
 
@@ -4957,6 +4983,25 @@ const STATE_RIVERS = {
 };
 
 // ── RENDER STATE RIVER TABS ───────────────────────────────────────────────────
+function clearActiveRiverDisplay(stateName) {
+  var title = document.getElementById('river-title');
+  var subtitle = document.getElementById('river-subtitle');
+  var condStatus = document.getElementById('condition-status');
+  var condSummary = document.getElementById('condition-summary');
+  if (title) title.innerHTML = 'No river selected';
+  if (subtitle) subtitle.textContent = '🔍 Use "Search Any US River" above to find a gauge in ' + stateName;
+  if (condStatus) condStatus.textContent = '—';
+  if (condSummary) condSummary.textContent = 'Search for a river above to see live conditions.';
+  ['flow-val','gage-val','wtemp-val','airtemp-val','baro-val'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '—';
+  });
+  var hatchGrid = document.getElementById('hatch-grid');
+  if (hatchGrid) hatchGrid.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Search for a river above to see hatch info.</div>';
+  var accessList = document.getElementById('access-list');
+  if (accessList) accessList.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Search for a river above to see access points.</div>';
+}
+
 function renderStateTabs(stateCode) {
   const nav = document.querySelector('.river-tabs');
 
@@ -4997,8 +5042,19 @@ function renderStateTabs(stateCode) {
 
   const rivers = STATE_RIVERS[stateCode];
   if (!rivers) {
+    // No curated preset rivers for this state — clear the stale tab strip
+    // and dashboard from whatever state was active before, rather than
+    // leaving old, wrong-state content sitting there looking current.
+    nav.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:10px 4px">No preset rivers for this state yet — search above to load any US gauge directly.</div>';
     document.getElementById('site-search-status').textContent =
       'No preset tabs for ' + stateCode + ' — use search above';
+    var stateNamesForClear = {MN:'Minnesota',MI:'Michigan',PA:'Pennsylvania',NY:'New York',
+      NC:'North Carolina',TN:'Tennessee',VT:'Vermont',WI:'Wisconsin'};
+    clearActiveRiverDisplay(stateNamesForClear[stateCode] || stateCode);
+    // Shops/Regs are state-level, not tied to having curated rivers —
+    // always keep them in sync with the picked state.
+    updateShopsForState(stateCode);
+    updateRegsForState(stateCode);
     return;
   }
 
@@ -5085,13 +5141,17 @@ function loadStateRiver(idx, stateCode) {
   if (baroEl) { baroEl.textContent = '--'; baroEl.classList.add('skeleton'); }
   document.getElementById('rig-setups').innerHTML = '<div style="color:var(--muted);font-size:0.8rem">asking Claude…</div>';
   document.getElementById('insights-content').innerHTML = '<div class="insights-loading"><div class="spinner"></div><span>Generating conditions report…</span></div>';
-  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for Washington preset rivers.</div>';
-  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for Washington preset rivers.</div>';
+  document.getElementById('hatch-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Detailed hatch data available for our fully-modeled preset rivers — search results show flow/conditions but not curated hatch data yet.</div>';
+  document.getElementById('access-list').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:8px 0">Access point data available for our fully-modeled preset rivers — search results show flow/conditions but not curated access points yet.</div>';
 
   const snap = activeRiver.id;
   Promise.all([fetchUSGS(snap), fetchWeather(snap)]).then(() => {
     if (activeRiver.id === snap) { fetchWaterTemp(snap); generateInsights(snap); }
   });
+  updateSaveButton();
+  updateReachDropdown(activeRiver.id); // hides the Yakima reach picker — state-preset rivers aren't in a group
+  updateRiverRegsStrip();
+  if (mapInitialized) centerMapOnRiver(); // refresh map scope — don't leave stale pins from a different state
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -5422,7 +5482,7 @@ const STATE_REGS = {
 };
 
 function updateShopsForState(stateCode) {
-  var shops = STATE_SHOPS[stateCode] || STATE_SHOPS.WA;
+  var shops = STATE_SHOPS[stateCode];
   var grid = document.getElementById('shop-grid');
   if (!grid) return;
   // Update panel headings
@@ -5434,6 +5494,13 @@ function updateShopsForState(stateCode) {
   var t = document.getElementById('shops-title');
   var s = document.getElementById('shops-subtitle');
   if (t) t.textContent = stateName + ' Fly Shops';
+  if (!shops || !shops.length) {
+    if (s) s.textContent = 'No curated shops for ' + stateName + ' yet.';
+    grid.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:12px 0;grid-column:1/-1">' +
+      'We have not added local fly shops for ' + stateName + ' yet — search online for shops near your river, ' +
+      'or check the state wildlife agency regulations page for licensed retailers.</div>';
+    return;
+  }
   if (s) s.textContent = 'Local shops near the rivers you fish in ' + stateName + ' — best sources for current intel';
   grid.innerHTML = shops.map(function(s) {
     return '<div class="shop-card">' +
@@ -5858,11 +5925,12 @@ function addGaugeMarkers() {
   if (!dsMap || !mapLayerGroups.gauges) return;
   activeGaugeMarker = null;
 
-  var isCustomRiver = activeRiver && typeof activeRiver.id === 'string' && activeRiver.id.indexOf('custom_') === 0;
+  var isCustomRiver = activeRiver && activeRiver.id && !RIVERS[activeRiver.id];
   var riverList;
   if (isCustomRiver) {
-    // Viewing a searched, out-of-region river — don't clutter the map with
-    // unrelated WA/OR preset pins from a completely different part of the country.
+    // Viewing a searched or state-preset river outside our WA/OR core list —
+    // don't clutter the map with unrelated WA/OR preset pins from a
+    // completely different part of the country.
     riverList = [];
     var stateCode = document.getElementById('state-picker') ? document.getElementById('state-picker').value : null;
     if (stateCode && STATE_RIVERS[stateCode]) {
@@ -5870,7 +5938,7 @@ function addGaugeMarkers() {
         riverList.push({ label: r.label, sublabel: r.sub, usgs: r.usgs, lat: r.lat, lon: r.lon, accessPoints: [] });
       });
     }
-    if (!riverList.some(function(r) { return r.usgs === activeRiver.usgs; })) {
+    if (activeRiver.usgs && !riverList.some(function(r) { return r.usgs === activeRiver.usgs; })) {
       riverList.push({ label: activeRiver.label, sublabel: activeRiver.sublabel, usgs: activeRiver.usgs, lat: activeRiver.lat, lon: activeRiver.lon, accessPoints: [] });
     }
   } else {
